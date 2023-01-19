@@ -21,7 +21,7 @@ class AuthFragmentViewModel(
 
     fun authenticatePhone(phone: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            authenticateUseCase.execute(phone)
+            authenticateUseCase.execute("+91$phone")
         }
     }
 

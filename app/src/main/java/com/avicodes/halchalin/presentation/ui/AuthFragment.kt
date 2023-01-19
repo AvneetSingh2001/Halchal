@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Response
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
@@ -61,16 +63,15 @@ class AuthFragment : Fragment() {
                 } else if(etPhoneNumber.editText?.text?.length != 10){
                     etPhoneNumber.error = "Invalid"
                 } else {
-                    var phone = etPhoneNumber.editText!!.text.toString()
+                    val phone = etPhoneNumber.editText!!.text.toString()
                     viewModel.authenticatePhone(phone)
                     lifecycleScope.launch {
                         viewModel.signUpState.collectLatest {uiState ->
                             when(uiState) {
                                 is Response.Success -> {
-                                    // if not in memory then have name screen
-                                    // else enters the app
 
-
+                                    progCons.visibility = View.INVISIBLE
+                                    mainCons.visibility = View.VISIBLE
 
                                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                                 }
@@ -79,19 +80,22 @@ class AuthFragment : Fragment() {
 
                                     val text = (uiState as Response.Loading).message
 
+                                    progCons.visibility = View.VISIBLE
+                                    mainCons.visibility = View.INVISIBLE
+
                                     if(text == context?.getString(R.string.code_sent)) {
                                         //VIEW OTP EditText
-                                        consOtp.visibility = View.VISIBLE
-
-
-                                    } else {
-                                        // loading state
+                                        val action =
+                                            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment()
+                                        requireView().findNavController().navigate(action)
 
                                     }
-
                                 }
 
                                 is Response.Error -> {
+
+                                    progCons.visibility = View.INVISIBLE
+                                    mainCons.visibility = View.VISIBLE
 
                                     val text = (uiState as Response.Error).exception?.message
                                     if(text == context?.getString(R.string.invalid_code)) {
@@ -99,7 +103,7 @@ class AuthFragment : Fragment() {
                                     } else {
                                         // show phone number ET
                                     }
-
+                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                                 }
 
                                 is Response.NotInitialized -> {

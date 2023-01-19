@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.ui.DetailsFragment">
-
+    tools:context=".presentation.ui.CodeAuthFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -48,47 +47,35 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_margin="20dp"
+        android:layout_height="match_parent"
+        >
 
         <TextView
-            android:id="@+id/tvWelcome"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Check your messages \nfor the OTP"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
+            android:layout_marginTop="60dp"
+            android:id="@+id/tvStarted"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="80dp"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Let's Get \nStarted"
-            android:layout_marginRight="20dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textColor="@color/black"
-            android:textSize="40sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            tools:layout_editor_absoluteY="116dp" />
+            app:layout_constraintRight_toRightOf="parent"
+            />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWelcome"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:fontFamily="@font/roboto_regular"
-            android:text="Enter you details to use Halchal!"/>
+
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etName"
-            app:layout_constraintBottom_toTopOf="@id/consLoc"
+            android:id="@+id/etOtp"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginBottom="30dp"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="80dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/baseline_person_24"
-            android:hint="Name"
+            app:startIconDrawable="@drawable/baseline_lock_24"
+            android:hint="OTP"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -98,51 +85,29 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/consLoc"
-            android:layout_margin="20dp"
-            android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintTop_toBottomOf="@id/etOtp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            >
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etLoc"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-
-                android:hint="Location"
-                app:startIconDrawable="@drawable/baseline_location_on_24"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:id="@+id/btnReqestAgain"
+            android:clickable="true"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="15dp"
+            android:textAlignment="textEnd"
+            android:text="Request Again?"
+            android:textColor="#0A5CD7"
+            />
 
 
         <Button
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="64dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:text="Continue"
-            android:layout_margin="20dp"
             android:layout_marginBottom="20dp"
             android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"
             app:layout_constraintBottom_toTopOf="@id/progIndicator"/>
@@ -157,14 +122,12 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:trackColor="@color/mainGrey"
-            android:layout_margin="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:trackThickness="6dp"
             tools:layout_editor_absoluteY="640dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
