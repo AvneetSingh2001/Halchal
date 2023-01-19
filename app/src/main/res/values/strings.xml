@@ -2,4 +2,12 @@
     <string name="app_name">Halchalin</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="code_sent">OTP Sent</string>
+    <string name="verified">Verified</string>
+    <string name="verification_failed">Verification Failed</string>
+    <string name="phone_auth_success">Login Success</string>
+    <string name="invalid_code">Invalid Code</string>
+    <string name="code_will_be_send">Code will be sent</string>
+
 </resources>

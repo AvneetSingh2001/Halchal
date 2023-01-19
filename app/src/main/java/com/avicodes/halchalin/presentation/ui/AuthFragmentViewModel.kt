@@ -1,25 +1,34 @@
 package com.avicodes.halchalin.presentation.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avicodes.halchalin.domain.usecase.LoginUserUseCase
-import com.avicodes.halchalin.domain.usecase.logoutUserUseCase
+import com.avicodes.halchalin.data.utils.Response
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.authenticateUseCase
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUseCase
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.signUpStateUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AuthFragmentViewModel(
-    private val loginUserUseCase: LoginUserUseCase,
-    private val logoutUserUseCase: logoutUserUseCase
+    private val authenticateUseCase: authenticateUseCase,
+    private val onVerifyOtpUseCase: onVerifyOtpUseCase,
+    private val signUpStateUseCase: signUpStateUseCase
 ): ViewModel() {
 
-    fun loginUser(number: String) {
+    val signUpState: MutableStateFlow<Response> = signUpStateUseCase.execute()
+
+    fun authenticatePhone(phone: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            loginUserUseCase.execute("+91${number}")
+            authenticateUseCase.execute(phone)
         }
     }
 
-
+    fun verifyOtp(code: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            onVerifyOtpUseCase.execute(code)
+        }
+    }
 
 }

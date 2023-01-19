@@ -9,7 +9,7 @@
 
     <View
         android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_height="380dp"
         android:layout_gravity="start"
         android:background="@drawable/rounded_rectangle_shape"
         />
@@ -25,9 +25,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Let's Get Started"
-            android:textSize="24sp"
-            android:layout_marginTop="60dp"
+            android:text="Let's Get \nStarted"
+            android:textSize="40sp"
+            android:fontFamily="@font/roboto_bold"
+            android:layout_marginTop="40dp"
             android:textColor="@color/black"
             android:id="@+id/tvStarted"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,22 +41,25 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter you phone number \nto start using Halchal"
+            android:text="Ready to experience the \nmedia network"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_light"
             android:id="@+id/tvDesc"
             app:layout_constraintTop_toBottomOf="@id/tvStarted"
             app:layout_constraintRight_toRightOf="parent"
             />
 
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etPhoneNumber"
-            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintBottom_toTopOf="@id/consOtp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/baseline_local_phone_24"
             android:hint="Phone Number"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -67,12 +71,57 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/consOtp"
+            android:visibility="gone"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etOtp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:hint="Enter Code"
+            app:startIconDrawable="@drawable/baseline_lock_24"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/etOtp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/tvRequestAgain"
+                android:text="Request Again?"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#0A5CD7"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <Button
             android:id="@+id/btnContinue"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:text="Continue"
@@ -81,31 +130,18 @@
             app:layout_constraintBottom_toTopOf="@id/progIndicator"/>
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textSize="10sp"
-            android:textAlignment="center"
-            android:id="@+id/tvTerms"
-            android:text="By continue I accept the term of services and community guidelines of the halchal community"
-            />
-
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progIndicator"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:indicatorColor="@color/mainRed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:trackThickness="6dp"
-            app:indicatorColor="@color/mainRed"
             app:trackColor="@color/mainGrey"
-            android:id="@+id/progIndicator"
-            app:layout_constraintBottom_toTopOf="@id/tvTerms"
-            android:layout_marginBottom="20dp"
-            
-            android:layout_height="wrap_content" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:trackThickness="6dp"
+            tools:layout_editor_absoluteY="640dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

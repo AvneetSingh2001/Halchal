@@ -5,11 +5,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Response
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class AuthFragment : Fragment() {
     private var _binding : FragmentAuthBinding? = null
     private val binding get() = _binding!!
@@ -35,20 +47,69 @@ class AuthFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[AuthFragmentViewModel::class.java]
 
         binding.apply {
             btnContinue.setOnClickListener {
-                if(etPhoneNumber.editText!!.text.isNotEmpty()) {
-                    number = etPhoneNumber.editText!!.text.toString()
-                    if(number.length == 10) {
-                        viewModel.loginUser(number)
-                    }
+                if(etPhoneNumber.editText?.text.isNullOrEmpty()) {
+                    etPhoneNumber.error = "Required"
+                } else if(etPhoneNumber.editText?.text?.length != 10){
+                    etPhoneNumber.error = "Invalid"
                 } else {
-                    etPhoneNumber.editText!!.error = "Required"
+                    var phone = etPhoneNumber.editText!!.text.toString()
+                    viewModel.authenticatePhone(phone)
+                    lifecycleScope.launch {
+                        viewModel.signUpState.collectLatest {uiState ->
+                            when(uiState) {
+                                is Response.Success -> {
+                                    // if not in memory then have name screen
+                                    // else enters the app
+
+
+
+                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                                }
+
+                                is Response.Loading -> {
+
+                                    val text = (uiState as Response.Loading).message
+
+                                    if(text == context?.getString(R.string.code_sent)) {
+                                        //VIEW OTP EditText
+                                        consOtp.visibility = View.VISIBLE
+
+
+                                    } else {
+                                        // loading state
+
+                                    }
+
+                                }
+
+                                is Response.Error -> {
+
+                                    val text = (uiState as Response.Error).exception?.message
+                                    if(text == context?.getString(R.string.invalid_code)) {
+                                        // show only OTP ET
+                                    } else {
+                                        // show phone number ET
+                                    }
+
+                                }
+
+                                is Response.NotInitialized -> {
+                                    //show phone number screen
+                                    // no errors
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
