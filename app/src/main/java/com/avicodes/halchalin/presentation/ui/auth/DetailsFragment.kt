@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.avicodes.halchalin.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,6 +45,9 @@ class DetailsFragment : Fragment() {
                     viewModel.uploadUser(
                         name = name,
                         loc = loc)
+
+                    navigateToHome()
+
                 } else {
                     if(name == "") {
                         etName.error = "Required"
@@ -60,6 +64,11 @@ class DetailsFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    private fun navigateToHome() {
+        var action = DetailsFragmentDirections.actionDetailsFragmentToHomeActivity()
+        requireView().findNavController().navigate(action)
     }
 
 

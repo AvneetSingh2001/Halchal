@@ -6,7 +6,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface PhoneAuthRepository {
-    val signUpState: MutableStateFlow<Response>
+    val signUpState: MutableStateFlow<Response<String>>
 
     suspend fun authenticate(phone: String)
 

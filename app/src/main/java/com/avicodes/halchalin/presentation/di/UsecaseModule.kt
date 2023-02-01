@@ -35,4 +35,8 @@ class UsecaseModule {
     @Provides
     @Singleton
     fun provideUserUploadRemotelyUsecase(userRespository: UserRespository): UserUploadRemotelyUseCase = UserUploadRemotelyUseCase(userRespository)
+
+    @Provides
+    @Singleton
+    fun provideGetUserUsecase(userRespository: UserRespository): GetUserUseCase = GetUserUseCase(userRespository)
 }

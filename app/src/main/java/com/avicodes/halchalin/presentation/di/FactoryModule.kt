@@ -19,9 +19,10 @@ class FactoryModule {
     fun provideAuthFragmentViewModelFactory(
         authenticateUseCase: authenticateUseCase,
         onVerifyOtpUseCase: onVerifyOtpUseCase,
-        signUpStateUseCase: signUpStateUseCase
+        signUpStateUseCase: signUpStateUseCase,
+        getUserUseCase: GetUserUseCase
     ): AuthFragmentViewModelFactory {
-        return AuthFragmentViewModelFactory(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase)
+        return AuthFragmentViewModelFactory(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase, getUserUseCase)
     }
 
     @Singleton

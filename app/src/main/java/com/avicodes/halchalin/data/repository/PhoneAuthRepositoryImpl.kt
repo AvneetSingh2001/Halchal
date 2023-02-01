@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class PhoneAuthRepositoryImpl(
     private val phoneAuthDataSource: PhoneAuthDataSource
 ): PhoneAuthRepository {
-    override val signUpState: MutableStateFlow<Response>
+    override val signUpState: MutableStateFlow<Response<String>>
         get() = phoneAuthDataSource.signUpState
 
     override suspend fun authenticate(phone: String) {

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class signUpStateUseCase(
     private val phoneAuthRepository: PhoneAuthRepository
 ) {
-    fun execute(): MutableStateFlow<Response> {
+    fun execute(): MutableStateFlow<Response<String>> {
         return phoneAuthRepository.signUpState
     }
 }

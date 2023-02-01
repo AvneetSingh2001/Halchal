@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -35,6 +36,7 @@ class AuthFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -77,7 +79,7 @@ class AuthFragment : Fragment() {
                                     mainCons.visibility = View.INVISIBLE
                                     if(text == context?.getString(R.string.code_sent)) {
                                         val action =
-                                            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment(phone)
+                                            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("+91$phone")
                                         requireView().findNavController().navigate(action)
                                     }
                                     Log.e("MYTAG", "AuthFragment")
@@ -106,9 +108,43 @@ class AuthFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if(auth.currentUser != null) {
-            val action = AuthFragmentDirections.actionAuthFragmentToDetailsFragment()
-            requireView().findNavController().navigate(action)
+            binding.progCons.visibility = View.VISIBLE
+            binding.mainCons.visibility = View.INVISIBLE
+            auth.currentUser!!.phoneNumber?.let { navigateToNextScreen(it) }
         }
+    }
 
+
+    fun navigateToNextScreen(phone: String) {
+        viewModel.getUser(phone).observe(requireActivity(), Observer {
+            when(it) {
+                is Response.Success -> {
+                    if(it.data != null) {
+                        Log.i("MYTAG", "Success to home: ${phone}")
+                        navigateToHomeScreen()
+                    } else {
+                        Log.i("MYTAG", "Success to details: ${phone}")
+                        navigateToDetailsScreen()
+                    }
+                }
+
+                is Response.Error -> {
+                    Log.e("Error", it.exception.toString())
+                }
+                else -> {
+                        Log.e("Loading", it.toString())
+                }
+            }
+        })
+    }
+
+    fun navigateToDetailsScreen() {
+        val action = AuthFragmentDirections.actionAuthFragmentToHomeActivity()
+        requireView().findNavController().navigate(action)
+    }
+
+    fun navigateToHomeScreen() {
+        val action = AuthFragmentDirections.actionAuthFragmentToHomeActivity()
+        requireView().findNavController().navigate(action)
     }
 }

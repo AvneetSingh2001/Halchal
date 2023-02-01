@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/newsVpFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.NewsVpFragment"
+        android:label="fragment_news_vp"
+        tools:layout="@layout/fragment_news_vp" />
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.NewsFragment"
+        android:label="fragment_news"
+        tools:layout="@layout/fragment_news" />
+    <fragment
+        android:id="@+id/adsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.AdsFragment"
+        android:label="fragment_ads"
+        tools:layout="@layout/fragment_ads" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

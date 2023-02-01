@@ -6,6 +6,7 @@ import android.util.Log
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.repository.dataSource.PhoneAuthDataSource
 import com.avicodes.halchalin.data.utils.Response
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -20,8 +21,8 @@ class PhoneAuthDataSourceImpl(
     var verificationOtp: String = ""
     var resentToken: PhoneAuthProvider.ForceResendingToken? = null
 
-    private var _signUpState : MutableStateFlow<Response> = MutableStateFlow(Response.NotInitialized)
-    override val signUpState: MutableStateFlow<Response>
+    private var _signUpState : MutableStateFlow<Response<String>> = MutableStateFlow(Response.NotInitialized)
+    override val signUpState: MutableStateFlow<Response<String>>
         get() = _signUpState
 
     override suspend fun authenticate(phone: String) {
@@ -95,7 +96,7 @@ class PhoneAuthDataSourceImpl(
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    _signUpState.value = Response.Success(activity.getString(com.avicodes.halchalin.R.string.phone_auth_success))
+                    _signUpState.value = Response.Success<String>(task.result.user!!.uid)
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)

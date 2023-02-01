@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -52,8 +53,6 @@ class CodeAuthFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[AuthFragmentViewModel::class.java]
 
         binding.apply {
-
-
             btnContinue.setOnClickListener {
                 if(etOtp.editText?.text.isNullOrEmpty()) {
                     etOtp.error = "Required"
@@ -70,8 +69,8 @@ class CodeAuthFragment : Fragment() {
                                 is Response.Success -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
-                                    val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToDetailsFragment()
-                                    requireView().findNavController().navigate(action)
+
+                                    navigateToNextScreen()
                                 }
 
                                 is Response.Loading -> {
@@ -110,7 +109,39 @@ class CodeAuthFragment : Fragment() {
             }
 
         }
+    }
 
+    fun navigateToNextScreen() {
+        viewModel.getUser(args.phone).observe(requireActivity(), Observer {
+            when(it) {
+                is Response.Success -> {
+                    if(it.data != null) {
+                        Log.i("MYTAG", "Success to home: ${args.phone}")
+                        navigateToHomeScreen()
+                    } else {
+                        Log.i("MYTAG", "Success to details: ${args.phone}")
+                        navigateToDetailsScreen()
+                    }
+                }
+
+                is Response.Error -> {
+                    Log.e("Error", it.exception.toString())
+                }
+                else -> {
+                    Log.e("Loading", it.toString())
+                }
+            }
+        })
+    }
+
+    fun navigateToDetailsScreen() {
+        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToDetailsFragment()
+        requireView().findNavController().navigate(action)
+    }
+
+    fun navigateToHomeScreen() {
+        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToHomeActivity()
+        requireView().findNavController().navigate(action)
     }
 
 }

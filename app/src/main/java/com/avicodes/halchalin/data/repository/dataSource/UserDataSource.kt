@@ -1,12 +1,14 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
 import com.avicodes.halchalin.data.models.User
+import com.avicodes.halchalin.data.utils.Response
+import kotlinx.coroutines.flow.Flow
 
 interface UserDataSource {
 
     suspend fun getUserLocally()
 
-    suspend fun getUserRemotely(uid: String)
+    fun getUserRemotely(uid: String): Flow<Response<User>>
 
     fun saveUserDataRemotely(user: User)
 
