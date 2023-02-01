@@ -1,9 +1,8 @@
 package com.avicodes.halchalin.presentation.di
 
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.authenticateUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.signUpStateUseCase
-import com.avicodes.halchalin.presentation.ui.AuthFragmentViewModelFactory
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
+import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +22,18 @@ class FactoryModule {
         signUpStateUseCase: signUpStateUseCase
     ): AuthFragmentViewModelFactory {
         return AuthFragmentViewModelFactory(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDetailsFragmentViewModelFactory(
+        userUploadRemotelyUseCase: UserUploadRemotelyUseCase,
+        getUserPhoneUseCase: GetUserPhoneUseCase
+    ): DetailsFragmentViewModelFactory {
+        return DetailsFragmentViewModelFactory(
+            userUploadRemotelyUseCase = userUploadRemotelyUseCase,
+            getUserPhoneUseCase = getUserPhoneUseCase
+        )
     }
 
 }

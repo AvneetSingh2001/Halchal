@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.AuthFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.auth.AuthFragment"
         android:label="fragment_auth"
         tools:layout="@layout/fragment_auth" >
         <action
@@ -19,17 +19,21 @@
     </fragment>
     <fragment
         android:id="@+id/codeAuthFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.CodeAuthFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.auth.CodeAuthFragment"
         android:label="fragment_code_auth"
         tools:layout="@layout/fragment_code_auth" >
         <action
-            android:id="@+id/action_codeAuthFragment_to_authFragment"
-            app:destination="@id/authFragment"
-            app:popUpToInclusive="false" />
+            android:id="@+id/action_codeAuthFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment"
+            app:popUpTo="@id/codeAuthFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="phone"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.DetailsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.auth.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
 </navigation>

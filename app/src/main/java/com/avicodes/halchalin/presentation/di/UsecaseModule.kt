@@ -1,10 +1,8 @@
 package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.domain.repository.PhoneAuthRepository
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.authenticateUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.signUpStateUseCase
-import com.avicodes.halchalin.domain.usecase.getUserPhoneUseCase
+import com.avicodes.halchalin.domain.repository.UserRespository
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +30,9 @@ class UsecaseModule {
 
     @Provides
     @Singleton
-    fun provideGetUserPhoneUsecase(phoneAuthRepository: PhoneAuthRepository): getUserPhoneUseCase = getUserPhoneUseCase(phoneAuthRepository)
+    fun provideGetUserPhoneUsecase(phoneAuthRepository: PhoneAuthRepository): GetUserPhoneUseCase = GetUserPhoneUseCase(phoneAuthRepository)
 
+    @Provides
+    @Singleton
+    fun provideUserUploadRemotelyUsecase(userRespository: UserRespository): UserUploadRemotelyUseCase = UserUploadRemotelyUseCase(userRespository)
 }

@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui
+package com.avicodes.halchalin.presentation.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUs
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.signUpStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class AuthFragmentViewModel(

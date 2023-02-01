@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.ui.CodeAuthFragment">
+    tools:context=".presentation.ui.auth.CodeAuthFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -65,7 +65,6 @@
             />
 
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etOtp"
             app:layout_constraintBottom_toTopOf="@id/btnContinue"
@@ -96,7 +95,7 @@
             android:fontFamily="@font/roboto_regular"
             android:layout_marginTop="15dp"
             android:textAlignment="textEnd"
-            android:text="Request Again?"
+            android:text="Change Phone?"
             android:textColor="#0A5CD7"
             />
 
