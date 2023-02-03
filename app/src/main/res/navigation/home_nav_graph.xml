@@ -29,5 +29,17 @@
         android:id="@+id/settingsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/mainActivity"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.avicodes.halchalin.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

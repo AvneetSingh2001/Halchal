@@ -3,6 +3,9 @@ package com.avicodes.halchalin.presentation.di
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
+import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,4 +40,11 @@ class FactoryModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideHomeActivityViewModelFactory(
+        auth: FirebaseAuth
+    ): HomeActivityViewModelFactory {
+        return HomeActivityViewModelFactory(auth)
+    }
 }

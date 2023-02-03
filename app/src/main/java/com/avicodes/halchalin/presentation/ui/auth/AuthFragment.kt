@@ -52,7 +52,6 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[AuthFragmentViewModel::class.java]
 
         binding.apply {
@@ -78,9 +77,7 @@ class AuthFragment : Fragment() {
                                     progCons.visibility = View.VISIBLE
                                     mainCons.visibility = View.INVISIBLE
                                     if(text == context?.getString(R.string.code_sent)) {
-                                        val action =
-                                            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("+91$phone")
-                                        requireView().findNavController().navigate(action)
+                                        navigateToCodeAuth(phone)
                                     }
                                     Log.e("MYTAG", "AuthFragment")
                                 }
@@ -114,11 +111,17 @@ class AuthFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
 
     fun navigateToNextScreen(phone: String) {
         viewModel.getUser(phone).observe(requireActivity(), Observer {
             when(it) {
                 is Response.Success -> {
+
                     if(it.data != null) {
                         Log.i("MYTAG", "Success to home: ${phone}")
                         navigateToHomeScreen()
@@ -135,7 +138,11 @@ class AuthFragment : Fragment() {
                         Log.e("Loading", it.toString())
                 }
             }
+
         })
+
+
+
     }
 
     fun navigateToDetailsScreen() {
@@ -145,6 +152,12 @@ class AuthFragment : Fragment() {
 
     fun navigateToHomeScreen() {
         val action = AuthFragmentDirections.actionAuthFragmentToHomeActivity()
+        requireView().findNavController().navigate(action)
+    }
+
+    fun navigateToCodeAuth(phone: String) {
+        val action =
+            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("+91$phone")
         requireView().findNavController().navigate(action)
     }
 }
