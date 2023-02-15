@@ -19,7 +19,7 @@ class DetailsFragmentViewModel(
         val user = User(
             name = name,
             mobile = getUserPhoneUseCase.execute(),
-            loc = loc,
+            location = loc,
             userId = getUserPhoneUseCase.execute()
         )
         userUploadRemotelyUseCase.execute(user)
