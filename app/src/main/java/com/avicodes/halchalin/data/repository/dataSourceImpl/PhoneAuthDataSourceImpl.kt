@@ -1,12 +1,10 @@
 package com.avicodes.halchalin.data.repository.dataSourceImpl
 
-import android.app.Activity
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.repository.dataSource.PhoneAuthDataSource
-import com.avicodes.halchalin.data.utils.Response
-import com.google.android.gms.tasks.Task
+import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -21,12 +19,12 @@ class PhoneAuthDataSourceImpl(
     var verificationOtp: String = ""
     var resentToken: PhoneAuthProvider.ForceResendingToken? = null
 
-    private var _signUpState : MutableStateFlow<Response<String>> = MutableStateFlow(Response.NotInitialized)
-    override val signUpState: MutableStateFlow<Response<String>>
+    private var _signUpState : MutableStateFlow<Result<String>> = MutableStateFlow(Result.NotInitialized)
+    override val signUpState: MutableStateFlow<Result<String>>
         get() = _signUpState
 
     override suspend fun authenticate(phone: String) {
-        _signUpState.value = Response.Loading(activity.getString(com.avicodes.halchalin.R.string.code_will_be_send))
+        _signUpState.value = Result.Loading(activity.getString(com.avicodes.halchalin.R.string.code_will_be_send))
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)       // Phone number to verify
             .setActivity(activity)
@@ -62,7 +60,7 @@ class PhoneAuthDataSourceImpl(
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
-            _signUpState.value = Response.Loading("Verification completed")
+            _signUpState.value = Result.Loading("Verification completed")
             signInWithPhoneAuthCredential(credential)
         }
 
@@ -75,7 +73,7 @@ class PhoneAuthDataSourceImpl(
                 Log.w(TAG, "onVerificationFailed", e)
             }
 
-            _signUpState.value = Response.Error(java.lang.Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
+            _signUpState.value = Result.Error(java.lang.Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
 
         }
 
@@ -86,7 +84,7 @@ class PhoneAuthDataSourceImpl(
             Log.d(TAG, "onCodeSent:$verificationId")
             verificationOtp = verificationId
             resentToken = token
-            _signUpState.value = Response.Loading(activity.getString(com.avicodes.halchalin.R.string.code_sent))
+            _signUpState.value = Result.Loading(activity.getString(com.avicodes.halchalin.R.string.code_sent))
         }
     }
 
@@ -96,15 +94,15 @@ class PhoneAuthDataSourceImpl(
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    _signUpState.value = Response.Success<String>(task.result.user!!.uid)
+                    _signUpState.value = Result.Success<String>(task.result.user!!.uid)
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        _signUpState.value = Response.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.invalid_code)))
+                        _signUpState.value = Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.invalid_code)))
                         return@addOnCompleteListener
                     }
-                    _signUpState.value = Response.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
+                    _signUpState.value = Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
 
 
                 }

@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.User
-import com.avicodes.halchalin.data.utils.Response
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.authenticateUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.signUpStateUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +20,7 @@ class AuthFragmentViewModel(
     private val getUserUseCase: GetUserUseCase
 ): ViewModel() {
 
-    val signUpState: MutableStateFlow<Response<String>> = signUpStateUseCase.execute()
+    val signUpState: MutableStateFlow<Result<String>> = signUpStateUseCase.execute()
 
     fun authenticatePhone(phone: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -35,7 +34,7 @@ class AuthFragmentViewModel(
         }
     }
 
-    fun getUser(uid: String) = liveData<Response<User>> {
+    fun getUser(uid: String) = liveData<Result<User>> {
         getUserUseCase.execute(uid).collect { response ->
             emit(response)
         }

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.utils.Response
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,14 +66,14 @@ class AuthFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.signUpState.collectLatest {uiState ->
                             when(uiState) {
-                                is Response.Success -> {
+                                is Result.Success -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
                                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                                 }
 
-                                is Response.Loading -> {
-                                    val text = (uiState as Response.Loading).message
+                                is Result.Loading -> {
+                                    val text = (uiState as Result.Loading).message
                                     progCons.visibility = View.VISIBLE
                                     mainCons.visibility = View.INVISIBLE
                                     if(text == context?.getString(R.string.code_sent)) {
@@ -82,14 +82,14 @@ class AuthFragment : Fragment() {
                                     Log.e("MYTAG", "AuthFragment")
                                 }
 
-                                is Response.Error -> {
+                                is Result.Error -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
                                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
 
                                 }
 
-                                is Response.NotInitialized -> {
+                                is Result.NotInitialized -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
                                 }
@@ -120,7 +120,7 @@ class AuthFragment : Fragment() {
     fun navigateToNextScreen(phone: String) {
         viewModel.getUser(phone).observe(requireActivity(), Observer {
             when(it) {
-                is Response.Success -> {
+                is Result.Success -> {
 
                     if(it.data != null) {
                         Log.i("MYTAG", "Success to home: ${phone}")
@@ -131,7 +131,7 @@ class AuthFragment : Fragment() {
                     }
                 }
 
-                is Response.Error -> {
+                is Result.Error -> {
                     Log.e("Error", it.exception.toString())
                 }
                 else -> {

@@ -19,6 +19,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField("String","API_KEY",NEWS_API_KEY)
+        buildConfigField("String","BASE_URL",NEWS_API_URL)
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

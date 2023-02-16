@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.utils.Response
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentCodeAuthBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -66,15 +66,15 @@ class CodeAuthFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.signUpState.collectLatest {uiState ->
                             when(uiState) {
-                                is Response.Success -> {
+                                is Result.Success -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
 
                                     navigateToNextScreen()
                                 }
 
-                                is Response.Loading -> {
-                                    val text = (uiState as Response.Loading).message
+                                is Result.Loading -> {
+                                    val text = (uiState as Result.Loading).message
                                     Log.e("loading", text.toString())
 
                                     if(text == context?.getString(R.string.code_sent)) {
@@ -85,15 +85,15 @@ class CodeAuthFragment : Fragment() {
 
                                 }
 
-                                is Response.Error -> {
+                                is Result.Error -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
-                                    val text = (uiState as Response.Error).exception?.message
+                                    val text = (uiState as Result.Error).exception?.message
                                     if (text == context?.getString(R.string.invalid_code)) {
                                         requireView().findNavController().popBackStack()
                                     }
                                 }
-                                is Response.NotInitialized -> {
+                                is Result.NotInitialized -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
                                 }
@@ -114,7 +114,7 @@ class CodeAuthFragment : Fragment() {
     fun navigateToNextScreen() {
         viewModel.getUser(args.phone).observe(requireActivity(), Observer {
             when(it) {
-                is Response.Success -> {
+                is Result.Success -> {
                     if(it.data != null) {
                         Log.i("MYTAG", "Success to home: ${args.phone}")
                         navigateToHomeScreen()
@@ -124,7 +124,7 @@ class CodeAuthFragment : Fragment() {
                     }
                 }
 
-                is Response.Error -> {
+                is Result.Error -> {
                     Log.e("Error", it.exception.toString())
                 }
                 else -> {

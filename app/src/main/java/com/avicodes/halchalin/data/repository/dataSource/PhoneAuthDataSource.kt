@@ -1,12 +1,12 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
-import com.avicodes.halchalin.data.utils.Response
+import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface PhoneAuthDataSource {
-    val signUpState: MutableStateFlow<Response<String>>
+    val signUpState: MutableStateFlow<Result<String>>
 
     suspend fun authenticate(phone: String)
 
