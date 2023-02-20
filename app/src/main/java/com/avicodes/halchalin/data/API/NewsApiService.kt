@@ -18,4 +18,15 @@ interface NewsApiService {
         apiKey: String = BuildConfig.API_KEY
     ): Response<NewsResponse>
 
+    @GET("topic-headlines")
+    suspend fun getTopicHeadlines(
+        @Query("topic")
+        topic: String,
+        @Query("country")
+        country: String,
+        @Query("lang")
+        lang: String,
+        @Header("X-RapidAPI-Key")
+        apiKey: String = BuildConfig.API_KEY
+    ): Response<NewsResponse>
 }

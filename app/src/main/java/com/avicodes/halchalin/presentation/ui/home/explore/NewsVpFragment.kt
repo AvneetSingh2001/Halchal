@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home
+package com.avicodes.halchalin.presentation.ui.home.explore
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

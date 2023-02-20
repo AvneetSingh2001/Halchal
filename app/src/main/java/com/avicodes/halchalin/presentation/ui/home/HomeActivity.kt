@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: HomeActivityViewModelFactory
 
-    private lateinit var viewModel: HomeActivityViewModel
+    lateinit var viewModel: HomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

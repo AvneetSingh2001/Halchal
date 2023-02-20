@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home
+package com.avicodes.halchalin.presentation.ui.home.home
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.FeatureSliderModel
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint

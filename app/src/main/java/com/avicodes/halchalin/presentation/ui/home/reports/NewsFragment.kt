@@ -1,17 +1,14 @@
-package com.avicodes.halchalin.presentation.ui.home
+package com.avicodes.halchalin.presentation.ui.home.reports
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.Tab
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class NewsFragment : Fragment() {
@@ -57,13 +54,13 @@ class NewsFragment : Fragment() {
             vpNews.adapter = adapter
 
             tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: Tab?) {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let {
                         vpNews.currentItem = tab.position
                     }
                 }
-                override fun onTabUnselected(tab: Tab?) {}
-                override fun onTabReselected(tab: Tab?) {}
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             })
 

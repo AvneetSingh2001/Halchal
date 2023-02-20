@@ -1,12 +1,10 @@
-package com.avicodes.halchalin.presentation.ui.home
+package com.avicodes.halchalin.presentation.ui.home.home
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.FeatureSliderModel
-import com.avicodes.halchalin.databinding.FragmentNewsVpBinding
 import com.avicodes.halchalin.databinding.SliderLayoutBinding
 import com.bumptech.glide.Glide
 

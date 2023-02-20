@@ -19,4 +19,16 @@ class RemoteNewsDataSourceImpl(
         )
     }
 
+    override suspend fun getTopicHeadlines(
+        topic: String,
+        country: String,
+        lang: String
+    ): Response<NewsResponse> {
+        return newsApiService.getTopicHeadlines(
+            topic = topic,
+            country = country,
+            lang = lang
+        )
+    }
+
 }

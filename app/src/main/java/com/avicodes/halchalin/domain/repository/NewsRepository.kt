@@ -9,4 +9,10 @@ interface NewsRepository {
         country: String,
         lang: String
     ): Result<NewsResponse>
+
+    suspend fun getTopicHeadlines(
+        topic: String,
+        country: String,
+        lang: String
+    ): Result<NewsResponse>
 }

@@ -1,12 +1,12 @@
-package com.avicodes.halchalin.presentation.ui.home
+package com.avicodes.halchalin.presentation.ui.home.settings
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.FragmentSettingsBinding
+import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
