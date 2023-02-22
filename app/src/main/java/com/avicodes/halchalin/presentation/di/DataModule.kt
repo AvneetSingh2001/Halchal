@@ -2,12 +2,8 @@ package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.API.NewsApiService
-import com.avicodes.halchalin.data.repository.dataSource.PhoneAuthDataSource
-import com.avicodes.halchalin.data.repository.dataSource.RemoteNewsDataSource
-import com.avicodes.halchalin.data.repository.dataSource.UserDataSource
-import com.avicodes.halchalin.data.repository.dataSourceImpl.PhoneAuthDataSourceImpl
-import com.avicodes.halchalin.data.repository.dataSourceImpl.RemoteNewsDataSourceImpl
-import com.avicodes.halchalin.data.repository.dataSourceImpl.UserDataSourceImpl
+import com.avicodes.halchalin.data.repository.dataSource.*
+import com.avicodes.halchalin.data.repository.dataSourceImpl.*
 import com.bumptech.glide.load.DataSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,6 +37,18 @@ class DataModule {
     @Singleton
     fun provideRemoteNewsDataSource(newsApiService: NewsApiService): RemoteNewsDataSource {
         return RemoteNewsDataSourceImpl(newsApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalNewsDataSource(firestoreDb: FirebaseFirestore) : LocalNewsDataSource{
+        return LocalNewsDataSourceImpl(firestoreDb)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAdsDataSource(firestoreDb: FirebaseFirestore): AdsDataSource {
+        return AdsDataSouceImpl(firestoreDb)
     }
 
 }

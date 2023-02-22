@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.di
 
+import com.avicodes.halchalin.domain.repository.AdsRepository
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
@@ -45,11 +46,13 @@ class FactoryModule {
     @Provides
     fun provideHomeActivityViewModelFactory(
         auth: FirebaseAuth,
-        newsRepository: NewsRepository
+        newsRepository: NewsRepository,
+        adsRepository: AdsRepository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
-            newsRepository = newsRepository
+            newsRepository = newsRepository,
+            adsRepository = adsRepository
         )
     }
 }

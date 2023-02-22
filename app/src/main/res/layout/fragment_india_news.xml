@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.ui.home.reports.IndiaNewsFragment">
+    tools:context=".presentation.ui.home.reports.remote.IndiaNewsFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

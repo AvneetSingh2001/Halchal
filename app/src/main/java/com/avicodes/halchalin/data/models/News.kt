@@ -7,7 +7,10 @@ data class News(
     var location: String? = null,
     var time: String? = null,
     var date: String? = null,
-    var likes : ArrayList<String> = ArrayList(),
-    var outputUrl: String? = null,
+    var likes : List<String> = ArrayList(),
+    var comments: List<Pair<User, String>> = ArrayList(),
+    var videoUrl: String? = null,
+    var imageUrl: String? = null,
+    var coverUrl: String? = null,
     var type: String? = null,
 )

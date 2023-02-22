@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home.reports
+package com.avicodes.halchalin.presentation.ui.home.reports.local
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,20 +7,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.avicodes.halchalin.data.models.Data
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
 
 
-class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
+class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
+
     inner class ViewHolder(private val binding: ItemRemoteNewsBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
                 Glide.with(ivNews.context)
-                    .load(data.photo_url)
+                    .load(data.coverUrl)
                     .into(ivNews)
 
-                tvHeadline.text = data.title
+                tvHeadline.text = data.newsHeadline
             }
         }
     }
@@ -40,12 +42,12 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<Data> (){
-        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
-            return oldItem.source_url == newItem.source_url
+    private var callback = object : DiffUtil.ItemCallback<News> (){
+        override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
+            return oldItem.newsId == newItem.newsId
         }
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
+        override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
             return oldItem == newItem
         }
     }

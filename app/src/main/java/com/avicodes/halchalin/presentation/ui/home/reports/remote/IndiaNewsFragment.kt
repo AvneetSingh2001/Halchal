@@ -1,6 +1,7 @@
-package com.avicodes.halchalin.presentation.ui.home.reports
+package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,9 +41,13 @@ class IndiaNewsFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         setUpNationalRecyclerView()
-
         getNewsList()
     }
+
+    private fun refresh() {
+
+    }
+
 
     fun setUpNationalRecyclerView() {
         binding.apply {
@@ -53,12 +58,12 @@ class IndiaNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.getNationalNewsHeadlines("IN", "hi")
         viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer {response ->
             when(response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occured", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Error", response.exception?.message.toString())
                 }
 
                 is Result.Success -> {

@@ -1,6 +1,7 @@
-package com.avicodes.halchalin.presentation.ui.home.reports
+package com.avicodes.halchalin.presentation.ui.home.reports.local
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,30 +9,26 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
+import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 
+class LocalNewsFragment : Fragment() {
 
-class GlobeNewsFragment : Fragment() {
-    private var _binding: FragmentGlobeNewsBinding? = null
+    private var _binding: FragmentLocalNewsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: HomeActivityViewModel
-    private lateinit var remoteNewsAdapter: RemoteNewsAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var localNewsAdapter: LocalNewsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentGlobeNewsBinding.inflate(inflater, container, false)
+        _binding = FragmentLocalNewsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -40,33 +37,31 @@ class GlobeNewsFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
-        setUpNationalRecyclerView()
-
+        setUpLocalNewsRecyclerView()
         getNewsList()
-
     }
 
-    fun setUpNationalRecyclerView() {
+    private fun setUpLocalNewsRecyclerView() {
         binding.apply {
-            remoteNewsAdapter = RemoteNewsAdapter()
-            rvNationalNews.adapter = remoteNewsAdapter
+            localNewsAdapter = LocalNewsAdapter()
+            rvNationalNews.adapter = localNewsAdapter
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
         }
     }
 
     private fun getNewsList() {
-        viewModel.getWorldNewsHeadlines("WORLD", "IN", "hi")
-        viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {response ->
+        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {response ->
             when(response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occured", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Error", response.exception?.message.toString())
                 }
 
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        remoteNewsAdapter.differ.submitList(it.data)
+                        localNewsAdapter.differ.submitList(it)
                     }
                 }
 
@@ -87,5 +82,4 @@ class GlobeNewsFragment : Fragment() {
         binding.progCons.visibility = View.GONE
         binding.mainCons.visibility = View.VISIBLE
     }
-
 }

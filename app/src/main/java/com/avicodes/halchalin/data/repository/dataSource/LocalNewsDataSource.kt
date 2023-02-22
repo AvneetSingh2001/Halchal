@@ -5,7 +5,7 @@ import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
 
 interface LocalNewsDataSource {
-    fun getAllLocalNews(location: String): Flow<List<News>>
-    suspend fun getNearbyNews(location: String): Flow<List<News>>
-    suspend fun getNewsById(id: String): Result<News>
+    fun getAllLocalNews(location: String): Flow<Result<List<News>>>
+    suspend fun getNearbyNews(location: String): Flow<Result<List<News>>>
+    suspend fun getNewsById(id: String): Flow<Result<News>>
 }

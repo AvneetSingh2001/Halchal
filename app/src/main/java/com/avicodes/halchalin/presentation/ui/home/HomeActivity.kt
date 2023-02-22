@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,6 +48,14 @@ class HomeActivity : AppCompatActivity() {
                 else -> hideBottomNav()
             }
         }
+        fetchData()
+    }
+
+    private fun fetchData() = lifecycleScope.launch(Dispatchers.IO){
+        viewModel.getFeaturedAds()
+        viewModel.getLocalNews("Kichha")
+        viewModel.getNationalNewsHeadlines("IN", "hi")
+        viewModel.getWorldNewsHeadlines("WORLD", "IN", "hi")
     }
 
     private fun showBottomNav() {

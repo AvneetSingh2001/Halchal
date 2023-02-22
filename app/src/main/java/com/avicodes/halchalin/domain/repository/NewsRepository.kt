@@ -1,8 +1,10 @@
 package com.avicodes.halchalin.domain.repository
 
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsResponse
 import com.avicodes.halchalin.data.utils.Result
-import retrofit2.Response
+import kotlinx.coroutines.flow.Flow
+
 
 interface NewsRepository {
     suspend fun getNationalHeadlines(
@@ -15,4 +17,8 @@ interface NewsRepository {
         country: String,
         lang: String
     ): Result<NewsResponse>
+
+    fun getLocalNews(
+        location: String
+    ): Flow<Result<List<News>>>
 }
