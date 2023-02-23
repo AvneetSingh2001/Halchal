@@ -2,7 +2,6 @@ package com.avicodes.halchalin.presentation.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.FeaturedAds
 import com.avicodes.halchalin.data.models.News
@@ -13,8 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.AdsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -24,9 +21,9 @@ class HomeActivityViewModel(
     private val adsRepository: AdsRepository
 ): ViewModel() {
 
-    val nationalHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData()
-    val worldHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData()
-    val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData()
+    val nationalHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
+    val worldHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
+    val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
 
     fun getNationalNewsHeadlines(

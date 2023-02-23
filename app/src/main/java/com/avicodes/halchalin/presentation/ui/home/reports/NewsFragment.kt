@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
+import com.avicodes.halchalin.presentation.ui.home.HomeActivity
+import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +19,7 @@ class NewsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: NewsAdapter
+    private lateinit var viewModel: HomeActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,7 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = NewsAdapter(childFragmentManager, lifecycle)
+        viewModel = (activity as HomeActivity).viewModel
 
         binding.run {
 
@@ -68,9 +72,20 @@ class NewsFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     tlNews.selectTab(tlNews.getTabAt(position))
+
+                    refreshLayout.setOnRefreshListener {
+                        refreshLayout.isRefreshing = false
+                        if(position == 0) {
+                            viewModel.getLocalNews("Kichha")
+                        } else if(position == 1) {
+                            viewModel.getNationalNewsHeadlines("in", "hi")
+                        } else {
+                            viewModel.getWorldNewsHeadlines("world", "in", "hi")
+                        }
+                    }
+
                 }
             })
-
         }
     }
 

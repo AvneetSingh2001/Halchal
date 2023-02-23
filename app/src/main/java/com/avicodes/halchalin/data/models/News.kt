@@ -13,4 +13,6 @@ data class News(
     var imageUrl: String? = null,
     var coverUrl: String? = null,
     var type: String? = null,
+    var resUrls: List<String>? = null,
+    var createdAt: Long = 0,
 )

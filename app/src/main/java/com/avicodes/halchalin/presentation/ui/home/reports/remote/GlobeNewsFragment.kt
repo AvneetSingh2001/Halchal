@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,9 +42,7 @@ class GlobeNewsFragment : Fragment() {
 
         setUpNationalRecyclerView()
         getNewsList()
-    }
 
-    private fun refresh() {
     }
 
     fun setUpNationalRecyclerView() {
@@ -55,6 +54,11 @@ class GlobeNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
+        viewModel.getWorldNewsHeadlines(
+            topic = "world",
+            country = "in",
+            lang = "hi"
+        )
         viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {response ->
             when(response) {
                 is Result.Error -> {
@@ -65,11 +69,12 @@ class GlobeNewsFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        remoteNewsAdapter.differ.submitList(it.data)
+                        remoteNewsAdapter.differ.submitList(it.results)
                     }
                 }
 
                 else -> {
+                    Log.i("Avneet", "Data Loading")
                     showProgressBar()
                 }
             }

@@ -2,7 +2,6 @@ package com.avicodes.halchalin.presentation.ui.home.home
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,11 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
-import com.avicodes.halchalin.data.models.FeatureSliderModel
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -23,7 +17,6 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.abs
 
 
 @AndroidEntryPoint

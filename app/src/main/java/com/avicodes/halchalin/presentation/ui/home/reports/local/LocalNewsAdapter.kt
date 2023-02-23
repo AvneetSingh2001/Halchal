@@ -6,29 +6,32 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.avicodes.halchalin.data.models.Data
 import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
+import com.avicodes.halchalin.data.utils.TimeCalc
+import com.avicodes.halchalin.databinding.ItemLocalNewsBinding
 import com.bumptech.glide.Glide
 
 
 class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
 
-    inner class ViewHolder(private val binding: ItemRemoteNewsBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemLocalNewsBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
-                Glide.with(ivNews.context)
+                Glide.with(ivThumbnail.context)
                     .load(data.coverUrl)
-                    .into(ivNews)
+                    .into(ivThumbnail)
 
                 tvHeadline.text = data.newsHeadline
+                tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
+                tvLikes.text = data.likes.size.toString() + " Likes"
+                tvCity.text = data.location
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRemoteNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemLocalNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

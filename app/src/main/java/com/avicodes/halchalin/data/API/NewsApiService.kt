@@ -4,29 +4,28 @@ import com.avicodes.halchalin.BuildConfig
 import com.avicodes.halchalin.data.models.NewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface NewsApiService {
-    @GET("top-headlines")
+    @GET("news")
     suspend fun getTopHeadlines(
         @Query("country")
         country: String,
-        @Query("lang")
+        @Query("language")
         lang: String,
-        @Header("X-RapidAPI-Key")
+        @Query("apikey")
         apiKey: String = BuildConfig.API_KEY
     ): Response<NewsResponse>
 
-    @GET("topic-headlines")
+    @GET("news")
     suspend fun getTopicHeadlines(
-        @Query("topic")
+        @Query("category")
         topic: String,
         @Query("country")
         country: String,
-        @Query("lang")
+        @Query("language")
         lang: String,
-        @Header("X-RapidAPI-Key")
+        @Query("apikey")
         apiKey: String = BuildConfig.API_KEY
     ): Response<NewsResponse>
 }

@@ -54,18 +54,14 @@ class HomeActivity : AppCompatActivity() {
     private fun fetchData() = lifecycleScope.launch(Dispatchers.IO){
         viewModel.getFeaturedAds()
         viewModel.getLocalNews("Kichha")
-        viewModel.getNationalNewsHeadlines("IN", "hi")
-        viewModel.getWorldNewsHeadlines("WORLD", "IN", "hi")
     }
 
     private fun showBottomNav() {
         binding.bottomNavigation.visibility = View.VISIBLE
-
     }
 
     private fun hideBottomNav() {
         binding.bottomNavigation.visibility = View.GONE
-
     }
 
     fun logout() {

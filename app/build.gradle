@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace 'com.avicodes.halchalin'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.avicodes.halchalin"
@@ -47,8 +47,9 @@ dependencies {
     def lifecycle_version = "2.5.1"
     def arch_version = "2.1.0"
     def nav_version = "2.5.3"
-
     def room_version = "2.4.3"
+    def media3_version = "1.0.0-rc01"
+
 
     //ROOM
     implementation "androidx.room:room-runtime:$room_version"
@@ -58,10 +59,8 @@ dependencies {
     // Kotlin
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
-
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
@@ -74,8 +73,6 @@ dependencies {
 
     // Annotation processor
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
-
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
@@ -107,4 +104,18 @@ dependencies {
 
     //Image slider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
+
+    //swipe to refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    //Exoplayer
+    // For media playback using ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:$media3_version")
+    // For building media playback UIs
+    implementation("androidx.media3:media3-ui:$media3_version")
+    // For DASH playback support with ExoPlayer
+    implementation("androidx.media3:media3-exoplayer-dash:$media3_version")
+
+    //timecalc
+    implementation 'com.blankj:utilcodex:1.30.6'
 }

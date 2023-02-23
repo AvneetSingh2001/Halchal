@@ -1,7 +1,8 @@
 package com.avicodes.halchalin.data.models
 
 data class NewsResponse(
-    val data: List<Data>,
-    val request_id: String,
-    val status: String
+    val nextPage: String,
+    val results: List<NewsRemote>,
+    val status: String,
+    val totalResults: Int
 )

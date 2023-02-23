@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.avicodes.halchalin.data.models.Data
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
 
@@ -17,7 +17,7 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
             binding.apply {
                 val data = differ.currentList[position]
                 Glide.with(ivNews.context)
-                    .load(data.photo_url)
+                    .load(data.image_url)
                     .into(ivNews)
 
                 tvHeadline.text = data.title
@@ -40,12 +40,12 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<Data> (){
-        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
-            return oldItem.source_url == newItem.source_url
+    private var callback = object : DiffUtil.ItemCallback<NewsRemote> (){
+        override fun areItemsTheSame(oldItem: NewsRemote, newItem: NewsRemote): Boolean {
+            return oldItem.link == newItem.link
         }
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
+        override fun areContentsTheSame(oldItem: NewsRemote, newItem: NewsRemote): Boolean {
             return oldItem == newItem
         }
     }

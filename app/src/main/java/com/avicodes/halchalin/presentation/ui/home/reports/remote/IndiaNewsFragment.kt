@@ -41,13 +41,10 @@ class IndiaNewsFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         setUpNationalRecyclerView()
+
         getNewsList()
-    }
-
-    private fun refresh() {
 
     }
-
 
     fun setUpNationalRecyclerView() {
         binding.apply {
@@ -58,18 +55,22 @@ class IndiaNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        viewModel.getNationalNewsHeadlines(
+            country = "in",
+            lang = "hi"
+        )
+        viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
                     Log.e("Error", response.exception?.message.toString())
                 }
 
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        remoteNewsAdapter.differ.submitList(it.data)
+                        remoteNewsAdapter.differ.submitList(it.results)
                     }
                 }
 

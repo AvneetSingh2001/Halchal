@@ -1,6 +1,5 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
-import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsResponse
 import retrofit2.Response
 
