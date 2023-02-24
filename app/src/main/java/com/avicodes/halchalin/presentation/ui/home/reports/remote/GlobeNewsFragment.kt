@@ -54,11 +54,7 @@ class GlobeNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.getWorldNewsHeadlines(
-            topic = "world",
-            country = "in",
-            lang = "hi"
-        )
+
         viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {response ->
             when(response) {
                 is Result.Error -> {

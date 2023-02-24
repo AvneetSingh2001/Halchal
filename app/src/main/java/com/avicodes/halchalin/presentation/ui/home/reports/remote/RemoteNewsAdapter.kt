@@ -1,11 +1,13 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
@@ -16,11 +18,15 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
+
                 Glide.with(ivNews.context)
                     .load(data.image_url)
+                    .error(R.drawable.halchal_logo_2)
                     .into(ivNews)
 
-                tvHeadline.text = data.title
+                data.title?.let { tvHeadline.text = it }
+                data.description?.let { tvDesc.text = it }
+                data.pubDate?.let { tvPubDate.text = "Published on $it"}
             }
         }
     }

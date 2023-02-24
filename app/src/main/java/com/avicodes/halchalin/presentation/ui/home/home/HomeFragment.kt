@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -27,6 +29,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var featuredAdapter: SliderAdapter
+    private lateinit var latestNewsAdapter: LatestNewsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +49,15 @@ class HomeFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
         getFeaturedAds()
+        getLatestNews()
     }
 
     private fun getFeaturedAds() {
-        viewModel.featuredAds.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        viewModel.featuredAds.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
                     Log.e("Error", response.exception?.message.toString())
                 }
 
@@ -83,6 +87,65 @@ class HomeFragment : Fragment() {
             imageSlider.indicatorUnselectedColor = Color.GRAY;
             imageSlider.scrollTimeInSec = 4; //set scroll delay in seconds :
             imageSlider.startAutoCycle();
+        }
+    }
+
+    private fun getLatestNews() {
+        binding?.apply {
+            latestNewsAdapter = LatestNewsAdapter()
+            rvLatestLocal.adapter = latestNewsAdapter
+            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
+            var latestHeadlines = mutableListOf<String>()
+            var one = false
+            var two = false
+            var three = false
+
+            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+                when (response) {
+                    is Result.Success -> {
+                        response.data?.let {
+                            it[0].newsHeadline?.let { news -> latestHeadlines.add(news) }
+                            one = true
+                            if(one and two and three) {
+                                latestNewsAdapter.differ.submitList(latestHeadlines)
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+            })
+
+            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
+                when (response) {
+                    is Result.Success -> {
+                        response.data?.let {
+                            if (it.results.isNotEmpty())
+                                it.results[0].title?.let { news -> latestHeadlines.add(news) }
+                            two = true
+                            if(one and two and three) {
+                                latestNewsAdapter.differ.submitList(latestHeadlines)
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+            })
+
+            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
+                when (response) {
+                    is Result.Success -> {
+                        response.data?.let {
+                            if (it.results.isNotEmpty())
+                                it.results[0].title?.let { news -> latestHeadlines.add(news) }
+                            three = true
+                            if(one and two and three) {
+                                latestNewsAdapter.differ.submitList(latestHeadlines)
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+            })
         }
     }
 

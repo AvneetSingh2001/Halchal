@@ -55,10 +55,6 @@ class IndiaNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.getNationalNewsHeadlines(
-            country = "in",
-            lang = "hi"
-        )
         viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Result.Error -> {

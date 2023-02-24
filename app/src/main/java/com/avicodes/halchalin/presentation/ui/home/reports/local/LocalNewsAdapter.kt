@@ -23,9 +23,10 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                     .into(ivThumbnail)
 
                 tvHeadline.text = data.newsHeadline
-                tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvLikes.text = data.likes.size.toString() + " Likes"
                 tvCity.text = data.location
+                tvDesc.text = data.newsDesc
+                tvPubDate.text = TimeCalc.getTimeAgo(data.createdAt)
             }
         }
     }

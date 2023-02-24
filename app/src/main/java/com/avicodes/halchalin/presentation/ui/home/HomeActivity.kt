@@ -33,6 +33,8 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory)[HomeActivityViewModel::class.java]
 
+        fetchData()
+
         val navController  = findNavController(R.id.fragmentContainerView)
         navController.setGraph(
             R.navigation.home_nav_graph)
@@ -48,12 +50,21 @@ class HomeActivity : AppCompatActivity() {
                 else -> hideBottomNav()
             }
         }
-        fetchData()
+
     }
 
     private fun fetchData() = lifecycleScope.launch(Dispatchers.IO){
         viewModel.getFeaturedAds()
         viewModel.getLocalNews("Kichha")
+        viewModel.getWorldNewsHeadlines(
+            topic = "world",
+            country = "in",
+            lang = "hi"
+        )
+        viewModel.getNationalNewsHeadlines(
+            country = "in",
+            lang = "hi"
+        )
     }
 
     private fun showBottomNav() {
