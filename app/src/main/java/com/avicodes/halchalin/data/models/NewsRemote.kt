@@ -1,5 +1,9 @@
 package com.avicodes.halchalin.data.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class NewsRemote(
     val category: List<String>?,
     val content: String?,
@@ -13,5 +17,4 @@ data class NewsRemote(
     val pubDate: String?,
     val source_id: String?,
     val title: String?,
-    val video_url: Any?
-)
+): Parcelable

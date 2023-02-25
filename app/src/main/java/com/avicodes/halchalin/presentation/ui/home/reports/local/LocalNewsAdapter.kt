@@ -27,6 +27,12 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                 tvCity.text = data.location
                 tvDesc.text = data.newsDesc
                 tvPubDate.text = TimeCalc.getTimeAgo(data.createdAt)
+
+                root.setOnClickListener {
+                    onItemClickListener?.let {
+                        it(position)
+                    }
+                }
             }
         }
     }
@@ -56,6 +62,12 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
         }
     }
 
-
     val differ = AsyncListDiffer(this, callback)
+
+
+    private var onItemClickListener: ((Int)->Unit)?= null
+
+    fun setOnItemClickListener(listener: (Int) -> Unit) {
+        onItemClickListener = listener
+    }
 }

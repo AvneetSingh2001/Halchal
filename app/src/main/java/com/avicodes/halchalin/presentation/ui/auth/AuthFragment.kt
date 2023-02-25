@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
@@ -121,7 +122,6 @@ class AuthFragment : Fragment() {
         viewModel.getUser(phone).observe(requireActivity(), Observer {
             when(it) {
                 is Result.Success -> {
-
                     if(it.data != null) {
                         Log.i("MYTAG", "Success to home: ${phone}")
                         navigateToHomeScreen()
@@ -146,13 +146,12 @@ class AuthFragment : Fragment() {
     }
 
     fun navigateToDetailsScreen() {
-        val action = AuthFragmentDirections.actionAuthFragmentToHomeActivity()
+        val action = AuthFragmentDirections.actionAuthFragmentToDetailsFragment()
         requireView().findNavController().navigate(action)
     }
 
     fun navigateToHomeScreen() {
-        val action = AuthFragmentDirections.actionAuthFragmentToHomeActivity()
-        requireView().findNavController().navigate(action)
+        (activity as MainActivity).moveToHomeActivity()
     }
 
     fun navigateToCodeAuth(phone: String) {

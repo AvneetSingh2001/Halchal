@@ -1,8 +1,10 @@
 package com.avicodes.halchalin.presentation.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
+import com.avicodes.halchalin.data.utils.Result
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,6 +53,19 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        observeTabs()
+
+    }
+
+    private fun observeTabs() {
+        viewModel.exploreNewsTab.observe(this, Observer { response ->
+            when(response) {
+                is Result.Success -> {
+                    binding.bottomNavigation.selectedItemId = R.id.newsVpFragment
+                }
+                else -> {}
+            }
+        })
     }
 
     private fun fetchData() = lifecycleScope.launch(Dispatchers.IO){

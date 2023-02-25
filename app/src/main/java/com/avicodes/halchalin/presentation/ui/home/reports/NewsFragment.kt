@@ -5,12 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import com.avicodes.halchalin.data.utils.Result
 
 @AndroidEntryPoint
 class NewsFragment : Fragment() {
@@ -88,5 +93,4 @@ class NewsFragment : Fragment() {
             })
         }
     }
-
 }

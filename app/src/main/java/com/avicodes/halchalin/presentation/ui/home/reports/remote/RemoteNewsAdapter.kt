@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 
 
 class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
+
     inner class ViewHolder(private val binding: ItemRemoteNewsBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
@@ -24,9 +26,25 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
                     .error(R.drawable.halchal_logo_2)
                     .into(ivNews)
 
+                data.source_id?.let { tvSource.text = "Source: ${it}" }
                 data.title?.let { tvHeadline.text = it }
-                data.description?.let { tvDesc.text = it }
-                data.pubDate?.let { tvPubDate.text = "Published on $it"}
+                data.content?.let { tvDesc.text = it }
+                data.pubDate?.let { tvPubDate.text = "$it"}
+                tvCollExp.text = "Expand"
+
+                tvCollExp.setOnClickListener {
+                    if(tvCollExp.text == "Expand") {
+                        tvDesc.visibility = View.GONE
+                        tvDescContent.text = data.content.toString()
+                        tvDescContent.visibility = View.VISIBLE
+                        tvCollExp.text = "Collapse"
+                    } else if(tvCollExp.text == "Collapse") {
+                        tvDesc.visibility = View.VISIBLE
+                        tvDescContent.visibility = View.GONE
+                        tvCollExp.text = "Expand"
+                    }
+                }
+
             }
         }
     }
@@ -58,4 +76,5 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
 
 
     val differ = AsyncListDiffer(this, callback)
+
 }

@@ -1,6 +1,7 @@
 package com.avicodes.halchalin
 
 import android.app.Application
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.avicodes.halchalin.databinding.ActivityMainBinding
 import com.avicodes.halchalin.presentation.HalchalApp
+import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -59,5 +61,11 @@ class MainActivity : AppCompatActivity() {
         mainActivity = null
     }
 
+    fun moveToHomeActivity() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
+    }
 
 }

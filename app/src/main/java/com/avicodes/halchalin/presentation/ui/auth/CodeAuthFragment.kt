@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentCodeAuthBinding
@@ -140,8 +141,7 @@ class CodeAuthFragment : Fragment() {
     }
 
     fun navigateToHomeScreen() {
-        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToHomeActivity()
-        requireView().findNavController().navigate(action)
+        (activity as MainActivity).moveToHomeActivity()
     }
 
 }

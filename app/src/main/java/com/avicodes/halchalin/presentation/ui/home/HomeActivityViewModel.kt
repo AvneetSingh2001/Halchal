@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.FeaturedAds
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,7 @@ class HomeActivityViewModel(
     val worldHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
+    val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -76,6 +78,7 @@ class HomeActivityViewModel(
             featuredAds.postValue(it)
         }
     }
+
 
     fun logout() {
         auth.signOut()

@@ -14,7 +14,7 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.data.utils.Result
 
-class IndiaNewsFragment : Fragment() {
+class IndiaNewsFragment() : Fragment() {
 
     private var _binding: FragmentIndiaNewsBinding? = null
     private val binding get() = _binding!!

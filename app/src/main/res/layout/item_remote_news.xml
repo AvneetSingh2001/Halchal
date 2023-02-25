@@ -16,9 +16,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:layout_marginVertical="20dp"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_marginTop="4dp"
                 android:id="@+id/ivNews"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -26,12 +28,25 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
 
+
             <TextView
-                android:id="@+id/tvHeadline"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
+                android:id="@+id/tvPubDate"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/ivNews"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintRight_toRightOf="parent"
+                android:textSize="14sp"
+                android:textColor="@color/mainRed"
+                android:text="News Published Date"
+                android:layout_margin="8dp"/>
+
+            <TextView
+                android:id="@+id/tvHeadline"
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvPubDate"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:textSize="20sp"
@@ -42,7 +57,6 @@
             <TextView
                 android:id="@+id/tvDesc"
                 android:layout_marginHorizontal="10dp"
-                app:layout_goneMarginTop="4dp"
                 android:maxLines="2"
                 android:lines="2"
                 android:ellipsize="end"
@@ -52,23 +66,52 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:textSize="17sp"
+                app:layout_constraintBottom_toTopOf="@id/tvCollExp"
+                android:layout_marginBottom="4dp"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginTop="4dp"
                 />
 
             <TextView
-                android:id="@+id/tvPubDate"
-                android:layout_marginHorizontal="10dp"
+                android:id="@+id/tvDescContent"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="4dp"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvDesc"
+                app:layout_constraintTop_toBottomOf="@id/tvHeadline"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:textSize="14sp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toTopOf="@id/tvCollExp"
+                android:visibility="gone"
+                android:layout_marginHorizontal="10dp"
+                android:text="headline"
+                />
+
+            <TextView
+                android:id="@+id/tvCollExp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expand"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="10dp"
                 android:textColor="@color/mainBlue"
                 android:fontFamily="@font/roboto_bold"
-                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/tvSource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:fontFamily="@font/roboto_bold"
+                android:textSize="14sp"
+                android:textColor="@color/mainBlue"
+                android:text="Source: Halchal.in"
+                android:layout_marginHorizontal="10dp"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

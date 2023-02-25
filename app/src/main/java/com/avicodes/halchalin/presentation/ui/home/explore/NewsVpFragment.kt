@@ -48,6 +48,19 @@ class NewsVpFragment : Fragment() {
         setUpLocalNewsRecyclerView()
         getNewsList()
         binding.videoViewPager.setPageTransformer(DepthPageTransformer())
+        observeExploreTab()
+    }
+
+    private fun observeExploreTab() {
+        viewModel.exploreNewsTab.observe(requireActivity(), Observer {
+            when(it) {
+                is Result.Success -> {
+                    it.data?.let { it1 -> binding.videoViewPager.currentItem = it1 }
+                    viewModel.exploreNewsTab.value = Result.NotInitialized
+                }
+                else -> {}
+            }
+        })
     }
 
     private fun getNewsList() {
