@@ -18,7 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
 
 @AndroidEntryPoint
-class NewsFragment : Fragment() {
+class NewsFragment(
+) : Fragment(){
+
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!

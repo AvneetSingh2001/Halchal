@@ -1,6 +1,5 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,8 @@ import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
 
 
-class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
+class RemoteNewsAdapter(
+): Adapter<RemoteNewsAdapter.ViewHolder>(){
 
     inner class ViewHolder(private val binding: ItemRemoteNewsBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
@@ -42,9 +42,11 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
                         tvDesc.visibility = View.VISIBLE
                         tvDescContent.visibility = View.GONE
                         tvCollExp.text = "Expand"
+                        onItemClickListener?.let {
+                            it(position)
+                        }
                     }
                 }
-
             }
         }
     }
@@ -76,5 +78,11 @@ class RemoteNewsAdapter: Adapter<RemoteNewsAdapter.ViewHolder>(){
 
 
     val differ = AsyncListDiffer(this, callback)
+
+    private var onItemClickListener: ((Int)->Unit)?= null
+
+    fun setOnItemClickListener(listener: (Int) -> Unit) {
+        onItemClickListener = listener
+    }
 
 }

@@ -49,6 +49,18 @@ class NewsVpFragment : Fragment() {
         getNewsList()
         binding.videoViewPager.setPageTransformer(DepthPageTransformer())
         observeExploreTab()
+
+        adapter.setOnLikeClickListener {
+
+        }
+
+        adapter.setOnCommentClickListener {
+
+        }
+
+        adapter.setOnShareClickListener {
+
+        }
     }
 
     private fun observeExploreTab() {

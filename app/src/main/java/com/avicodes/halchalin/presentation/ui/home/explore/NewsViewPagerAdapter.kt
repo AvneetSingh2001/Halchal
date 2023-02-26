@@ -40,6 +40,24 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
                     ivNews.startAutoCycle()
                 }
                 tvHeadline.text = data.newsHeadline
+
+                cvLikes.setOnClickListener {
+                    likeClickListener?.let {
+                        it(position)
+                    }
+                }
+
+                cvComment.setOnClickListener {
+                    commentClickListener?.let {
+                        it(position)
+                    }
+                }
+
+                cvShare.setOnClickListener {
+                    shareClickListener?.let {
+                        it(position)
+                    }
+                }
             }
         }
     }
@@ -70,4 +88,20 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
     }
 
     val differ = AsyncListDiffer(this, callback)
+
+    private var likeClickListener: ((Int)->Unit)?= null
+    fun setOnLikeClickListener(listener: (Int) -> Unit) {
+        likeClickListener = listener
+    }
+
+    private var commentClickListener: ((Int)->Unit)?= null
+    fun setOnCommentClickListener(listener: (Int) -> Unit) {
+        commentClickListener = listener
+    }
+
+    private var shareClickListener: ((Int)->Unit)?= null
+    fun setOnShareClickListener(listener: (Int) -> Unit) {
+        shareClickListener = listener
+    }
+
 }

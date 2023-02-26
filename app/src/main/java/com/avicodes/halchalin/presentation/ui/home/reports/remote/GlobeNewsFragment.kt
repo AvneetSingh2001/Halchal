@@ -50,6 +50,9 @@ class GlobeNewsFragment : Fragment() {
             remoteNewsAdapter = RemoteNewsAdapter()
             rvNationalNews.adapter = remoteNewsAdapter
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
+            remoteNewsAdapter.setOnItemClickListener {
+                rvNationalNews.scrollToPosition(it)
+            }
         }
     }
 
