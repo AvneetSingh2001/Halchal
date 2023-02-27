@@ -47,4 +47,7 @@ class LocalNewsDataSourceImpl(
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun updateLikes(uid: String) {
+    }
+
 }

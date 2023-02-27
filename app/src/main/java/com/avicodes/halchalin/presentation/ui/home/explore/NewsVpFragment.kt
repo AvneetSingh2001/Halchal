@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.saveable.autoSaver
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentNewsVpBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -49,10 +51,6 @@ class NewsVpFragment : Fragment() {
         getNewsList()
         binding.videoViewPager.setPageTransformer(DepthPageTransformer())
         observeExploreTab()
-
-        adapter.setOnLikeClickListener {
-
-        }
 
         adapter.setOnCommentClickListener {
 

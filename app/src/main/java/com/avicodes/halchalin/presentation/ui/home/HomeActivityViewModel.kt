@@ -28,6 +28,8 @@ class HomeActivityViewModel(
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
     val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
 
+    val likesCount: MutableLiveData<Int> = MutableLiveData()
+
     fun getNationalNewsHeadlines(
         country: String,
         lang: String
@@ -78,7 +80,6 @@ class HomeActivityViewModel(
             featuredAds.postValue(it)
         }
     }
-
 
     fun logout() {
         auth.signOut()
