@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.repository.dataSourceImpl
 
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.repository.dataSource.LocalNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
@@ -47,7 +48,27 @@ class LocalNewsDataSourceImpl(
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun updateLikes(uid: String) {
-    }
+    override fun postComment(
+        newsId: String,
+        comment: String,
+        comments: List<Pair<User, String>>
+    ) = flow<Result<String>> {
+        emit(Result.Loading("Uploading Comment"))
+
+        val user = User()
+        val commentList = comments.toMutableList()
+        commentList.add(Pair(user, comment))
+
+        val snapshot = firestore
+            .collection("News")
+            .document(newsId)
+            .update("comments", commentList)
+            .await()
+
+        emit(Result.Success("Uploaded"))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
+
 
 }

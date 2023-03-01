@@ -22,7 +22,7 @@
     <item
         android:id="@+id/adsFragment"
         android:title="Ads"
-        android:icon="@drawable/profile"/>
+        android:icon="@drawable/category"/>
 
     <item
         android:id="@+id/settingsFragment"

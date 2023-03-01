@@ -3,10 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avicodes.halchalin.data.models.FeaturedAds
-import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsRemote
-import com.avicodes.halchalin.data.models.NewsResponse
+import com.avicodes.halchalin.data.models.*
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -27,8 +24,6 @@ class HomeActivityViewModel(
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
     val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
-
-    val likesCount: MutableLiveData<Int> = MutableLiveData()
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -79,6 +74,14 @@ class HomeActivityViewModel(
         adsRepository.getAllFeaturedAds().collectLatest {
             featuredAds.postValue(it)
         }
+    }
+
+    fun postComment(newsId: String, comment: String, comments: List<Pair<User, String>>) {
+        remoteNewsRepository.postComment(
+            newsId = newsId,
+            comment = comment,
+            comments = comments,
+        )
     }
 
     fun logout() {

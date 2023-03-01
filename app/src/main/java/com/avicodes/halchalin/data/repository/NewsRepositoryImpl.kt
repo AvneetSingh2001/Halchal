@@ -2,6 +2,7 @@ package com.avicodes.halchalin.data.repository;
 
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsResponse
+import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.repository.dataSource.LocalNewsDataSource
 import com.avicodes.halchalin.data.repository.dataSource.RemoteNewsDataSource;
 import com.avicodes.halchalin.data.utils.Result
@@ -39,6 +40,15 @@ class NewsRepositoryImpl(
     override fun getLocalNews(location: String): Flow<Result<List<News>>> {
         return localNewsDataSource.getAllLocalNews(location)
     }
+
+    override fun postComment(newsId: String, comment: String, comments: List<Pair<User, String>>): Flow<Result<String>> {
+        return localNewsDataSource.postComment(
+            newsId = newsId,
+            comment = comment,
+            comments = comments
+        )
+    }
+
 
     fun responseToResource(response: Response<NewsResponse>): Result<NewsResponse> {
         if (response.isSuccessful) {

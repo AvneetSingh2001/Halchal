@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
 
@@ -9,5 +10,9 @@ interface LocalNewsDataSource {
     suspend fun getNearbyNews(location: String): Flow<Result<List<News>>>
     suspend fun getNewsById(id: String): Flow<Result<News>>
 
-    suspend fun updateLikes(uid: String)
+    fun postComment(
+        newsId: String,
+        comment: String,
+        comments: List<Pair<User, String>>,
+    ): Flow<Result<String>>
 }

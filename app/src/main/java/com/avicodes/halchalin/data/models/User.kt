@@ -5,5 +5,6 @@ data class User(
     var name : String = "",
     var location: String = "",
     var mobile : String = "",
+    var imgUrl: String = ""
 )
 

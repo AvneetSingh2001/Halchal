@@ -2,22 +2,21 @@ package com.avicodes.halchalin.presentation.ui.home.explore
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.runtime.saveable.autoSaver
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentNewsVpBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.reports.local.LocalNewsAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -53,12 +52,17 @@ class NewsVpFragment : Fragment() {
         observeExploreTab()
 
         adapter.setOnCommentClickListener {
-
+            showCommentDialog(it)
         }
 
         adapter.setOnShareClickListener {
 
         }
+    }
+
+    private fun showCommentDialog(news: News) {
+        val action = NewsVpFragmentDirections.actionNewsVpFragmentToCommentFragment(news)
+        requireView().findNavController().navigate(action)
     }
 
     private fun observeExploreTab() {

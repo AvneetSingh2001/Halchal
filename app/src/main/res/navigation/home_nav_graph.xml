@@ -14,7 +14,11 @@
         android:id="@+id/newsVpFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.explore.NewsVpFragment"
         android:label="fragment_news_vp"
-        tools:layout="@layout/fragment_news_vp" />
+        tools:layout="@layout/fragment_news_vp" >
+        <action
+            android:id="@+id/action_newsVpFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment"
@@ -42,4 +46,13 @@
         android:name="com.avicodes.halchalin.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <dialog
+        android:id="@+id/commentFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.explore.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" >
+        <argument
+            android:name="news"
+            app:argType="com.avicodes.halchalin.data.models.News" />
+    </dialog>
 </navigation>

@@ -42,13 +42,13 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
 
                 cvComment.setOnClickListener {
                     commentClickListener?.let {
-                        it(position)
+                        it(data)
                     }
                 }
 
                 cvShare.setOnClickListener {
                     shareClickListener?.let {
-                        it(position)
+                        it(data)
                     }
                 }
             }
@@ -82,13 +82,13 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
 
     val differ = AsyncListDiffer(this, callback)
 
-    private var commentClickListener: ((Int)->Unit)?= null
-    fun setOnCommentClickListener(listener: (Int) -> Unit) {
+    private var commentClickListener: ((News)->Unit)?= null
+    fun setOnCommentClickListener(listener: (News) -> Unit) {
         commentClickListener = listener
     }
 
-    private var shareClickListener: ((Int)->Unit)?= null
-    fun setOnShareClickListener(listener: (Int) -> Unit) {
+    private var shareClickListener: ((News)->Unit)?= null
+    fun setOnShareClickListener(listener: (News) -> Unit) {
         shareClickListener = listener
     }
 
