@@ -16,27 +16,43 @@ class UsecaseModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticateUsecase(phoneAuthRepository: PhoneAuthRepository): authenticateUseCase = authenticateUseCase(phoneAuthRepository)
+    fun provideAuthenticateUsecase(phoneAuthRepository: PhoneAuthRepository): authenticateUseCase =
+        authenticateUseCase(phoneAuthRepository)
 
 
     @Provides
     @Singleton
-    fun provideOnVerifyOtpUsecase(phoneAuthRepository: PhoneAuthRepository): onVerifyOtpUseCase = onVerifyOtpUseCase(phoneAuthRepository)
+    fun provideOnVerifyOtpUsecase(phoneAuthRepository: PhoneAuthRepository): onVerifyOtpUseCase =
+        onVerifyOtpUseCase(phoneAuthRepository)
 
     @Provides
     @Singleton
-    fun provideSignupStateUsecase(phoneAuthRepository: PhoneAuthRepository): signUpStateUseCase = signUpStateUseCase(phoneAuthRepository)
+    fun provideSignupStateUsecase(phoneAuthRepository: PhoneAuthRepository): signUpStateUseCase =
+        signUpStateUseCase(phoneAuthRepository)
 
 
     @Provides
     @Singleton
-    fun provideGetUserPhoneUsecase(phoneAuthRepository: PhoneAuthRepository): GetUserPhoneUseCase = GetUserPhoneUseCase(phoneAuthRepository)
+    fun provideGetUserPhoneUsecase(phoneAuthRepository: PhoneAuthRepository): GetUserPhoneUseCase =
+        GetUserPhoneUseCase(phoneAuthRepository)
 
     @Provides
     @Singleton
-    fun provideUserUploadRemotelyUsecase(userRespository: UserRespository): UserUploadRemotelyUseCase = UserUploadRemotelyUseCase(userRespository)
+    fun provideUserUploadRemotelyUsecase(userRespository: UserRespository): UserUploadRemotelyUseCase =
+        UserUploadRemotelyUseCase(userRespository)
 
     @Provides
     @Singleton
-    fun provideGetUserUsecase(userRespository: UserRespository): GetUserUseCase = GetUserUseCase(userRespository)
+    fun provideGetUserUsecase(userRespository: UserRespository): GetUserUseCase =
+        GetUserUseCase(userRespository)
+
+    @Provides
+    @Singleton
+    fun provideGetUserByIdUsecase(userRespository: UserRespository): GetUserByIdUseCase =
+        GetUserByIdUseCase(userRespository)
+
+    @Provides
+    @Singleton
+    fun provideUpdateUserPicUsecase(userRespository: UserRespository): updateUserPicUseCase =
+        updateUserPicUseCase(userRespository = userRespository)
 }

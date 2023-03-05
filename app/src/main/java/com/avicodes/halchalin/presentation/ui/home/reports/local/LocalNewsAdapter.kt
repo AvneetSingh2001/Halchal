@@ -23,7 +23,6 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                     .into(ivThumbnail)
 
                 tvHeadline.text = data.newsHeadline
-                tvLikes.text = data.comments.size.toString() + " Conversations"
                 tvCity.text = data.location
                 tvDesc.text = data.newsDesc
                 tvPubDate.text = TimeCalc.getTimeAgo(data.createdAt)

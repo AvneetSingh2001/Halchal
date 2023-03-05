@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.avicodes.halchalin"
-        minSdk 26
+        minSdk 22
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -101,6 +101,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
     //Image slider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
@@ -118,4 +119,8 @@ dependencies {
 
     //timecalc
     implementation 'com.blankj:utilcodex:1.30.6'
+
+    //DataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }

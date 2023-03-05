@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.domain.repository.AdsRepository
 import com.avicodes.halchalin.domain.repository.NewsRepository
+import com.avicodes.halchalin.domain.repository.UserRespository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
@@ -27,16 +28,23 @@ class FactoryModule {
         signUpStateUseCase: signUpStateUseCase,
         getUserUseCase: GetUserUseCase
     ): AuthFragmentViewModelFactory {
-        return AuthFragmentViewModelFactory(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase, getUserUseCase)
+        return AuthFragmentViewModelFactory(
+            authenticateUseCase,
+            onVerifyOtpUseCase,
+            signUpStateUseCase,
+            getUserUseCase
+        )
     }
 
     @Singleton
     @Provides
     fun provideDetailsFragmentViewModelFactory(
+        auth: FirebaseAuth,
         userUploadRemotelyUseCase: UserUploadRemotelyUseCase,
         getUserPhoneUseCase: GetUserPhoneUseCase
     ): DetailsFragmentViewModelFactory {
         return DetailsFragmentViewModelFactory(
+            auth = auth,
             userUploadRemotelyUseCase = userUploadRemotelyUseCase,
             getUserPhoneUseCase = getUserPhoneUseCase
         )
@@ -47,12 +55,18 @@ class FactoryModule {
     fun provideHomeActivityViewModelFactory(
         auth: FirebaseAuth,
         newsRepository: NewsRepository,
-        adsRepository: AdsRepository
+        adsRepository: AdsRepository,
+        getUserByIdUseCase: GetUserByIdUseCase,
+        updateUserPicUseCase: updateUserPicUseCase,
+        userRespository: UserRespository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
             newsRepository = newsRepository,
-            adsRepository = adsRepository
+            adsRepository = adsRepository,
+            getUserByIdUseCase = getUserByIdUseCase,
+            updateUserPicUseCase = updateUserPicUseCase,
+            userRespository = userRespository
         )
     }
 }

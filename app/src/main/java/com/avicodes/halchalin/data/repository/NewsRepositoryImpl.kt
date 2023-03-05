@@ -1,18 +1,22 @@
 package com.avicodes.halchalin.data.repository;
 
-import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.models.User
+import com.avicodes.halchalin.data.models.*
 import com.avicodes.halchalin.data.repository.dataSource.LocalNewsDataSource
 import com.avicodes.halchalin.data.repository.dataSource.RemoteNewsDataSource;
+import com.avicodes.halchalin.data.repository.dataSource.UserDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.NewsRepository
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUseCase
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class NewsRepositoryImpl(
     private val remoteNewsDataSource: RemoteNewsDataSource,
-    private val localNewsDataSource: LocalNewsDataSource
+    private val localNewsDataSource: LocalNewsDataSource,
+    private val userDataSource: UserDataSource
 ) : NewsRepository {
     override suspend fun getNationalHeadlines(country: String, lang: String): Result<NewsResponse> {
         return responseToResource(
@@ -41,12 +45,15 @@ class NewsRepositoryImpl(
         return localNewsDataSource.getAllLocalNews(location)
     }
 
-    override fun postComment(newsId: String, comment: String, comments: List<Pair<User, String>>): Flow<Result<String>> {
+    override fun postComment(newsId: String, comment: String): Flow<Result<String>> {
         return localNewsDataSource.postComment(
             newsId = newsId,
             comment = comment,
-            comments = comments
         )
+    }
+
+    override fun getComment(newsId: String): Flow<Result<List<Comment>>> {
+        return localNewsDataSource.getAllComments(newsId)
     }
 
 

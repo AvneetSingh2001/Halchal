@@ -40,6 +40,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/mainActivity"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_settingsFragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -55,4 +58,9 @@
             android:name="news"
             app:argType="com.avicodes.halchalin.data.models.News" />
     </dialog>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.settings.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" />
 </navigation>

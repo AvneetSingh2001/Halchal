@@ -70,6 +70,4 @@ class DetailsFragment : Fragment() {
     private fun navigateToHome() {
         (activity as MainActivity).moveToHomeActivity()
     }
-
-
 }

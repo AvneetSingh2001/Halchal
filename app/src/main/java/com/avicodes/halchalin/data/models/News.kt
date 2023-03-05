@@ -12,7 +12,6 @@ data class News(
     var time: String? = null,
     var date: String? = null,
     var likes : List<String> = ArrayList(),
-    var comments: List<Pair<User, String>> = ArrayList(),
     var videoUrl: String? = null,
     var imageUrl: String? = null,
     var coverUrl: String? = null,

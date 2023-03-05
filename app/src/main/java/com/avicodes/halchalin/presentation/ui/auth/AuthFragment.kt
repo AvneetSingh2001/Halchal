@@ -105,44 +105,43 @@ class AuthFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if(auth.currentUser != null) {
+        auth.currentUser?.let {
+            Log.e("Auth", auth.currentUser!!.uid)
             binding.progCons.visibility = View.VISIBLE
             binding.mainCons.visibility = View.INVISIBLE
-            auth.currentUser!!.phoneNumber?.let { navigateToNextScreen(it) }
+            navigateToNextScreen(it.phoneNumber)
         }
     }
 
     override fun onResume() {
         super.onResume()
-
     }
 
 
-    fun navigateToNextScreen(phone: String) {
-        viewModel.getUser(phone).observe(requireActivity(), Observer {
-            when(it) {
-                is Result.Success -> {
-                    if(it.data != null) {
-                        Log.i("MYTAG", "Success to home: ${phone}")
-                        navigateToHomeScreen()
-                    } else {
-                        Log.i("MYTAG", "Success to details: ${phone}")
-                        navigateToDetailsScreen()
+    fun navigateToNextScreen(phone: String?) {
+        auth.currentUser?.let {user->
+            viewModel.getUser(user.uid).observe(requireActivity(), Observer {
+                when(it) {
+                    is Result.Success -> {
+                        if(it.data != null) {
+                            Log.i("MYTAG", "Success to home: ${phone}")
+                            navigateToHomeScreen()
+                        } else {
+                            Log.i("MYTAG", "Success to details: ${phone}")
+                            navigateToDetailsScreen()
+                        }
+                    }
+
+                    is Result.Error -> {
+                        Log.e("Error", it.exception.toString())
+                    }
+                    else -> {
+                        Log.e("Loading", it.toString())
                     }
                 }
 
-                is Result.Error -> {
-                    Log.e("Error", it.exception.toString())
-                }
-                else -> {
-                        Log.e("Loading", it.toString())
-                }
-            }
-
-        })
-
-
-
+            })
+        }
     }
 
     fun navigateToDetailsScreen() {

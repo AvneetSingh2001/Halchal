@@ -2,11 +2,13 @@ package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.API.NewsApiService
+import com.avicodes.halchalin.data.prefs.UserPrefs
 import com.avicodes.halchalin.data.repository.dataSource.*
 import com.avicodes.halchalin.data.repository.dataSourceImpl.*
 import com.bumptech.glide.load.DataSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,9 +28,9 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideUserDataSource(auth:FirebaseAuth, firestoreDb: FirebaseFirestore) : UserDataSource{
+    fun provideUserDataSource(auth:FirebaseAuth, firestoreDb: FirebaseFirestore, storage: FirebaseStorage, userPrefs: UserPrefs) : UserDataSource{
         return UserDataSourceImpl(
-            auth, firestoreDb
+            auth, firestoreDb, storage, userPrefs
         )
     }
 
@@ -36,19 +38,25 @@ class DataModule {
     @Provides
     @Singleton
     fun provideRemoteNewsDataSource(newsApiService: NewsApiService): RemoteNewsDataSource {
-        return RemoteNewsDataSourceImpl(newsApiService)
+        return RemoteNewsDataSourceImpl(
+            newsApiService
+        )
     }
 
     @Provides
     @Singleton
-    fun provideLocalNewsDataSource(firestoreDb: FirebaseFirestore) : LocalNewsDataSource{
-        return LocalNewsDataSourceImpl(firestoreDb)
+    fun provideLocalNewsDataSource(auth: FirebaseAuth,firestoreDb: FirebaseFirestore) : LocalNewsDataSource{
+        return LocalNewsDataSourceImpl(
+            auth, firestoreDb
+        )
     }
 
     @Provides
     @Singleton
     fun provideAdsDataSource(firestoreDb: FirebaseFirestore): AdsDataSource {
-        return AdsDataSouceImpl(firestoreDb)
+        return AdsDataSouceImpl(
+            firestoreDb
+        )
     }
 
 }

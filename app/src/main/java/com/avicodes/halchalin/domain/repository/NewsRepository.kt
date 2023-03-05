@@ -1,8 +1,6 @@
 package com.avicodes.halchalin.domain.repository
 
-import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.models.User
+import com.avicodes.halchalin.data.models.*
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
 
@@ -26,6 +24,9 @@ interface NewsRepository {
     fun postComment(
         newsId: String,
         comment: String,
-        comments: List<Pair<User, String>>,
     ): Flow<Result<String>>
+
+    fun getComment(
+        newsId: String
+    ): Flow<Result<List<Comment>>>
 }

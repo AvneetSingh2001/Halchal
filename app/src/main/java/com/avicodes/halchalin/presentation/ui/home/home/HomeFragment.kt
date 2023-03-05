@@ -50,6 +50,10 @@ class HomeFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         getFeaturedAds()
         getLatestNews()
+
+        viewModel.curUser.observe(requireActivity(), Observer {
+            binding.etLoc.setText(it?.location.toString())
+        })
     }
 
     private fun getFeaturedAds() {

@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.avicodes.halchalin.data.utils.Result
 import android.os.Bundle
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory)[HomeActivityViewModel::class.java]
 
         fetchData()
+        getCurUser()
 
         val navController  = findNavController(R.id.fragmentContainerView)
         navController.setGraph(
@@ -55,6 +58,10 @@ class HomeActivity : AppCompatActivity() {
 
         observeTabs()
 
+    }
+
+    private fun getCurUser() {
+        viewModel.getUserLocally()
     }
 
     private fun observeTabs() {
@@ -92,5 +99,9 @@ class HomeActivity : AppCompatActivity() {
 
     fun logout() {
         viewModel.logout()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 }

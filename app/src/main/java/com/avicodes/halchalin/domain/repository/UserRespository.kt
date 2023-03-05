@@ -10,5 +10,11 @@ interface UserRespository {
 
     fun saveUserDataRemotely(user: User)
 
+    suspend fun getUserById(uid: String): User?
 
+    fun updateUserPic(img: String): Flow<Result<String>>
+
+    suspend fun saveUserLocally(user: User)
+
+    fun getUserLocally(): Flow<User>
 }

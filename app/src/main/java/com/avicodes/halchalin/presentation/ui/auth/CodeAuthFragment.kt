@@ -70,7 +70,6 @@ class CodeAuthFragment : Fragment() {
                                 is Result.Success -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
-
                                     navigateToNextScreen()
                                 }
 

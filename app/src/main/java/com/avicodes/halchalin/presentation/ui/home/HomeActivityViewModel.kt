@@ -1,22 +1,32 @@
 package com.avicodes.halchalin.presentation.ui.home
 
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.*
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.AdsRepository
+import com.avicodes.halchalin.domain.repository.UserRespository
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUseCase
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
+import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.transform
 
 
 class HomeActivityViewModel(
     val auth: FirebaseAuth,
     private val remoteNewsRepository: NewsRepository,
-    private val adsRepository: AdsRepository
+    private val adsRepository: AdsRepository,
+    private val getUserByIdUseCase: GetUserByIdUseCase,
+    private val updateUserPicUseCase: updateUserPicUseCase,
+    private val userRespository: UserRespository
 ): ViewModel() {
 
     val nationalHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
@@ -24,6 +34,11 @@ class HomeActivityViewModel(
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
     val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
+    val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
+    val getUsers: MutableLiveData<User?> = MutableLiveData()
+    val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
+    val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
+    val curUser: MutableLiveData<User?> = MutableLiveData()
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -70,18 +85,94 @@ class HomeActivityViewModel(
         }
     }
 
+    fun getComments(
+        newsId: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        remoteNewsRepository.getComment(newsId)
+            .collectLatest {
+                when(it) {
+                    is Result.Success -> {
+                        it.data?.let {commentsList ->
+                            var commentProcessed: MutableList<CommentProcessed> = mutableListOf()
+                            for(comment in commentsList) {
+                                val user = async { getUserById(comment.userId) }.await()
+                                commentProcessed.add(
+                                    CommentProcessed(
+                                        comment.time,
+                                        comment.comment,
+                                        user!!
+                                    )
+                                )
+                            }
+                            comments.postValue(Result.Success(commentProcessed))
+                        }
+                    }
+                    is Result.Loading -> {
+                        comments.postValue(it)
+                    }
+                    is Result.Error -> {
+                        comments.postValue(it)
+                    }
+                    else -> {}
+                }
+
+        }
+    }
+
     fun getFeaturedAds() = viewModelScope.launch {
         adsRepository.getAllFeaturedAds().collectLatest {
             featuredAds.postValue(it)
         }
     }
 
-    fun postComment(newsId: String, comment: String, comments: List<Pair<User, String>>) {
-        remoteNewsRepository.postComment(
-            newsId = newsId,
-            comment = comment,
-            comments = comments,
+    fun postComment(newsId: String, comment: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            remoteNewsRepository.postComment(
+                newsId = newsId,
+                comment = comment,
+            ).collectLatest {
+                commentUpdated.postValue(it)
+            }
+        }
+    }
+
+    suspend fun getUserById(userId: String): User? {
+        return userRespository.getUserById(userId)
+    }
+
+    fun saveUserImage(image: String) = viewModelScope.launch{
+        updateUserPicUseCase.execute(image).collectLatest {
+            updateUserPic.postValue(it)
+        }
+    }
+
+    fun saveUserLocally(
+        userId: String? = curUser.value?.userId,
+        name: String? = curUser.value?.name,
+        phone: String? = curUser.value?.mobile,
+        location: String? = curUser.value?.location,
+        image: String? = curUser.value?.imgUrl,
+        about: String? = curUser.value?.about
+    ) {
+        val user = User(
+            userId = userId.toString(),
+            name = name.toString(),
+            mobile = phone.toString(),
+            location =  location.toString(),
+            imgUrl = image.toString(),
+            about = about.toString()
         )
+        viewModelScope.launch(Dispatchers.IO) {
+            userRespository.saveUserLocally(user)
+        }
+    }
+
+    fun getUserLocally() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userRespository.getUserLocally().collectLatest {
+                curUser.postValue(it)
+            }
+        }
     }
 
     fun logout() {
