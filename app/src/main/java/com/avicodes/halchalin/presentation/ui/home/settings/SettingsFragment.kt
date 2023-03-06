@@ -1,10 +1,16 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
+import android.content.Intent
+import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.findFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -52,12 +58,31 @@ class SettingsFragment : Fragment() {
                     tvPhone.text = user.mobile
 
                     Glide.with(ivUser)
-                        .load(user.imgUrl)
+                        .load(user.imgUrl).circleCrop()
                         .error(R.drawable.baseline_person_24)
                         .into(ivUser)
                 }
             })
 
+            rgLang.setOnCheckedChangeListener { group, checkedId ->
+                if(checkedId == R.id.hiLang) {
+                    hiLang.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.white)
+                    )
+                    enLang.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.black)
+                    )
+                }
+
+                if(checkedId == R.id.enLang) {
+                    enLang.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.white)
+                    )
+                    hiLang.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.black)
+                    )
+                }
+            }
         }
     }
 
