@@ -35,11 +35,11 @@ class EditFragment : Fragment() {
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var imageUrl : String
+    private lateinit var imageUrl: String
     private lateinit var viewModel: HomeActivityViewModel
 
     private val GALLERY_REQUEST_CODE = 1234
-    private val WRITE_EXTERNAL_STORAGE_CODE=1
+    private val WRITE_EXTERNAL_STORAGE_CODE = 1
 
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     lateinit var userPicUri: Uri
@@ -84,7 +84,7 @@ class EditFragment : Fragment() {
             })
 
             btnSubmit.setOnClickListener {
-                viewModel.saveUserLocally(
+                viewModel.saveUser(
                     name = etName.editText?.text.toString(),
                     phone = etPhone.editText?.text.toString(),
                     about = etAbout.editText?.text.toString(),
@@ -104,29 +104,33 @@ class EditFragment : Fragment() {
         selectPictureLauncher.launch(intent.type)
     }
 
-    private val selectPictureLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
-        viewModel.saveUserImage(it.toString())
-        viewModel.updateUserPic.observe(requireActivity(), Observer {result ->
-            when(result) {
-                is Result.Success -> {
-                    Glide.with(requireContext()).load(result.data.toString()).circleCrop().error(
-                        R.drawable.baseline_person_24).into(binding.ivUser)
-                    imageUrl = result.data.toString()
-                    hideProg()
+    private val selectPictureLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            viewModel.saveUserImage(it.toString())
+            viewModel.updateUserPic.observe(requireActivity(), Observer { result ->
+                when (result) {
+                    is Result.Success -> {
+                        Glide.with(requireContext()).load(result.data.toString()).circleCrop()
+                            .error(
+                                R.drawable.baseline_person_24
+                            ).into(binding.ivUser)
+                        imageUrl = result.data.toString()
+                        hideProg()
+                    }
+                    is Result.Loading -> {
+                        showProg()
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(requireContext(), "Error, Try Again", Toast.LENGTH_SHORT)
+                            .show()
+                        hideProg()
+                    }
+                    else -> {
+                        hideProg()
+                    }
                 }
-                is Result.Loading -> {
-                    showProg()
-                }
-                is Result.Error -> {
-                    Toast.makeText(requireContext(), "Error, Try Again", Toast.LENGTH_SHORT).show()
-                    hideProg()
-                }
-                else -> {
-                    hideProg()
-                }
-            }
-        })
-    }
+            })
+        }
 
     fun showProg() {
         binding.progCons.visibility = View.VISIBLE

@@ -23,5 +23,11 @@ interface UserDataSource {
 
     suspend fun getUserById(userId: String): User?
 
-    fun updateUserPic(image: String): Flow<Result<String>>
+    fun updateUserPic(image: String, uid: String): Flow<Result<String>>
+
+    fun isLoggedIn() : Flow<Boolean>
+
+    suspend fun login()
+
+    suspend fun logout()
 }

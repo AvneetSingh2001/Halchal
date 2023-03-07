@@ -1,9 +1,11 @@
 package com.avicodes.halchalin.presentation.ui.home
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.*
 import com.avicodes.halchalin.domain.repository.NewsRepository
@@ -35,7 +37,6 @@ class HomeActivityViewModel(
     val featuredAds: MutableLiveData<Result<List<FeaturedAds>>> = MutableLiveData()
     val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
-    val getUsers: MutableLiveData<User?> = MutableLiveData()
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
     val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
@@ -141,12 +142,12 @@ class HomeActivityViewModel(
     }
 
     fun saveUserImage(image: String) = viewModelScope.launch{
-        updateUserPicUseCase.execute(image).collectLatest {
+        updateUserPicUseCase.execute(image, curUser.value?.userId!!).collectLatest {
             updateUserPic.postValue(it)
         }
     }
 
-    fun saveUserLocally(
+    fun saveUser(
         userId: String? = curUser.value?.userId,
         name: String? = curUser.value?.name,
         phone: String? = curUser.value?.mobile,
@@ -163,7 +164,7 @@ class HomeActivityViewModel(
             about = about.toString()
         )
         viewModelScope.launch(Dispatchers.IO) {
-            userRespository.saveUserLocally(user)
+            userRespository.saveUser(user)
         }
     }
 
@@ -175,7 +176,14 @@ class HomeActivityViewModel(
         }
     }
 
-    fun logout() {
+    fun logout()  = viewModelScope.launch(Dispatchers.IO){
+        userRespository.logout()
         auth.signOut()
+    }
+
+    fun getUser(uid: String) = liveData<Result<User>> {
+        userRespository.getUserRemotely(uid).collectLatest {
+            emit(it)
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.avicodes.halchalin.domain.repository.UserRespository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.authenticateUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.onVerifyOtpUseCase
@@ -11,9 +12,10 @@ class AuthFragmentViewModelFactory(
     private val authenticateUseCase: authenticateUseCase,
     private val onVerifyOtpUseCase: onVerifyOtpUseCase,
     private val signUpStateUseCase: signUpStateUseCase,
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val userRespository: UserRespository
 ) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AuthFragmentViewModel(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase, getUserUseCase) as T
+        return AuthFragmentViewModel(authenticateUseCase, onVerifyOtpUseCase, signUpStateUseCase, getUserUseCase, userRespository) as T
     }
 }

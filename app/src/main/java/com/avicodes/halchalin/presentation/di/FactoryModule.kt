@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.di
 
+import com.avicodes.halchalin.MainActivityViewModelFactory
 import com.avicodes.halchalin.domain.repository.AdsRepository
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
@@ -26,13 +27,15 @@ class FactoryModule {
         authenticateUseCase: authenticateUseCase,
         onVerifyOtpUseCase: onVerifyOtpUseCase,
         signUpStateUseCase: signUpStateUseCase,
-        getUserUseCase: GetUserUseCase
+        getUserUseCase: GetUserUseCase,
+        userRespository: UserRespository
     ): AuthFragmentViewModelFactory {
         return AuthFragmentViewModelFactory(
             authenticateUseCase,
             onVerifyOtpUseCase,
             signUpStateUseCase,
-            getUserUseCase
+            getUserUseCase,
+            userRespository
         )
     }
 
@@ -41,13 +44,14 @@ class FactoryModule {
     fun provideDetailsFragmentViewModelFactory(
         auth: FirebaseAuth,
         userUploadRemotelyUseCase: UserUploadRemotelyUseCase,
-        getUserPhoneUseCase: GetUserPhoneUseCase
+        userRespository: UserRespository
     ): DetailsFragmentViewModelFactory {
         return DetailsFragmentViewModelFactory(
             auth = auth,
             userUploadRemotelyUseCase = userUploadRemotelyUseCase,
-            getUserPhoneUseCase = getUserPhoneUseCase
-        )
+            userRespository = userRespository
+            )
+
     }
 
     @Singleton
@@ -66,6 +70,16 @@ class FactoryModule {
             adsRepository = adsRepository,
             getUserByIdUseCase = getUserByIdUseCase,
             updateUserPicUseCase = updateUserPicUseCase,
+            userRespository = userRespository
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainActivityViewModelFactory(
+        userRespository: UserRespository
+    ) : MainActivityViewModelFactory {
+        return MainActivityViewModelFactory(
             userRespository = userRespository
         )
     }

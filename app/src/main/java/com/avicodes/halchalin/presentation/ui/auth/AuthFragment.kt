@@ -24,13 +24,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthFragment : Fragment() {
-    private var _binding : FragmentAuthBinding? = null
+    private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel : AuthFragmentViewModel
+    private lateinit var viewModel: AuthFragmentViewModel
 
     @Inject
-    lateinit var viewModelFactory : AuthFragmentViewModelFactory
+    lateinit var viewModelFactory: AuthFragmentViewModelFactory
 
     @Inject
     lateinit var auth: FirebaseAuth
@@ -46,6 +46,25 @@ class AuthFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
+
+        binding.progCons.visibility = View.VISIBLE
+        binding.mainCons.visibility = View.INVISIBLE
+
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            viewModelFactory
+        )[AuthFragmentViewModel::class.java]
+
+        viewModel.isLoggedIn().observe(viewLifecycleOwner, Observer {
+            Log.e("AuthFragment", "Is Logged in: ${it.toString()}")
+            if (it == true) {
+                navigateToHomeScreen()
+            } else {
+                binding.progCons.visibility = View.INVISIBLE
+                binding.mainCons.visibility = View.VISIBLE
+            }
+        })
+
         return binding.root
     }
 
@@ -53,20 +72,19 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[AuthFragmentViewModel::class.java]
 
         binding.apply {
             btnContinue.setOnClickListener {
-                if(etPhoneNumber.editText?.text.isNullOrEmpty()) {
+                if (etPhoneNumber.editText?.text.isNullOrEmpty()) {
                     etPhoneNumber.error = "Required"
-                } else if(etPhoneNumber.editText?.text?.length != 10){
+                } else if (etPhoneNumber.editText?.text?.length != 10) {
                     etPhoneNumber.error = "Invalid"
                 } else {
                     val phone = etPhoneNumber.editText!!.text.toString()
                     viewModel.authenticatePhone(phone)
                     lifecycleScope.launch {
-                        viewModel.signUpState.collectLatest {uiState ->
-                            when(uiState) {
+                        viewModel.signUpState.collectLatest { uiState ->
+                            when (uiState) {
                                 is Result.Success -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
@@ -77,7 +95,7 @@ class AuthFragment : Fragment() {
                                     val text = (uiState as Result.Loading).message
                                     progCons.visibility = View.VISIBLE
                                     mainCons.visibility = View.INVISIBLE
-                                    if(text == context?.getString(R.string.code_sent)) {
+                                    if (text == context?.getString(R.string.code_sent)) {
                                         navigateToCodeAuth(phone)
                                     }
                                     Log.e("MYTAG", "AuthFragment")
@@ -86,13 +104,11 @@ class AuthFragment : Fragment() {
                                 is Result.Error -> {
                                     progCons.visibility = View.INVISIBLE
                                     mainCons.visibility = View.VISIBLE
+                                    Log.e("AuthFragment", uiState.exception?.message.toString())
                                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-
                                 }
 
                                 is Result.NotInitialized -> {
-                                    progCons.visibility = View.INVISIBLE
-                                    mainCons.visibility = View.VISIBLE
                                 }
                             }
                         }
@@ -100,53 +116,16 @@ class AuthFragment : Fragment() {
 
                 }
             }
+
+
+
         }
     }
+
+
 
     override fun onStart() {
         super.onStart()
-        auth.currentUser?.let {
-            Log.e("Auth", auth.currentUser!!.uid)
-            binding.progCons.visibility = View.VISIBLE
-            binding.mainCons.visibility = View.INVISIBLE
-            navigateToNextScreen(it.phoneNumber)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-
-    fun navigateToNextScreen(phone: String?) {
-        auth.currentUser?.let {user->
-            viewModel.getUser(user.uid).observe(requireActivity(), Observer {
-                when(it) {
-                    is Result.Success -> {
-                        if(it.data != null) {
-                            Log.i("MYTAG", "Success to home: ${phone}")
-                            navigateToHomeScreen()
-                        } else {
-                            Log.i("MYTAG", "Success to details: ${phone}")
-                            navigateToDetailsScreen()
-                        }
-                    }
-
-                    is Result.Error -> {
-                        Log.e("Error", it.exception.toString())
-                    }
-                    else -> {
-                        Log.e("Loading", it.toString())
-                    }
-                }
-
-            })
-        }
-    }
-
-    fun navigateToDetailsScreen() {
-        val action = AuthFragmentDirections.actionAuthFragmentToDetailsFragment()
-        requireView().findNavController().navigate(action)
     }
 
     fun navigateToHomeScreen() {
@@ -155,7 +134,7 @@ class AuthFragment : Fragment() {
 
     fun navigateToCodeAuth(phone: String) {
         val action =
-            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("+91$phone")
+            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("$phone")
         requireView().findNavController().navigate(action)
     }
 }

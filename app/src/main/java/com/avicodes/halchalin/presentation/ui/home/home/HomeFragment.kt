@@ -47,9 +47,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showProgressBar()
+
         viewModel = (activity as HomeActivity).viewModel
         getFeaturedAds()
         getLatestNews()
+        Log.e("Initialise Home", "HOme Fragment")
 
         viewModel.curUser.observe(requireActivity(), Observer {
             binding.etLoc.setText(it?.location.toString())
@@ -104,14 +107,16 @@ class HomeFragment : Fragment() {
             var two = false
             var three = false
 
-            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.localHeadlines.observe(requireActivity(), Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {
-                            it[0].newsHeadline?.let { news -> latestHeadlines.add(news) }
-                            one = true
-                            if(one and two and three) {
-                                latestNewsAdapter.differ.submitList(latestHeadlines)
+                            if(it.isNotEmpty()) {
+                                it[0].newsHeadline?.let { news -> latestHeadlines.add(news) }
+                                one = true
+                                if (one and two and three) {
+                                    latestNewsAdapter.differ.submitList(latestHeadlines)
+                                }
                             }
                         }
                     }
@@ -119,7 +124,7 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.nationalHeadlines.observe(requireActivity(), Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {
@@ -135,7 +140,7 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            viewModel.worldHeadlines.observe(requireActivity(), Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {

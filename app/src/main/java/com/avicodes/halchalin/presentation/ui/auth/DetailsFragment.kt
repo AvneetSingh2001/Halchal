@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,8 @@ class DetailsFragment : Fragment() {
 
     lateinit var viewModel: DetailsFragmentViewModel
 
+    val args: DetailsFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -34,8 +37,8 @@ class DetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-
         viewModel = ViewModelProvider(requireActivity(), factory)[DetailsFragmentViewModel::class.java]
+
 
         binding.apply {
             btnContinue.setOnClickListener {
@@ -43,27 +46,23 @@ class DetailsFragment : Fragment() {
                 val loc = etLoc.editText?.text.toString()
 
                 if(name != "" && loc != "") {
-                    viewModel.uploadUser(
+                    viewModel.saveUser(
                         name = name,
-                        loc = loc)
-
+                        loc = loc,
+                        phone = args.phone
+                    )
+                    viewModel.login()
                     navigateToHome()
-
                 } else {
                     if(name == "") {
                         etName.error = "Required"
                     }
-
                     if(loc == "") {
                         etLoc.error = "Required"
                     }
                 }
-
-
             }
         }
-
-
         return binding.root
     }
 

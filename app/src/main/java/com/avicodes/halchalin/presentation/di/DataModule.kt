@@ -45,9 +45,9 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideLocalNewsDataSource(auth: FirebaseAuth,firestoreDb: FirebaseFirestore) : LocalNewsDataSource{
+    fun provideLocalNewsDataSource(auth: FirebaseAuth,firestoreDb: FirebaseFirestore, userPrefs: UserPrefs) : LocalNewsDataSource{
         return LocalNewsDataSourceImpl(
-            auth, firestoreDb
+            auth, firestoreDb, userPrefs
         )
     }
 

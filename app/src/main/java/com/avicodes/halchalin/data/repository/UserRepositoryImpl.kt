@@ -16,15 +16,15 @@ class UserRepositoryImpl(
     }
 
     override fun saveUserDataRemotely(user: User) {
-        userDataSource.saveUserDataLocally(user)
+        userDataSource.saveUserDataRemotely(user)
     }
 
     override suspend fun getUserById(uid: String): User? {
         return userDataSource.getUserById(uid)
     }
 
-    override fun updateUserPic(img: String): Flow<Result<String>> {
-        return userDataSource.updateUserPic(img)
+    override fun updateUserPic(img: String, uid: String): Flow<Result<String>> {
+        return userDataSource.updateUserPic(img, uid)
     }
 
     override suspend fun saveUserLocally(user: User) {
@@ -33,6 +33,23 @@ class UserRepositoryImpl(
 
     override fun getUserLocally(): Flow<User> {
         return userDataSource.getUserLocally()
+    }
+
+    override fun saveUser(user: User) {
+        userDataSource.saveUserDataRemotely(user)
+        userDataSource.saveUserDataLocally(user)
+    }
+
+    override fun isLoggedIn(): Flow<Boolean> {
+        return userDataSource.isLoggedIn()
+    }
+
+    override suspend fun login() {
+        userDataSource.login()
+    }
+
+    override suspend fun logout() {
+        userDataSource.logout()
     }
 
 

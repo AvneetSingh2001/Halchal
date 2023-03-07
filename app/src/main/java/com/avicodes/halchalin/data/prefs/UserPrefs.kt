@@ -3,6 +3,7 @@ package com.avicodes.halchalin.data.prefs
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -16,6 +17,7 @@ class UserPrefs(
 
 
     companion object {
+        var LOGGEDIN = booleanPreferencesKey("LOGGEDIN")
         var USERID = stringPreferencesKey("USER_ID")
         val NAME = stringPreferencesKey("USER_NAME")
         val LOCATION = stringPreferencesKey("LOCATION")
@@ -33,6 +35,18 @@ class UserPrefs(
         }
     }
 
+    suspend fun login() {
+        dataStore.edit {
+            it[LOGGEDIN] = true
+        }
+    }
+
+    suspend fun logout() {
+        dataStore.edit {
+            it[LOGGEDIN] = false
+        }
+    }
+
     fun getUser() = dataStore.data.map {
             User(
                 it[USERID]?:"",
@@ -43,6 +57,9 @@ class UserPrefs(
             )
         }
 
+    fun isLoggedIn() = dataStore.data.map {
+        it[LOGGEDIN] ?: false
+    }
 
     fun getUserId() = dataStore.data.map {
         it[USERID]?:""

@@ -3,6 +3,7 @@ package com.avicodes.halchalin.data.repository.dataSourceImpl
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.User
+import com.avicodes.halchalin.data.prefs.UserPrefs
 import com.avicodes.halchalin.data.repository.dataSource.LocalNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.auth.FirebaseAuth
@@ -10,15 +11,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 
 class LocalNewsDataSourceImpl(
     val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
+    private val userPrefs: UserPrefs
 ): LocalNewsDataSource {
     override fun getAllLocalNews(location: String) = flow<Result<List<News>>> {
         emit(Result.Loading("Fetching News"))
@@ -73,18 +72,21 @@ class LocalNewsDataSourceImpl(
     ) = flow<Result<String>> {
         emit(Result.Loading("Uploading Comment"))
 
-        val userComment = Comment(
-            System.currentTimeMillis(),
-            comment,
-            auth.uid.toString()
-        )
+        userPrefs.getUserId().collectLatest {
+            val userComment = Comment(
+                System.currentTimeMillis(),
+                comment,
+                it
+            )
 
-        firestore
-            .collection("Comments")
-            .document(newsId)
-            .collection(newsId)
-            .document().set(userComment)
-            .await()
+            firestore
+                .collection("Comments")
+                .document(newsId)
+                .collection(newsId)
+                .document().set(userComment)
+                .await()
+        }
+
 
         emit(Result.Success("Uploaded"))
 

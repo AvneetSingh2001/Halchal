@@ -63,7 +63,6 @@ class NewsRepositoryImpl(
                 return Result.Success(it)
             }
         }
-
         return Result.Error(Exception(response.message()))
     }
 }

@@ -46,15 +46,17 @@ class UserDataSourceImpl(
         firestoreDb.collection("Users").document(user.userId).set(user)
     }
 
+
+
     override suspend fun getUserById(userId: String): User? {
         val task = firestoreDb.collection("Users").document(userId).get().await()
         val user = task.toObject(User::class.java)
         return user
     }
 
-    override fun updateUserPic(image: String) = flow {
+    override fun updateUserPic(image: String, uid: String) = flow {
         emit(Result.Loading("Updating"))
-        val it = firebaseStorage.getReference("dp/${auth.uid}").putFile(
+        val it = firebaseStorage.getReference("dp/$uid").putFile(
             image.toUri()
         ).await()
         val task = it.storage.downloadUrl.await()
@@ -62,10 +64,21 @@ class UserDataSourceImpl(
         emit(Result.Success(imgUrl))
     }.catch { emit(Result.Error(it)) }.flowOn(Dispatchers.IO)
 
+    override fun isLoggedIn(): Flow<Boolean> {
+        return userPrefs.isLoggedIn()
+    }
+
+    override suspend fun login() {
+        userPrefs.login()
+    }
+
+    override suspend fun logout() {
+        userPrefs.logout()
+    }
+
     override fun saveUserDataLocally(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
             userPrefs.saveUser(user)
-            saveUserDataRemotely(user)
         }
     }
 

@@ -7,7 +7,7 @@ import com.avicodes.halchalin.data.utils.Result
 
 class updateUserPicUseCase ( private val userRespository: UserRespository
 ) {
-    suspend fun execute(img: String): Flow<Result<String>> {
-        return userRespository.updateUserPic(img)
+    suspend fun execute(img: String, uid: String): Flow<Result<String>> {
+        return userRespository.updateUserPic(img, uid)
     }
 }
