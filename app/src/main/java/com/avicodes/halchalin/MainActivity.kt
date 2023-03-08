@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         fun getInstance(): MainActivity? = mainActivity
     }
 
-
     private var _binding : ActivityMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController

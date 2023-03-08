@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.MainActivityViewModelFactory
 import com.avicodes.halchalin.domain.repository.AdsRepository
+import com.avicodes.halchalin.domain.repository.CityRepository
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
@@ -44,12 +45,14 @@ class FactoryModule {
     fun provideDetailsFragmentViewModelFactory(
         auth: FirebaseAuth,
         userUploadRemotelyUseCase: UserUploadRemotelyUseCase,
-        userRespository: UserRespository
+        userRespository: UserRespository,
+        cityRepository: CityRepository
     ): DetailsFragmentViewModelFactory {
         return DetailsFragmentViewModelFactory(
             auth = auth,
             userUploadRemotelyUseCase = userUploadRemotelyUseCase,
-            userRespository = userRespository
+            userRespository = userRespository,
+            cityRepository = cityRepository
             )
 
     }
@@ -62,7 +65,8 @@ class FactoryModule {
         adsRepository: AdsRepository,
         getUserByIdUseCase: GetUserByIdUseCase,
         updateUserPicUseCase: updateUserPicUseCase,
-        userRespository: UserRespository
+        userRespository: UserRespository,
+        cityRepository: CityRepository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
@@ -70,17 +74,18 @@ class FactoryModule {
             adsRepository = adsRepository,
             getUserByIdUseCase = getUserByIdUseCase,
             updateUserPicUseCase = updateUserPicUseCase,
-            userRespository = userRespository
+            userRespository = userRespository,
+            cityRepository = cityRepository
         )
     }
 
     @Singleton
     @Provides
     fun provideMainActivityViewModelFactory(
-        userRespository: UserRespository
+        cityRepository: CityRepository
     ) : MainActivityViewModelFactory {
         return MainActivityViewModelFactory(
-            userRespository = userRespository
+            cityRepository = cityRepository
         )
     }
 }

@@ -1,15 +1,9 @@
 package com.avicodes.halchalin.presentation.di
 
 import android.provider.ContactsContract.CommonDataKinds.Phone
-import com.avicodes.halchalin.data.repository.AdsRepositoryImpl
-import com.avicodes.halchalin.data.repository.NewsRepositoryImpl
-import com.avicodes.halchalin.data.repository.PhoneAuthRepositoryImpl
-import com.avicodes.halchalin.data.repository.UserRepositoryImpl
+import com.avicodes.halchalin.data.repository.*
 import com.avicodes.halchalin.data.repository.dataSource.*
-import com.avicodes.halchalin.domain.repository.AdsRepository
-import com.avicodes.halchalin.domain.repository.NewsRepository
-import com.avicodes.halchalin.domain.repository.PhoneAuthRepository
-import com.avicodes.halchalin.domain.repository.UserRespository
+import com.avicodes.halchalin.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +13,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoryModule {
-
 
     @Provides
     @Singleton
@@ -45,4 +38,9 @@ class RepositoryModule {
         return AdsRepositoryImpl(adsDataSource)
     }
 
+    @Provides
+    @Singleton
+    fun provideCityRepository(cityDataSource: CityDataSource): CityRepository {
+        return CityRespositoryImpl(cityDataSource)
+    }
 }

@@ -123,4 +123,6 @@ dependencies {
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    //imagecropper
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 }

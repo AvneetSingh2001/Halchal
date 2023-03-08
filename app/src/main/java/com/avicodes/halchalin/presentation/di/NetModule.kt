@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetModule {
 
-
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit{
@@ -24,11 +23,11 @@ class NetModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
     @Singleton
     @Provides
     fun provideNewsApiService(retrofit: Retrofit) : NewsApiService {
         return retrofit
             .create(NewsApiService::class.java)
     }
+
 }

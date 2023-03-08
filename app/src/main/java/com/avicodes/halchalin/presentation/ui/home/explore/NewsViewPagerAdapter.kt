@@ -27,6 +27,8 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvCity.text = data.location
 
+                tvDesc.text = data.newsDesc
+
                 val resourceAdapter = data.resUrls?.let { NewsResAdapter(it) }
                 resourceAdapter?.let {
                     ivNews.setSliderAdapter(it)

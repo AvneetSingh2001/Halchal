@@ -21,9 +21,9 @@ class LocalNewsDataSourceImpl(
 ): LocalNewsDataSource {
     override fun getAllLocalNews(location: String) = flow<Result<List<News>>> {
         emit(Result.Loading("Fetching News"))
+
         val snapshot = firestore
             .collection("News")
-            .whereEqualTo("location", location)
             .orderBy("time", Query.Direction.DESCENDING)
             .get().await()
 

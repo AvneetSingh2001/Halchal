@@ -1,14 +1,22 @@
 package com.avicodes.halchalin.presentation.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.MainActivity
+import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.City
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,11 +29,13 @@ class DetailsFragment : Fragment() {
 
 
     @Inject
-    lateinit var factory : DetailsFragmentViewModelFactory
+    lateinit var factory: DetailsFragmentViewModelFactory
 
     lateinit var viewModel: DetailsFragmentViewModel
 
     val args: DetailsFragmentArgs by navArgs()
+
+    private var citiesList: List<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,28 +47,29 @@ class DetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity(), factory)[DetailsFragmentViewModel::class.java]
+        viewModel =
+            ViewModelProvider(requireActivity(), factory)[DetailsFragmentViewModel::class.java]
 
+        getCities()
 
         binding.apply {
+
             btnContinue.setOnClickListener {
                 val name = etName.editText?.text.toString()
                 val loc = etLoc.editText?.text.toString()
 
-                if(name != "" && loc != "") {
+                if (name != "" && loc != "") {
                     viewModel.saveUser(
                         name = name,
                         loc = loc,
-                        phone = args.phone
+                        phone = args.phone,
                     )
                     viewModel.login()
                     navigateToHome()
+
                 } else {
-                    if(name == "") {
+                    if (name == "") {
                         etName.error = "Required"
-                    }
-                    if(loc == "") {
-                        etLoc.error = "Required"
                     }
                 }
             }
@@ -68,5 +79,32 @@ class DetailsFragment : Fragment() {
 
     private fun navigateToHome() {
         (activity as MainActivity).moveToHomeActivity()
+    }
+
+    fun getCities() {
+        viewModel.getCities().observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Success -> {
+                    citiesList = it.data?.map(City::name)!!
+                    Log.e("Cities Fetch", it.data.toString())
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, citiesList)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                }
+
+                is Result.Error -> {
+                    Log.e("Cities Fetch", it.exception?.message.toString())
+                    val items = listOf("Error Fetching Data")
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+                }
+                is Result.Loading -> {
+                    val items = listOf("Loading...")
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                }
+                else -> {}
+            }
+        })
     }
 }

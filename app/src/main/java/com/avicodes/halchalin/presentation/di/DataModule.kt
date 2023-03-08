@@ -59,4 +59,12 @@ class DataModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideCityDataSource(firestoreDb: FirebaseFirestore): CityDataSource {
+        return CityDataSourceImpl(
+            firestoreDb
+        )
+    }
+
 }

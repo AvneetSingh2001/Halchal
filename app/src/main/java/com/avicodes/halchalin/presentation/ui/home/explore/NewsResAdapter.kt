@@ -45,6 +45,7 @@ class NewsResAdapter(
                 .load(item)
                 .into(ivSlider)
 
+
 //            player = ExoPlayer.Builder(videoView.context)
 //                .build()
 //                .also { exoPlayer ->

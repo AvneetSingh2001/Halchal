@@ -34,6 +34,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Theme.Halchalin.cropper"
+            />
     </application>
 
 </manifest>

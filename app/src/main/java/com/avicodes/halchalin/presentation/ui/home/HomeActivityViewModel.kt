@@ -12,6 +12,7 @@ import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.AdsRepository
+import com.avicodes.halchalin.domain.repository.CityRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
@@ -28,7 +29,8 @@ class HomeActivityViewModel(
     private val adsRepository: AdsRepository,
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserPicUseCase: updateUserPicUseCase,
-    private val userRespository: UserRespository
+    private val userRespository: UserRespository,
+    private val cityRepository: CityRepository
 ): ViewModel() {
 
     val nationalHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
@@ -186,4 +188,12 @@ class HomeActivityViewModel(
             emit(it)
         }
     }
+
+    fun getCities() = liveData {
+        cityRepository.getAllCities().collectLatest {
+            emit(it)
+        }
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.avicodes.halchalin.domain.repository.AdsRepository
+import com.avicodes.halchalin.domain.repository.CityRepository
 import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
@@ -15,7 +16,8 @@ class HomeActivityViewModelFactory(
     val adsRepository: AdsRepository,
     val getUserByIdUseCase: GetUserByIdUseCase,
     val updateUserPicUseCase: updateUserPicUseCase,
-    val userRespository: UserRespository
+    val userRespository: UserRespository,
+    val cityRepository: CityRepository
 ): ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -25,7 +27,8 @@ class HomeActivityViewModelFactory(
             adsRepository,
             getUserByIdUseCase,
             updateUserPicUseCase,
-            userRespository
+            userRespository,
+            cityRepository
         ) as T
     }
 }

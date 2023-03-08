@@ -1,32 +1,33 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.City
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentEditBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
-
-import java.io.File
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import java.lang.reflect.TypeVariable
 import java.util.*
 
 
@@ -44,9 +45,10 @@ class EditFragment : Fragment() {
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     lateinit var userPicUri: Uri
 
-
+    private var citiesList: List<String> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -63,7 +65,11 @@ class EditFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
+
         binding.apply {
+
+            getCities()
+
             btnImage.setOnClickListener {
                 selectImage()
             }
@@ -78,19 +84,27 @@ class EditFragment : Fragment() {
                         .error(R.drawable.baseline_person_24)
                         .into(ivUser)
 
+                    etLoc.editText?.setText(u.location)
+
                     imageUrl = u.imgUrl
                     etPhone.editText?.setText(u.mobile)
                 }
             })
 
             btnSubmit.setOnClickListener {
+                var city = etLoc.editText?.text.toString()
                 viewModel.saveUser(
                     name = etName.editText?.text.toString(),
                     phone = etPhone.editText?.text.toString(),
                     about = etAbout.editText?.text.toString(),
-                    image = imageUrl
+                    image = imageUrl,
+                    location = city
                 )
                 requireView().findNavController().popBackStack()
+            }
+
+            etLoc.addOnEditTextAttachedListener {
+                etLoc.error = null
             }
         }
     }
@@ -106,6 +120,24 @@ class EditFragment : Fragment() {
 
     private val selectPictureLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
+            cropImage.launch(
+                CropImageContractOptions(
+                    uri = it,
+                    CropImageOptions(
+                        allowRotation = true,
+                        allowFlipping = true,
+                        cropMenuCropButtonTitle = "CROP"
+                    )
+                )
+            )
+        }
+
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // Use the returned uri.
+            val it = result.uriContent
+
             viewModel.saveUserImage(it.toString())
             viewModel.updateUserPic.observe(requireActivity(), Observer { result ->
                 when (result) {
@@ -130,7 +162,13 @@ class EditFragment : Fragment() {
                     }
                 }
             })
+
+        } else {
+            // An error occurred.
+            val exception = result.error
         }
+    }
+
 
     fun showProg() {
         binding.progCons.visibility = View.VISIBLE
@@ -140,6 +178,33 @@ class EditFragment : Fragment() {
     fun hideProg() {
         binding.progCons.visibility = View.INVISIBLE
         binding.mainCons.visibility = View.VISIBLE
+    }
+
+    fun getCities() {
+        viewModel.getCities().observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Success -> {
+                    citiesList = it.data?.map(City::name)!!
+                    Log.e("Cities Fetch", it.data.toString())
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, citiesList)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                }
+
+                is Result.Error -> {
+                    Log.e("Cities Fetch", it.exception?.message.toString())
+                    val items = listOf("Error Fetching Data")
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+                }
+                is Result.Loading -> {
+                    val items = listOf("Loading...")
+                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                }
+                else -> {}
+            }
+        })
     }
 
 }
