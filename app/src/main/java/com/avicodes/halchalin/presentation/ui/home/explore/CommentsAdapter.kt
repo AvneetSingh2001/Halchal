@@ -32,8 +32,21 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
                     .circleCrop()
                     .into(ivUser)
 
+
                 tvName.text = user.name
                 tvTime.text = TimeCalc.getTimeAgo(commentData.time)
+
+                tvName.setOnClickListener {
+                    userClicked?.let {
+                        it(user)
+                    }
+                }
+
+                ivUser.setOnClickListener {
+                    userClicked?.let {
+                        it(user)
+                    }
+                }
             }
         }
     }
@@ -67,5 +80,12 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
 
     fun getUserByIdFun(listener: (String) -> User?) {
         getUserById = listener
+    }
+
+
+    private var userClicked: ((User) -> Unit)?= null
+
+    fun userClicked(listener: (User) -> Unit) {
+        userClicked = listener
     }
 }

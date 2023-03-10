@@ -42,6 +42,7 @@ class HomeActivityViewModel(
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
     val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
+    val linkCreated: MutableLiveData<Result<String>> = MutableLiveData()
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -81,9 +82,9 @@ class HomeActivityViewModel(
     }
 
     fun getLocalNews(
-        location: String
     ) = viewModelScope.launch{
-        remoteNewsRepository.getLocalNews(location).collectLatest {
+        val loc = curUser.value?.location
+        remoteNewsRepository.getLocalNews(loc.toString()).collectLatest {
             localHeadlines.postValue(it)
         }
     }
@@ -195,5 +196,9 @@ class HomeActivityViewModel(
         }
     }
 
-
+    fun createDeepLink(news: News) = viewModelScope.launch(Dispatchers.IO) {
+        remoteNewsRepository.createDynamicLink(news).collectLatest {
+            linkCreated.postValue(it)
+        }
+    }
 }

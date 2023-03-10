@@ -65,11 +65,12 @@
             android:layout_height="wrap_content"
             android:hint="Name"
             app:startIconDrawable="@drawable/baseline_person_24"
-            android:layout_marginRight="15dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:layout_marginRight="15dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:lines="1"
+                android:background="@color/white"
                 android:maxLines="1"
                 android:layout_height="wrap_content"
                 />
@@ -85,11 +86,12 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
-            android:layout_marginRight="15dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            android:layout_marginRight="15dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:lines="1"
+                android:background="@color/white"
                 android:maxLines="1"
                 android:layout_height="wrap_content"
                 />
@@ -111,6 +113,7 @@
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:inputType="none"
                 />
 

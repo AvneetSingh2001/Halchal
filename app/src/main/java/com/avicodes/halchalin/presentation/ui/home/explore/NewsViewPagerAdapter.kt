@@ -3,6 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home.explore
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -27,7 +28,19 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvCity.text = data.location
 
-                tvDesc.text = data.newsDesc
+                val desc = data.newsDesc
+                val stIdx = 0
+                var enIdx = desc?.length ?: 0
+
+                var displayDesc = desc?.substring(stIdx, enIdx)
+
+                if(enIdx > 400) {
+                    enIdx = 400
+                    tvSeeMore.visibility = View.VISIBLE
+                    displayDesc = desc?.substring(stIdx, enIdx).plus("...")
+                }
+
+                tvDesc.text = displayDesc
 
                 val resourceAdapter = data.resUrls?.let { NewsResAdapter(it) }
                 resourceAdapter?.let {
@@ -51,6 +64,12 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
                 cvShare.setOnClickListener {
                     shareClickListener?.let {
                         it(data)
+                    }
+                }
+
+                tvSeeMore.setOnClickListener {
+                    seeMoreClickListener?.let {
+                        it(desc.toString())
                     }
                 }
             }
@@ -92,6 +111,11 @@ class NewsViewPagerAdapter: Adapter<NewsViewPagerAdapter.ViewHolder>(){
     private var shareClickListener: ((News)->Unit)?= null
     fun setOnShareClickListener(listener: (News) -> Unit) {
         shareClickListener = listener
+    }
+
+    private var seeMoreClickListener: ((String)->Unit)?= null
+    fun setOnSeeMoreClickListener(listener: (String) -> Unit) {
+        seeMoreClickListener = listener
     }
 
 }

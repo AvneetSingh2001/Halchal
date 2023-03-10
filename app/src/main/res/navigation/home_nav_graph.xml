@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_newsVpFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_newsVpFragment_to_descFragment"
+            app:destination="@id/descFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
@@ -57,10 +60,31 @@
         <argument
             android:name="news"
             app:argType="com.avicodes.halchalin.data.models.News" />
+        <action
+            android:id="@+id/action_commentFragment_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
     </dialog>
     <fragment
         android:id="@+id/editFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.settings.EditFragment"
         android:label="fragment_edit"
         tools:layout="@layout/fragment_edit" />
+    <dialog
+        android:id="@+id/descFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.explore.DescFragment"
+        android:label="fragment_desc"
+        tools:layout="@layout/fragment_desc" >
+        <argument
+            android:name="desc"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/userProfileFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.profile.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <argument
+            android:name="user"
+            app:argType="com.avicodes.halchalin.data.models.User" />
+    </dialog>
 </navigation>

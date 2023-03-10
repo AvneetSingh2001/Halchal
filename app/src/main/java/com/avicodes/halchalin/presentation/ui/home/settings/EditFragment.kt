@@ -17,13 +17,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.City
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentEditBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -31,7 +34,8 @@ import java.lang.reflect.TypeVariable
 import java.util.*
 
 
-class EditFragment : Fragment() {
+class EditFragment(
+) : Fragment() {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
@@ -82,10 +86,10 @@ class EditFragment : Fragment() {
                     Glide.with(ivUser.context)
                         .load(u.imgUrl).circleCrop()
                         .error(R.drawable.baseline_person_24)
+                        .placeholder(CircularProgressDrawable(ivUser.context))
                         .into(ivUser)
 
                     etLoc.editText?.setText(u.location)
-
                     imageUrl = u.imgUrl
                     etPhone.editText?.setText(u.mobile)
                 }
@@ -138,15 +142,20 @@ class EditFragment : Fragment() {
             // Use the returned uri.
             val it = result.uriContent
 
+
+
             viewModel.saveUserImage(it.toString())
             viewModel.updateUserPic.observe(requireActivity(), Observer { result ->
                 when (result) {
                     is Result.Success -> {
-                        Glide.with(requireContext()).load(result.data.toString()).circleCrop()
-                            .error(
-                                R.drawable.baseline_person_24
-                            ).into(binding.ivUser)
                         imageUrl = result.data.toString()
+
+                        Glide.with(binding.ivUser.context)
+                            .load(it).circleCrop()
+                            .error(R.drawable.baseline_person_24)
+                            .placeholder(CircularProgressDrawable(binding.ivUser.context))
+                            .into(binding.ivUser)
+
                         hideProg()
                     }
                     is Result.Loading -> {

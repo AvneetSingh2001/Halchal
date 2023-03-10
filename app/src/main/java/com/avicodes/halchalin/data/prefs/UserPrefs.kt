@@ -23,6 +23,7 @@ class UserPrefs(
         val LOCATION = stringPreferencesKey("LOCATION")
         val PHONE = stringPreferencesKey("PHONE")
         val IMAGE = stringPreferencesKey("IMAGE")
+        val ABOUT = stringPreferencesKey("ABOUT")
     }
 
     suspend fun saveUser(user: User) {
@@ -32,6 +33,7 @@ class UserPrefs(
             it[LOCATION] = user.location
             it[PHONE] = user.mobile
             it[IMAGE] = user.imgUrl
+            it[ABOUT] = user.about
         }
     }
 
@@ -54,6 +56,7 @@ class UserPrefs(
                 it[LOCATION]?:"",
                 it[PHONE]?:"" ,
                 it[IMAGE]?:"",
+                it[ABOUT]?:""
             )
         }
 

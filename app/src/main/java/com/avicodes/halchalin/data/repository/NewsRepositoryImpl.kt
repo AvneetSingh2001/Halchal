@@ -56,6 +56,10 @@ class NewsRepositoryImpl(
         return localNewsDataSource.getAllComments(newsId)
     }
 
+    override suspend fun createDynamicLink(news: News): Flow<Result<String>> {
+        return localNewsDataSource.createDynamicLink(news)
+    }
+
 
     fun responseToResource(response: Response<NewsResponse>): Result<NewsResponse> {
         if (response.isSuccessful) {

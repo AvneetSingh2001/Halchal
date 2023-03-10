@@ -19,7 +19,7 @@ import com.avicodes.halchalin.data.utils.Result
 
 @AndroidEntryPoint
 class NewsFragment(
-) : Fragment(){
+) : Fragment() {
 
 
     private var _binding: FragmentNewsBinding? = null
@@ -48,6 +48,8 @@ class NewsFragment(
         adapter = NewsAdapter(childFragmentManager, lifecycle)
         viewModel = (activity as HomeActivity).viewModel
 
+        observeUser()
+
         binding.run {
 
             tlNews.addTab(
@@ -70,11 +72,18 @@ class NewsFragment(
                         vpNews.currentItem = tab.position
                     }
                 }
+
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             })
 
+            addTabsVp()
+        }
+    }
+
+    fun addTabsVp() {
+        binding.run {
             vpNews.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -82,9 +91,9 @@ class NewsFragment(
 
                     refreshLayout.setOnRefreshListener {
                         refreshLayout.isRefreshing = false
-                        if(position == 0) {
-                            viewModel.getLocalNews("Kichha")
-                        } else if(position == 1) {
+                        if (position == 0) {
+                            viewModel.getLocalNews()
+                        } else if (position == 1) {
                             viewModel.getNationalNewsHeadlines("in", "hi")
                         } else {
                             viewModel.getWorldNewsHeadlines("world", "in", "hi")
@@ -94,5 +103,12 @@ class NewsFragment(
                 }
             })
         }
+    }
+
+    private fun observeUser() {
+        viewModel.curUser.observe(requireActivity(), Observer {
+            viewModel.getLocalNews()
+            addTabsVp()
+        })
     }
 }

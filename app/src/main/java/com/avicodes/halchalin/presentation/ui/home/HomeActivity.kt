@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -37,10 +38,22 @@ class HomeActivity : AppCompatActivity() {
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         viewModel = ViewModelProvider(this, viewModelFactory)[HomeActivityViewModel::class.java]
 
+
         getCurUser()
-        fetchData()
+        fetchDataAds()
+        fetchLocalNewss()
+        fetchRemoteNews()
+
+        val newsLink = intent.getStringExtra("deepLink")
+        newsLink?.let {
+            Log.e("DeepLink: ", newsLink)
+            var newsUri = newsLink.toUri()
+            var newsId = newsUri.getQueryParameter("news")
+            Log.e("deepLink newsId: ", newsId.toString())
+        }
 
         val navController  = findNavController(R.id.fragmentContainerView)
         navController.setGraph(
@@ -77,18 +90,17 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
-    private fun fetchData() = lifecycleScope.launch(Dispatchers.IO){
+    private fun fetchDataAds() = lifecycleScope.launch(Dispatchers.IO){
         viewModel.getFeaturedAds()
-        viewModel.getLocalNews("Kichha")
-        viewModel.getWorldNewsHeadlines(
-            topic = "world",
-            country = "in",
-            lang = "hi"
-        )
-        viewModel.getNationalNewsHeadlines(
-            country = "in",
-            lang = "hi"
-        )
+    }
+
+    fun fetchLocalNewss() = lifecycleScope.launch(Dispatchers.IO) {
+        viewModel.getLocalNews()
+    }
+
+    private fun fetchRemoteNews() = lifecycleScope.launch(Dispatchers.IO) {
+        viewModel.getNationalNewsHeadlines("IN", "hi")
+        viewModel.getWorldNewsHeadlines("WORLD", "IN", "hi")
     }
 
     private fun showBottomNav() {

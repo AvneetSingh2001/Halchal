@@ -17,4 +17,8 @@ interface LocalNewsDataSource {
         newsId: String,
         comment: String,
     ): Flow<Result<String>>
+
+    suspend fun createDynamicLink(
+        news: News
+    ) : Flow<Result<String>>
 }

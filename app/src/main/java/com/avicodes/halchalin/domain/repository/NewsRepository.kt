@@ -29,4 +29,8 @@ interface NewsRepository {
     fun getComment(
         newsId: String
     ): Flow<Result<List<Comment>>>
+
+    suspend fun createDynamicLink(
+        news: News
+    ): Flow<Result<String>>
 }

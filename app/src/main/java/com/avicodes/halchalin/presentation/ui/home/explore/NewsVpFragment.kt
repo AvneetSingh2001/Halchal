@@ -1,11 +1,13 @@
 package com.avicodes.halchalin.presentation.ui.home.explore
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -56,8 +58,46 @@ class NewsVpFragment : Fragment() {
         }
 
         adapter.setOnShareClickListener {
-
+            viewModel.createDeepLink(it)
         }
+
+        adapter.setOnSeeMoreClickListener {
+            showNewsDescDialog(it)
+        }
+
+        observeLinkCreated()
+    }
+
+    private fun observeLinkCreated() {
+        viewModel.linkCreated.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Result.Loading -> {
+                }
+                is Result.Success -> {
+                    it.data?.let {link ->
+                        shareLink(link)
+                    }
+                }
+                is Result.Error-> {
+                    Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
+            }
+        })
+    }
+    private fun shareLink(link: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "$link")
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Share News")
+        startActivity(shareIntent)
+    }
+
+    private fun showNewsDescDialog(desc: String) {
+        val action = NewsVpFragmentDirections.actionNewsVpFragmentToDescFragment(desc)
+        requireView().findNavController().navigate(action)
     }
 
     private fun showCommentDialog(news: News) {

@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
@@ -77,6 +80,11 @@ class CommentFragment : BottomSheetDialogFragment() {
                 else -> {}
             }
         })
+
+        adapter.userClicked {
+            navigateToUserProfile(it)
+        }
+
     }
 
     private fun getComments(newsId: String) {
@@ -91,5 +99,10 @@ class CommentFragment : BottomSheetDialogFragment() {
         adapter = CommentsAdapter()
         binding.rvComments.adapter = adapter
         binding.rvComments.layoutManager = LinearLayoutManager(activity)
+    }
+
+    private fun navigateToUserProfile(user: User) {
+        val action = CommentFragmentDirections.actionCommentFragmentToUserProfileFragment2(user)
+        findNavController().navigate(action)
     }
 }

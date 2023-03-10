@@ -1,17 +1,11 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
-import android.content.Intent
-import android.content.res.Resources
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.findFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.R
@@ -19,6 +13,9 @@ import com.avicodes.halchalin.databinding.FragmentSettingsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -52,10 +49,11 @@ class SettingsFragment : Fragment() {
                 navigateToEditScreen()
             }
 
+
             viewModel.curUser.observe(requireActivity(), Observer { user->
                 user?.let {
                     tvName.text = user.name
-                    tvPhone.text = user.mobile
+                    tvPhone.text = user.about
 
                     Glide.with(ivUser)
                         .load(user.imgUrl).circleCrop()

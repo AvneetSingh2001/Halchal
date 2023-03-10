@@ -15,6 +15,7 @@ import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
+import com.avicodes.halchalin.presentation.ui.home.settings.EditFragment
 
 class LocalNewsFragment : Fragment() {
 
@@ -44,6 +45,7 @@ class LocalNewsFragment : Fragment() {
         localNewsAdapter.setOnItemClickListener { pos ->
             viewModel.exploreNewsTab.value = Result.Success(pos)
         }
+
     }
 
     private fun setUpLocalNewsRecyclerView() {
@@ -55,7 +57,7 @@ class LocalNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {response ->
+        viewModel.localHeadlines.observe(requireActivity(), Observer {response ->
             when(response) {
                 is Result.Error -> {
                     hideProgressBar()
