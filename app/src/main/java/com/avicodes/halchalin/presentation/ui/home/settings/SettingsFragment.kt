@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    private var _binding : FragmentSettingsBinding? = null
+    private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: HomeActivityViewModel
@@ -50,7 +50,7 @@ class SettingsFragment : Fragment() {
             }
 
 
-            viewModel.curUser.observe(requireActivity(), Observer { user->
+            viewModel.curUser.observe(requireActivity(), Observer { user ->
                 user?.let {
                     tvName.text = user.name
                     tvPhone.text = user.about
@@ -62,25 +62,6 @@ class SettingsFragment : Fragment() {
                 }
             })
 
-            rgLang.setOnCheckedChangeListener { group, checkedId ->
-                if(checkedId == R.id.hiLang) {
-                    hiLang.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.white)
-                    )
-                    enLang.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.black)
-                    )
-                }
-
-                if(checkedId == R.id.enLang) {
-                    enLang.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.white)
-                    )
-                    hiLang.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.black)
-                    )
-                }
-            }
         }
     }
 
