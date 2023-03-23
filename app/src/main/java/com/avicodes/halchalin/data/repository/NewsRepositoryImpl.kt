@@ -60,6 +60,10 @@ class NewsRepositoryImpl(
         return localNewsDataSource.createDynamicLink(news)
     }
 
+    override fun getNewsById(newsId: String): Flow<Result<News>> {
+        return localNewsDataSource.getNewsById(newsId)
+    }
+
 
     fun responseToResource(response: Response<NewsResponse>): Result<NewsResponse> {
         if (response.isSuccessful) {

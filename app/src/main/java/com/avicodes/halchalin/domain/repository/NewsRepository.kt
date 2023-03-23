@@ -33,4 +33,6 @@ interface NewsRepository {
     suspend fun createDynamicLink(
         news: News
     ): Flow<Result<String>>
+
+    fun getNewsById(newsId: String): Flow<Result<News>>
 }

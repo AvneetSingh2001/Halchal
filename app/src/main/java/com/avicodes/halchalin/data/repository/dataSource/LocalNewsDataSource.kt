@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.internal.ChannelFlow
 interface LocalNewsDataSource {
     fun getAllLocalNews(location: String): Flow<Result<List<News>>>
     suspend fun getNearbyNews(location: String): Flow<Result<List<News>>>
-    suspend fun getNewsById(id: String): Flow<Result<News>>
+    fun getNewsById(id: String): Flow<Result<News>>
     fun getAllComments(newsId: String): Flow<Result<List<Comment>>>
 
     fun postComment(

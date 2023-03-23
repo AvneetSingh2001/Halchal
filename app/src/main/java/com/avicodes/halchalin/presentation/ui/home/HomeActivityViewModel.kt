@@ -3,6 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -21,6 +22,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.transform
+import kotlin.math.exp
 
 
 class HomeActivityViewModel(
@@ -43,6 +45,7 @@ class HomeActivityViewModel(
     val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
     val linkCreated: MutableLiveData<Result<String>> = MutableLiveData()
+    val sharedNews: MutableLiveData<Result<News>> = MutableLiveData()
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -199,6 +202,25 @@ class HomeActivityViewModel(
     fun createDeepLink(news: News) = viewModelScope.launch(Dispatchers.IO) {
         remoteNewsRepository.createDynamicLink(news).collectLatest {
             linkCreated.postValue(it)
+        }
+    }
+
+    fun getNewsById(newsId: String) = viewModelScope.launch(Dispatchers.IO) {
+        remoteNewsRepository.getNewsById(newsId).collectLatest {
+            sharedNews.postValue(it)
+        }
+    }
+
+    fun getNewsByDeepLink(newsLink: String) {
+        newsLink.let {
+            Log.e("DeepLink: ", newsLink)
+            var newsUri = newsLink.toUri()
+            var newsId = newsUri.getQueryParameter("news")
+            newsId?.let {
+                getLocalNews()
+                getNewsById(newsId)
+                exploreNewsTab.postValue(Result.Success(-1))
+            }
         }
     }
 }

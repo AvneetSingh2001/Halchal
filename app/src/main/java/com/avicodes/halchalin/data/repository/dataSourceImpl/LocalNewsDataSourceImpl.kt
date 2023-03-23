@@ -59,7 +59,7 @@ class LocalNewsDataSourceImpl(
         emit(Result.Loading("Implementing"))
     }
 
-    override suspend fun getNewsById(id: String) = flow<Result<News>> {
+    override fun getNewsById(id: String) = flow<Result<News>> {
         emit(Result.Loading("Fetching News"))
         val snapshot = firestore
             .collection("News")

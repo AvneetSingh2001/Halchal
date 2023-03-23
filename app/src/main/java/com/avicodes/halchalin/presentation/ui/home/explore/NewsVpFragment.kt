@@ -31,6 +31,9 @@ class NewsVpFragment : Fragment() {
     private lateinit var adapter: NewsViewPagerAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
+    private var newsList: List<News> = mutableListOf()
+    private var sharedNews : List<News> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -109,7 +112,45 @@ class NewsVpFragment : Fragment() {
         viewModel.exploreNewsTab.observe(requireActivity(), Observer {
             when(it) {
                 is Result.Success -> {
-                    it.data?.let { it1 -> binding.videoViewPager.currentItem = it1 }
+                    it.data?.let { pos ->
+                            if(pos >= 0) {
+                                binding.videoViewPager.currentItem = pos
+                            } else if(pos == -1) {
+                                viewModel.sharedNews.observe(requireActivity(), Observer { res ->
+                                    when(res) {
+                                        is Result.Success -> {
+                                            hideProgressBar()
+                                            res.data?.let {news->
+                                                sharedNews.toMutableList().add(0, news)
+                                                adapter.differ.submitList(sharedNews)
+                                                binding.videoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                                                    override fun onPageScrolled(
+                                                        position: Int,
+                                                        positionOffset: Float,
+                                                        positionOffsetPixels: Int
+                                                    ) {
+                                                        if(pos == -1) {
+                                                            adapter.differ.submitList(newsList)
+                                                        }
+                                                        super.onPageScrolled(
+                                                            position,
+                                                            positionOffset,
+                                                            positionOffsetPixels
+                                                        )
+                                                    }
+                                                })
+                                            }
+                                        }
+                                        is Result.Loading -> {
+                                            showProgressBar()
+                                        }
+                                        else -> {
+                                            hideProgressBar()
+                                        }
+                                    }
+                                })
+                            }
+                    }
                     viewModel.exploreNewsTab.value = Result.NotInitialized
                 }
                 else -> {}
@@ -129,6 +170,7 @@ class NewsVpFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
+                        newsList = it
                         adapter.differ.submitList(it)
                     }
                 }

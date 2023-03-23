@@ -49,10 +49,7 @@ class HomeActivity : AppCompatActivity() {
 
         val newsLink = intent.getStringExtra("deepLink")
         newsLink?.let {
-            Log.e("DeepLink: ", newsLink)
-            var newsUri = newsLink.toUri()
-            var newsId = newsUri.getQueryParameter("news")
-            Log.e("deepLink newsId: ", newsId.toString())
+            viewModel.getNewsByDeepLink(it)
         }
 
         val navController  = findNavController(R.id.fragmentContainerView)
@@ -70,9 +67,7 @@ class HomeActivity : AppCompatActivity() {
                 else -> hideBottomNav()
             }
         }
-
         observeTabs()
-
     }
 
     private fun getCurUser() {
