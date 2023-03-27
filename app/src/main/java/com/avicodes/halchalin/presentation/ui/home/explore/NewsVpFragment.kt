@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.loader.content.Loader
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.avicodes.halchalin.data.models.ExoPlayerItem
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentNewsVpBinding
@@ -25,14 +27,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NewsVpFragment : Fragment() {
 
-    private var _binding : FragmentNewsVpBinding? = null
+    private var _binding: FragmentNewsVpBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: NewsViewPagerAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
     private var newsList: List<News> = mutableListOf()
-    private var sharedNews : List<News> = mutableListOf()
+    private var sharedNews: List<News> = mutableListOf()
+
+    private val exoPlayerItems = ArrayList<ExoPlayerItem>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,21 +78,26 @@ class NewsVpFragment : Fragment() {
 
     private fun observeLinkCreated() {
         viewModel.linkCreated.observe(viewLifecycleOwner, Observer {
-            when(it) {
+            when (it) {
                 is Result.Loading -> {
+                    showProgressBar()
                 }
                 is Result.Success -> {
-                    it.data?.let {link ->
+                    hideProgressBar()
+                    it.data?.let { link ->
                         shareLink(link)
                     }
                 }
-                is Result.Error-> {
-                    Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT).show()
+                is Result.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 else -> {}
             }
         })
     }
+
     private fun shareLink(link: String?) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -109,27 +119,29 @@ class NewsVpFragment : Fragment() {
     }
 
     private fun observeExploreTab() {
-        viewModel.exploreNewsTab.observe(requireActivity(), Observer {
-            when(it) {
+        viewModel.exploreNewsTab.observe(viewLifecycleOwner, Observer {
+            when (it) {
                 is Result.Success -> {
                     it.data?.let { pos ->
-                            if(pos >= 0) {
-                                binding.videoViewPager.currentItem = pos
-                            } else if(pos == -1) {
-                                viewModel.sharedNews.observe(requireActivity(), Observer { res ->
-                                    when(res) {
-                                        is Result.Success -> {
-                                            hideProgressBar()
-                                            res.data?.let {news->
-                                                sharedNews.toMutableList().add(0, news)
-                                                adapter.differ.submitList(sharedNews)
-                                                binding.videoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                        if (pos >= 0) {
+                            Log.e("Avneet Scroll", pos.toString())
+                            binding.videoViewPager.setCurrentItem(pos, true)
+                        } else if (pos == -1) {
+                            viewModel.sharedNews.observe(viewLifecycleOwner, Observer { res ->
+                                when (res) {
+                                    is Result.Success -> {
+                                        hideProgressBar()
+                                        res.data?.let { news ->
+                                            sharedNews.toMutableList().add(0, news)
+                                            adapter.differ.submitList(sharedNews)
+                                            binding.videoViewPager.registerOnPageChangeCallback(
+                                                object : ViewPager2.OnPageChangeCallback() {
                                                     override fun onPageScrolled(
                                                         position: Int,
                                                         positionOffset: Float,
                                                         positionOffsetPixels: Int
                                                     ) {
-                                                        if(pos == -1) {
+                                                        if (pos == -1) {
                                                             adapter.differ.submitList(newsList)
                                                         }
                                                         super.onPageScrolled(
@@ -139,17 +151,17 @@ class NewsVpFragment : Fragment() {
                                                         )
                                                     }
                                                 })
-                                            }
-                                        }
-                                        is Result.Loading -> {
-                                            showProgressBar()
-                                        }
-                                        else -> {
-                                            hideProgressBar()
                                         }
                                     }
-                                })
-                            }
+                                    is Result.Loading -> {
+                                        showProgressBar()
+                                    }
+                                    else -> {
+                                        hideProgressBar()
+                                    }
+                                }
+                            })
+                        }
                     }
                     viewModel.exploreNewsTab.value = Result.NotInitialized
                 }
@@ -159,11 +171,11 @@ class NewsVpFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
                     Log.e("Error", response.exception?.message.toString())
                 }
 
@@ -183,24 +195,80 @@ class NewsVpFragment : Fragment() {
     }
 
     private fun showProgressBar() {
+        binding.progCons.visibility = View.VISIBLE
         binding.mainCons.visibility = View.INVISIBLE
     }
 
 
     private fun hideProgressBar() {
+        binding.progCons.visibility = View.GONE
         binding.mainCons.visibility = View.VISIBLE
     }
 
     private fun setUpLocalNewsRecyclerView() {
         binding.apply {
-            adapter = NewsViewPagerAdapter()
+            adapter = NewsViewPagerAdapter(
+                requireContext(),
+                object : NewsViewPagerAdapter.OnVideoPreparedListener {
+                    override fun onVideoPrepared(exoPlayerItem: ExoPlayerItem) {
+                        exoPlayerItems.add(exoPlayerItem)
+                    }
+                })
             videoViewPager.adapter = adapter
+
+            videoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    val previousIndex = exoPlayerItems.indexOfFirst { it.exoPlayer.isPlaying }
+                    if (previousIndex != -1) {
+                        val player = exoPlayerItems[previousIndex].exoPlayer
+                        player.pause()
+                        player.playWhenReady = false
+                    }
+                    val newIndex = exoPlayerItems.indexOfFirst { it.position == position }
+                    if (newIndex != -1) {
+                        val player = exoPlayerItems[newIndex].exoPlayer
+                        player.playWhenReady = true
+                        player.play()
+                    }
+                }
+            })
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        val index = exoPlayerItems.indexOfFirst { it.position == binding.videoViewPager.currentItem }
+        if (index != -1) {
+            val player = exoPlayerItems[index].exoPlayer
+            player.pause()
+            player.playWhenReady = false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val index = exoPlayerItems.indexOfFirst { it.position == binding.videoViewPager.currentItem }
+        if (index != -1) {
+            val player = exoPlayerItems[index].exoPlayer
+            player.playWhenReady = true
+            player.play()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (exoPlayerItems.isNotEmpty()) {
+            for (item in exoPlayerItems) {
+                val player = item.exoPlayer
+                player.stop()
+                player.clearMediaItems()
+            }
+        }
+    }
     class DepthPageTransformer : ViewPager2.PageTransformer {
 
-        private val MIN_SCALE= 0.75F
+        private val MIN_SCALE = 0.75F
 
         override fun transformPage(view: View, position: Float) {
             view.apply {

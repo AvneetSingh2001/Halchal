@@ -89,6 +89,7 @@ class HomeActivityViewModel(
         val loc = curUser.value?.location
         remoteNewsRepository.getLocalNews(loc.toString()).collectLatest {
             localHeadlines.postValue(it)
+            Log.e("Avneet Local viewmodel", it.toString())
         }
     }
 

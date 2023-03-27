@@ -47,10 +47,7 @@ class HomeActivity : AppCompatActivity() {
         fetchLocalNewss()
         fetchRemoteNews()
 
-        val newsLink = intent.getStringExtra("deepLink")
-        newsLink?.let {
-            viewModel.getNewsByDeepLink(it)
-        }
+
 
         val navController  = findNavController(R.id.fragmentContainerView)
         navController.setGraph(
@@ -109,8 +106,18 @@ class HomeActivity : AppCompatActivity() {
     fun logout() {
         viewModel.logout()
         val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
         finish()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val newsLink = intent?.getStringExtra("deepLink")
+        Log.e("Avneet New Intent", "HomeActivity $newsLink")
+
+        newsLink?.let {
+            viewModel.getNewsByDeepLink(it)
+        }
     }
 }

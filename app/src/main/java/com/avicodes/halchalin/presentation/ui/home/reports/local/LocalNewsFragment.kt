@@ -57,7 +57,7 @@ class LocalNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.localHeadlines.observe(requireActivity(), Observer {response ->
+        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {response ->
             when(response) {
                 is Result.Error -> {
                     hideProgressBar()
@@ -68,6 +68,7 @@ class LocalNewsFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
+                        Log.e("Avneet Home Local", it.toString())
                         localNewsAdapter.differ.submitList(it)
                     }
                 }

@@ -18,9 +18,12 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
-                Glide.with(ivThumbnail.context)
-                    .load(data.coverUrl)
-                    .into(ivThumbnail)
+
+                data.coverUrl?.let {
+                    Glide.with(ivThumbnail.context)
+                        .load(it)
+                        .into(ivThumbnail)
+                }
 
                 tvHeadline.text = data.newsHeadline
                 tvCity.text = data.location
@@ -32,6 +35,7 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                         it(position)
                     }
                 }
+
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.repository.dataSourceImpl
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
@@ -30,11 +31,11 @@ class LocalNewsDataSourceImpl(
 
         val snapshot = firestore
             .collection("News")
-            .orderBy("time", Query.Direction.DESCENDING)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
             .whereEqualTo("location", location)
             .get().await()
-
         val news = snapshot.toObjects(News::class.java)
+        Log.e("Avneet Local Source", news.toString())
         emit(Result.Success(news))
     }.catch {
         emit(Result.Error(it))
@@ -111,7 +112,8 @@ class LocalNewsDataSourceImpl(
                 socialMetaTagParameters {
                     title = "Halchal News"
                     description = "हर हलचल पर हमारी नज़र"
-                    imageUrl = news.imageUrl?.toUri() ?: news.coverUrl?.toUri() ?: "https://firebasestorage.googleapis.com/v0/b/halchal-bb06e.appspot.com/o/logo%2Fhalchal.png?alt=media&token=0fab102e-d7d2-4fa2-95c4-b2665f37dc05".toUri()
+                    imageUrl = news.coverUrl?.toUri() ?: news.coverUrl?.toUri()
+                            ?: "https://firebasestorage.googleapis.com/v0/b/halchal-bb06e.appspot.com/o/logo%2Fhalchal.png?alt=media&token=0fab102e-d7d2-4fa2-95c4-b2665f37dc05".toUri()
                 }
             }.await()
 
