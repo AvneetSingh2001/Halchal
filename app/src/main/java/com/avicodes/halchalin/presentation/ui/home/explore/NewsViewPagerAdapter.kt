@@ -99,6 +99,8 @@ class NewsViewPagerAdapter(
                 rgContent.setOnCheckedChangeListener { group, checkedId ->
                     if (checkedId == R.id.enLang) {
                         exoPlayer.pause()
+                        exoPlayer.playWhenReady = false
+
                         vvNews.visibility = View.GONE
                         ivNews.visibility = View.VISIBLE
                         enLang.setTextColor(
