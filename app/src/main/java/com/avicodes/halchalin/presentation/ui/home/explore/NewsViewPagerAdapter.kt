@@ -49,7 +49,7 @@ class NewsViewPagerAdapter(
 
                 tvHeadline.text = data.newsHeadline
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
-                tvCity.text = data.location
+                tvLoc.text = data.location
 
                 val desc = data.newsDesc
                 val stIdx = 0

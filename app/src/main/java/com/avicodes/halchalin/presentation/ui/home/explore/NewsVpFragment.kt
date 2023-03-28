@@ -58,8 +58,9 @@ class NewsVpFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         setUpLocalNewsRecyclerView()
         getNewsList()
-        binding.videoViewPager.setPageTransformer(DepthPageTransformer())
         observeExploreTab()
+        binding.videoViewPager.setPageTransformer(DepthPageTransformer())
+
 
         adapter.setOnCommentClickListener {
             showCommentDialog(it)
@@ -87,6 +88,7 @@ class NewsVpFragment : Fragment() {
                     it.data?.let { link ->
                         shareLink(link)
                     }
+                    viewModel.linkCreated.postValue(Result.NotInitialized)
                 }
                 is Result.Error -> {
                     hideProgressBar()
