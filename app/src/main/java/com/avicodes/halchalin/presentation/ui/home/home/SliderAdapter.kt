@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.models.FeaturedAds
+import com.avicodes.halchalin.data.models.Featured
 import com.bumptech.glide.Glide
 import com.google.android.material.transition.Hold
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class SliderAdapter(
-    private val images: List<FeaturedAds>
+    private val images: List<Featured>
 ): SliderViewAdapter<SliderAdapter.Holder>() {
     inner class Holder(itemView: View): ViewHolder(itemView) {
         var ivSlider: ImageView = itemView.findViewById(R.id.ivSlider)

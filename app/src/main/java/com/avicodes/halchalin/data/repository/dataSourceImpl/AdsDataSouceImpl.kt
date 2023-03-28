@@ -1,6 +1,6 @@
 package com.avicodes.halchalin.data.repository.dataSourceImpl
 
-import com.avicodes.halchalin.data.models.FeaturedAds
+import com.avicodes.halchalin.data.models.Featured
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.repository.dataSource.AdsDataSource
 import com.avicodes.halchalin.data.utils.Result
@@ -15,16 +15,16 @@ import kotlinx.coroutines.tasks.await
 
 class AdsDataSouceImpl(
     private var firestore: FirebaseFirestore
-): AdsDataSource {
+) : AdsDataSource {
 
-    override fun getAllFeaturedAds() = flow<Result<List<FeaturedAds>>> {
+    override fun getAllFeaturedAds() = flow<Result<List<Featured>>> {
         emit(Result.Loading("Fetching Ads"))
         val snapshot = firestore
-            .collection("FeaturedAds")
-            .orderBy("id", Query.Direction.ASCENDING)
+            .collection("Featured")
+            .orderBy("priority", Query.Direction.DESCENDING)
             .get().await()
 
-        val featuredAds = snapshot.toObjects(FeaturedAds::class.java)
+        val featuredAds = snapshot.toObjects(Featured::class.java)
         emit(Result.Success(featuredAds))
     }.catch {
         emit(Result.Error(it))
