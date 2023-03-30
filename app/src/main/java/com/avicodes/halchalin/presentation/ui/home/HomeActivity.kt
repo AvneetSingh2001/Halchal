@@ -57,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.homeFragment -> showBottomNav()
-                R.id.newsVpFragment -> showBottomNav()
+                R.id.localNewsFragment -> showBottomNav()
                 R.id.newsFragment -> showBottomNav()
                 R.id.adsFragment -> showBottomNav()
                 R.id.settingsFragment -> showBottomNav()
@@ -75,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.exploreNewsTab.observe(this, Observer { response ->
             when(response) {
                 is Result.Success -> {
-                    binding.bottomNavigation.selectedItemId = R.id.newsVpFragment
+                    binding.bottomNavigation.selectedItemId = R.id.localNewsFragment
                 }
                 else -> {}
             }

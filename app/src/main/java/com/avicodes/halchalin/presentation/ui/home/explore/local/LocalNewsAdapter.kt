@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home.reports.local
+package com.avicodes.halchalin.presentation.ui.home.explore.local
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,15 +26,28 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                 }
 
                 tvHeadline.text = data.newsHeadline
-                tvCity.text = data.location
+               // tvCity.text = data.location
                 tvDesc.text = data.newsDesc
-                tvPubDate.text = TimeCalc.getTimeAgo(data.createdAt)
+               // tvPubDate.text = TimeCalc.getTimeAgo(data.createdAt)
 
                 root.setOnClickListener {
                     onItemClickListener?.let {
-                        it(position)
+                        it(data)
                     }
                 }
+
+                btnComment.setOnClickListener {
+                    commentClickListener?.let {
+                        it(data)
+                    }
+                }
+
+                btnShare.setOnClickListener {
+                    shareClickListener?.let {
+                        it(data)
+                    }
+                }
+
 
             }
         }
@@ -68,9 +81,20 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
     val differ = AsyncListDiffer(this, callback)
 
 
-    private var onItemClickListener: ((Int)->Unit)?= null
+    private var onItemClickListener: ((News)->Unit)?= null
 
-    fun setOnItemClickListener(listener: (Int) -> Unit) {
+    fun setOnItemClickListener(listener: (News) -> Unit) {
         onItemClickListener = listener
+    }
+
+
+    private var commentClickListener: ((News) -> Unit)? = null
+    fun setOnCommentClickListener(listener: (News) -> Unit) {
+        commentClickListener = listener
+    }
+
+    private var shareClickListener: ((News) -> Unit)? = null
+    fun setOnShareClickListener(listener: (News) -> Unit) {
+        shareClickListener = listener
     }
 }

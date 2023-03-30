@@ -20,33 +20,33 @@
                 android:id="@+id/clTablayout"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:background="@drawable/bg_tab"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tlNews"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
+                    app:tabTextAppearance="@style/CustomTextAppearanceTab"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabIndicator="@drawable/classy_tab_indicator"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tabIndicator="@drawable/tab_indicator"
                     app:tabIndicatorAnimationMode="elastic"
-                    app:tabIndicatorColor="@null"
-                    app:tabIndicatorGravity="stretch"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/white"
-                    app:tabTextColor="#929597" />
+                    app:tabSelectedTextColor="@color/black"
+                    app:tabTextColor="#929597"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vpNews"
                 android:layout_width="0dp"
+
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"

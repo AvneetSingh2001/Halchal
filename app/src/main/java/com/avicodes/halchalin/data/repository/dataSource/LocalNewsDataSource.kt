@@ -2,6 +2,7 @@ package com.avicodes.halchalin.data.repository.dataSource
 
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
@@ -21,4 +22,5 @@ interface LocalNewsDataSource {
     suspend fun createDynamicLink(
         news: News
     ) : Flow<Result<String>>
+
 }

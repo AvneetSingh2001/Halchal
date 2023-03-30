@@ -1,31 +1,22 @@
-package com.avicodes.halchalin.presentation.ui.home.explore
+package com.avicodes.halchalin.presentation.ui.home.explore.localvp
 
 
 import android.content.Context
 import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.ExoPlayerItem
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.ItemNewsDescBinding
+import com.avicodes.halchalin.presentation.ui.home.explore.NewsResAdapter
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -35,6 +26,8 @@ class NewsViewPagerAdapter(
     var context: Context,
     var videoPreparedListener: OnVideoPreparedListener
 ) : Adapter<NewsViewPagerAdapter.ViewHolder>() {
+
+
 
     private lateinit var exoPlayer: ExoPlayer
     private lateinit var mediaSource: MediaSource
@@ -50,17 +43,16 @@ class NewsViewPagerAdapter(
                 tvHeadline.text = data.newsHeadline
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvLoc.text = data.location
-
                 val desc = data.newsDesc
                 val stIdx = 0
                 var enIdx = desc?.length ?: 0
 
                 var displayDesc = desc?.substring(stIdx, enIdx)
 
-                if (enIdx > 400) {
-                    enIdx = 400
-                    tvSeeMore.visibility = View.VISIBLE
+                if (enIdx > 200) {
+                    enIdx = 200
                     displayDesc = desc?.substring(stIdx, enIdx).plus("...")
+                    tvSeeMore.visibility = View.VISIBLE
                 }
 
                 tvDesc.text = displayDesc
@@ -78,13 +70,13 @@ class NewsViewPagerAdapter(
                 }
                 tvHeadline.text = data.newsHeadline
 
-                cvComment.setOnClickListener {
+                btnComment.setOnClickListener {
                     commentClickListener?.let {
                         it(data)
                     }
                 }
 
-                cvShare.setOnClickListener {
+                btnShare.setOnClickListener {
                     shareClickListener?.let {
                         it(data)
                     }
@@ -92,87 +84,88 @@ class NewsViewPagerAdapter(
 
                 tvSeeMore.setOnClickListener {
                     seeMoreClickListener?.let {
-                        it(desc.toString())
+                        it(data)
                     }
                 }
 
-                rgContent.setOnCheckedChangeListener { group, checkedId ->
-                    if (checkedId == R.id.enLang) {
-                        exoPlayer.pause()
-                        exoPlayer.playWhenReady = false
 
-                        vvNews.visibility = View.GONE
-                        ivNews.visibility = View.VISIBLE
-                        enLang.setTextColor(
-                            ContextCompat.getColor(context, R.color.white)
-                        )
-                        hiLang.setTextColor(
-                            ContextCompat.getColor(context, R.color.black)
-                        )
-
-                    }
-                    if (checkedId == R.id.hiLang) {
-                        hiLang.setTextColor(
-                            ContextCompat.getColor(context, R.color.white)
-                        )
-                        enLang.setTextColor(
-                            ContextCompat.getColor(context, R.color.black)
-                        )
-
-
-                        vvNews.visibility = View.VISIBLE
-                        ivNews.visibility = View.INVISIBLE
-                        data.videoUrl?.let {
-                            exoPlayer = ExoPlayer.Builder(context).build()
-                            exoPlayer.addListener(object : Player.Listener {
-                                override fun onPlayerError(error: PlaybackException) {
-                                    super.onPlayerError(error)
-                                    Toast.makeText(
-                                        context,
-                                        "Can't play this video",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                override fun onPlayerStateChanged(
-                                    playWhenReady: Boolean,
-                                    playbackState: Int
-                                ) {
-                                    if (playbackState == Player.STATE_BUFFERING) {
-                                        vvLoader.visibility = View.VISIBLE
-                                    } else if (playbackState == Player.STATE_READY) {
-                                        vvLoader.visibility = View.GONE
-                                    }
-                                }
-                            })
-
-                            vvNews.player = exoPlayer
-
-                            exoPlayer.seekTo(0)
-                            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
-
-                            val dataSourceFactory = DefaultDataSource.Factory(context)
-
-                            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                                .createMediaSource(MediaItem.fromUri(Uri.parse(it)))
-
-                            exoPlayer.setMediaSource(mediaSource)
-                            exoPlayer.prepare()
-
-                            if (absoluteAdapterPosition == 0) {
-                                exoPlayer.playWhenReady = true
-                                exoPlayer.play()
-                            }
-
-                            videoPreparedListener.onVideoPrepared(
-                                ExoPlayerItem(
-                                    exoPlayer,
-                                    absoluteAdapterPosition
-                                )
-                            )
-                        }
-                    }
-                }
+//                rgContent.setOnCheckedChangeListener { group, checkedId ->
+//                    if (checkedId == R.id.enLang) {
+//                        exoPlayer.pause()
+//                        exoPlayer.playWhenReady = false
+//
+//                        vvNews.visibility = View.GONE
+//                        ivNews.visibility = View.VISIBLE
+//                        enLang.setTextColor(
+//                            ContextCompat.getColor(context, R.color.white)
+//                        )
+//                        hiLang.setTextColor(
+//                            ContextCompat.getColor(context, R.color.black)
+//                        )
+//
+//                    }
+//                    if (checkedId == R.id.hiLang) {
+//                        hiLang.setTextColor(
+//                            ContextCompat.getColor(context, R.color.white)
+//                        )
+//                        enLang.setTextColor(
+//                            ContextCompat.getColor(context, R.color.black)
+//                        )
+//
+//
+//                        vvNews.visibility = View.VISIBLE
+//                        ivNews.visibility = View.INVISIBLE
+//                        data.videoUrl?.let {
+//                            exoPlayer = ExoPlayer.Builder(context).build()
+//                            exoPlayer.addListener(object : Player.Listener {
+//                                override fun onPlayerError(error: PlaybackException) {
+//                                    super.onPlayerError(error)
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Can't play this video",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//
+//                                override fun onPlayerStateChanged(
+//                                    playWhenReady: Boolean,
+//                                    playbackState: Int
+//                                ) {
+//                                    if (playbackState == Player.STATE_BUFFERING) {
+//                                        vvLoader.visibility = View.VISIBLE
+//                                    } else if (playbackState == Player.STATE_READY) {
+//                                        vvLoader.visibility = View.GONE
+//                                    }
+//                                }
+//                            })
+//
+//                            vvNews.player = exoPlayer
+//
+//                            exoPlayer.seekTo(0)
+//                            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
+//
+//                            val dataSourceFactory = DefaultDataSource.Factory(context)
+//
+//                            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+//                                .createMediaSource(MediaItem.fromUri(Uri.parse(it)))
+//
+//                            exoPlayer.setMediaSource(mediaSource)
+//                            exoPlayer.prepare()
+//
+//                            if (absoluteAdapterPosition == 0) {
+//                                exoPlayer.playWhenReady = true
+//                                exoPlayer.play()
+//                            }
+//
+//                            videoPreparedListener.onVideoPrepared(
+//                                ExoPlayerItem(
+//                                    exoPlayer,
+//                                    absoluteAdapterPosition
+//                                )
+//                            )
+//                        }
+//                    }
+//                }
 
 
             }
@@ -216,8 +209,8 @@ class NewsViewPagerAdapter(
         shareClickListener = listener
     }
 
-    private var seeMoreClickListener: ((String) -> Unit)? = null
-    fun setOnSeeMoreClickListener(listener: (String) -> Unit) {
+    private var seeMoreClickListener: ((News) -> Unit)? = null
+    fun setOnSeeMoreClickListener(listener: (News) -> Unit) {
         seeMoreClickListener = listener
     }
 

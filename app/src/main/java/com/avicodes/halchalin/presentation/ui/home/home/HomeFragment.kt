@@ -50,6 +50,9 @@ class HomeFragment : Fragment() {
         showProgressBar()
 
         viewModel = (activity as HomeActivity).viewModel
+
+        viewModel.getLocalNews()
+
         getFeaturedAds()
         getLatestNews()
         Log.e("Initialise Home", "HOme Fragment")
@@ -57,6 +60,7 @@ class HomeFragment : Fragment() {
         viewModel.curUser.observe(requireActivity(), Observer {
             binding.etLoc.setText(it?.location.toString())
         })
+
     }
 
     private fun getFeaturedAds() {
@@ -98,7 +102,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getLatestNews() {
-        binding?.apply {
+        binding.apply {
             latestNewsAdapter = LatestNewsAdapter()
             rvLatestLocal.adapter = latestNewsAdapter
             rvLatestLocal.layoutManager = LinearLayoutManager(activity)
@@ -107,7 +111,7 @@ class HomeFragment : Fragment() {
             var two = false
             var three = false
 
-            viewModel.localHeadlines.observe(requireActivity(), Observer { response ->
+            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {
@@ -124,7 +128,7 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            viewModel.nationalHeadlines.observe(requireActivity(), Observer { response ->
+            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {
@@ -140,7 +144,7 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            viewModel.worldHeadlines.observe(requireActivity(), Observer { response ->
+            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
                         response.data?.let {

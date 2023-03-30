@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -50,11 +51,14 @@ class GlobeNewsFragment : Fragment() {
             remoteNewsAdapter = RemoteNewsAdapter()
             rvNationalNews.adapter = remoteNewsAdapter
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
-            remoteNewsAdapter.setOnItemClickListener {
-                rvNationalNews.scrollToPosition(it)
+            remoteNewsAdapter.setOnItemClickListener {news ->
+                onItemClickListener?.let {
+                    it(news)
+                }
             }
         }
     }
+
 
     private fun getNewsList() {
 
@@ -89,6 +93,15 @@ class GlobeNewsFragment : Fragment() {
     private fun hideProgressBar() {
         binding.progCons.visibility = View.GONE
         binding.mainCons.visibility = View.VISIBLE
+    }
+
+
+
+    companion object {
+        private var onItemClickListener: ((NewsRemote) -> Unit)? = null
+        fun setOnItemClickListener(listener: (NewsRemote) -> Unit) {
+            onItemClickListener = listener
+        }
     }
 
 }

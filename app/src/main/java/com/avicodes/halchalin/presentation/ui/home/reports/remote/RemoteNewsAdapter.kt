@@ -14,9 +14,10 @@ import com.bumptech.glide.Glide
 
 
 class RemoteNewsAdapter(
-): Adapter<RemoteNewsAdapter.ViewHolder>(){
+) : Adapter<RemoteNewsAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: ItemRemoteNewsBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemRemoteNewsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
@@ -26,33 +27,24 @@ class RemoteNewsAdapter(
                     .error(R.drawable.halchal_logo_2)
                     .into(ivNews)
 
-                data.source_id?.let { tvSource.text = "Source: ${it}" }
+                data.source_id?.let { tvSource.text = "${it}" }
                 data.title?.let { tvHeadline.text = it }
-                data.content?.let { tvDesc.text = it }
-                data.pubDate?.let { tvPubDate.text = "$it"}
-                tvCollExp.text = "Expand"
+                data.pubDate?.let { tvTime.text = "$it" }
 
-                tvCollExp.setOnClickListener {
-                    if(tvCollExp.text == "Expand") {
-                        tvDesc.visibility = View.GONE
-                        tvDescContent.text = data.content.toString()
-                        tvDescContent.visibility = View.VISIBLE
-                        tvCollExp.text = "Collapse"
-                    } else if(tvCollExp.text == "Collapse") {
-                        tvDesc.visibility = View.VISIBLE
-                        tvDescContent.visibility = View.GONE
-                        tvCollExp.text = "Expand"
-                        onItemClickListener?.let {
-                            it(position)
-                        }
+                root.setOnClickListener {
+                    onItemClickListener?.let {
+                        it(data)
                     }
                 }
+
+
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemRemoteNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemRemoteNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -66,7 +58,7 @@ class RemoteNewsAdapter(
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<NewsRemote> (){
+    private var callback = object : DiffUtil.ItemCallback<NewsRemote>() {
         override fun areItemsTheSame(oldItem: NewsRemote, newItem: NewsRemote): Boolean {
             return oldItem.link == newItem.link
         }
@@ -79,9 +71,9 @@ class RemoteNewsAdapter(
 
     val differ = AsyncListDiffer(this, callback)
 
-    private var onItemClickListener: ((Int)->Unit)?= null
+    private var onItemClickListener: ((NewsRemote) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Int) -> Unit) {
+    fun setOnItemClickListener(listener: (NewsRemote) -> Unit) {
         onItemClickListener = listener
     }
 

@@ -35,4 +35,6 @@ interface NewsRepository {
     ): Flow<Result<String>>
 
     fun getNewsById(newsId: String): Flow<Result<News>>
+
+    fun createRemoteNewsDynamicLink(newsRemote: NewsRemote): Flow<Result<String>>
 }

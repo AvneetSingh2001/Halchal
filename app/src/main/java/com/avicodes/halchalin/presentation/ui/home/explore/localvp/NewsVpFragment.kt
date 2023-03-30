@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home.explore
+package com.avicodes.halchalin.presentation.ui.home.explore.localvp
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.loader.content.Loader
 import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.avicodes.halchalin.data.models.ExoPlayerItem
@@ -19,8 +17,6 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentNewsVpBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -38,6 +34,7 @@ class NewsVpFragment : Fragment() {
 
     private val exoPlayerItems = ArrayList<ExoPlayerItem>()
 
+   // val args: NewsVpFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +53,17 @@ class NewsVpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as HomeActivity).viewModel
+
+
         setUpLocalNewsRecyclerView()
         getNewsList()
-        observeExploreTab()
+
+
         binding.videoViewPager.setPageTransformer(DepthPageTransformer())
 
 
         adapter.setOnCommentClickListener {
-            showCommentDialog(it)
+           showCommentDialog(it)
         }
 
         adapter.setOnShareClickListener {
@@ -71,7 +71,14 @@ class NewsVpFragment : Fragment() {
         }
 
         adapter.setOnSeeMoreClickListener {
-            showNewsDescDialog(it)
+            val action = NewsVpFragmentDirections.actionNewsVpFragmentToLocalNewsDescFragment(it)
+            requireView().findNavController().navigate(action)
+        }
+
+        binding.apply {
+            btnBack.setOnClickListener {
+                requireView().findNavController().popBackStack()
+            }
         }
 
         observeLinkCreated()
@@ -100,6 +107,8 @@ class NewsVpFragment : Fragment() {
         })
     }
 
+
+
     private fun shareLink(link: String?) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -110,66 +119,10 @@ class NewsVpFragment : Fragment() {
         startActivity(shareIntent)
     }
 
-    private fun showNewsDescDialog(desc: String) {
-        val action = NewsVpFragmentDirections.actionNewsVpFragmentToDescFragment(desc)
-        requireView().findNavController().navigate(action)
-    }
 
     private fun showCommentDialog(news: News) {
         val action = NewsVpFragmentDirections.actionNewsVpFragmentToCommentFragment(news)
         requireView().findNavController().navigate(action)
-    }
-
-    private fun observeExploreTab() {
-        viewModel.exploreNewsTab.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Result.Success -> {
-                    it.data?.let { pos ->
-                        if (pos >= 0) {
-                            Log.e("Avneet Scroll", pos.toString())
-                            binding.videoViewPager.setCurrentItem(pos, true)
-                        } else if (pos == -1) {
-                            viewModel.sharedNews.observe(viewLifecycleOwner, Observer { res ->
-                                when (res) {
-                                    is Result.Success -> {
-                                        hideProgressBar()
-                                        res.data?.let { news ->
-                                            sharedNews.toMutableList().add(0, news)
-                                            adapter.differ.submitList(sharedNews)
-                                            binding.videoViewPager.registerOnPageChangeCallback(
-                                                object : ViewPager2.OnPageChangeCallback() {
-                                                    override fun onPageScrolled(
-                                                        position: Int,
-                                                        positionOffset: Float,
-                                                        positionOffsetPixels: Int
-                                                    ) {
-                                                        if (pos == -1) {
-                                                            adapter.differ.submitList(newsList)
-                                                        }
-                                                        super.onPageScrolled(
-                                                            position,
-                                                            positionOffset,
-                                                            positionOffsetPixels
-                                                        )
-                                                    }
-                                                })
-                                        }
-                                    }
-                                    is Result.Loading -> {
-                                        showProgressBar()
-                                    }
-                                    else -> {
-                                        hideProgressBar()
-                                    }
-                                }
-                            })
-                        }
-                    }
-                    viewModel.exploreNewsTab.value = Result.NotInitialized
-                }
-                else -> {}
-            }
-        })
     }
 
     private fun getNewsList() {

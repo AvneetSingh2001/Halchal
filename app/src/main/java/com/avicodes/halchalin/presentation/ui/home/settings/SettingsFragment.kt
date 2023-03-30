@@ -41,11 +41,11 @@ class SettingsFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         binding.run {
-            btnLogout.setOnClickListener {
+            btnSignOut.setOnClickListener {
                 (activity as HomeActivity).logout()
             }
 
-            profCons.setOnClickListener {
+            btnEdit.setOnClickListener {
                 navigateToEditScreen()
             }
 
@@ -53,7 +53,7 @@ class SettingsFragment : Fragment() {
             viewModel.curUser.observe(requireActivity(), Observer { user ->
                 user?.let {
                     tvName.text = user.name
-                    tvPhone.text = user.about
+                    //tvPhone.text = user.about
 
                     Glide.with(ivUser)
                         .load(user.imgUrl).circleCrop()

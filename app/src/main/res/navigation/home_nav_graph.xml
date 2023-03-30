@@ -11,22 +11,26 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/newsVpFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.NewsVpFragment"
-        android:label="fragment_news_vp"
-        tools:layout="@layout/fragment_news_vp" >
+        android:id="@+id/localNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.explore.local.LocalNewsFragment"
+        android:label="fragment_local_news"
+        tools:layout="@layout/fragment_local_news" >
         <action
-            android:id="@+id/action_newsVpFragment_to_commentFragment"
+            android:id="@+id/action_localNewsFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
         <action
-            android:id="@+id/action_newsVpFragment_to_descFragment"
-            app:destination="@id/descFragment" />
+            android:id="@+id/action_localNewsFragment_to_localNewsDescFragment"
+            app:destination="@id/localNewsDescFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_newsFragment_to_detailedRemoteFragment"
+            app:destination="@id/detailedRemoteFragment" />
+    </fragment>
     <fragment
         android:id="@+id/adsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment"
@@ -70,15 +74,6 @@
         android:label="fragment_edit"
         tools:layout="@layout/fragment_edit" />
     <dialog
-        android:id="@+id/descFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.DescFragment"
-        android:label="fragment_desc"
-        tools:layout="@layout/fragment_desc" >
-        <argument
-            android:name="desc"
-            app:argType="string" />
-    </dialog>
-    <dialog
         android:id="@+id/userProfileFragment"
         android:name="com.avicodes.halchalin.presentation.ui.profile.UserProfileFragment"
         android:label="fragment_user_profile"
@@ -87,4 +82,40 @@
             android:name="user"
             app:argType="com.avicodes.halchalin.data.models.User" />
     </dialog>
+    <fragment
+        android:id="@+id/detailedRemoteFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.reports.remote.DetailedRemoteFragment"
+        android:label="fragment_detailed_remote"
+        tools:layout="@layout/fragment_detailed_remote" >
+        <argument
+            android:name="news"
+            app:argType="com.avicodes.halchalin.data.models.NewsRemote" />
+    </fragment>
+    <fragment
+        android:id="@+id/localNewsDescFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.explore.LocalNewsDescFragment"
+        android:label="LocalNewsDescFragment" >
+        <action
+            android:id="@+id/action_localNewsDescFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+        <argument
+            android:name="news"
+            app:argType="com.avicodes.halchalin.data.models.News" />
+        <action
+            android:id="@+id/action_localNewsDescFragment_to_newsVpFragment"
+            app:destination="@id/newsVpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsVpFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.explore.localvp.NewsVpFragment"
+        android:label="fragment_news_vp"
+        tools:layout="@layout/fragment_news_vp" >
+        <action
+            android:id="@+id/action_newsVpFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_newsVpFragment_to_localNewsDescFragment"
+            app:destination="@id/localNewsDescFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
 </navigation>

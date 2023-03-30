@@ -1,6 +1,9 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
+import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
+import com.avicodes.halchalin.data.utils.Result
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface RemoteNewsDataSource {
@@ -15,5 +18,7 @@ interface RemoteNewsDataSource {
         country: String,
         lang: String
     ): Response<NewsResponse>
+
+    fun createRemoteNewsDynamicLink(newsRemote: NewsRemote): Flow<Result<String>>
 
 }

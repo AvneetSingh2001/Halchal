@@ -16,6 +16,8 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
+import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
+import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
 
 @AndroidEntryPoint
 class NewsFragment(
@@ -48,20 +50,14 @@ class NewsFragment(
         adapter = NewsAdapter(childFragmentManager, lifecycle)
         viewModel = (activity as HomeActivity).viewModel
 
-        observeUser()
-
         binding.run {
 
             tlNews.addTab(
-                tlNews.newTab().setText("Local")
+                tlNews.newTab().setText("National News")
             )
 
             tlNews.addTab(
-                tlNews.newTab().setText("India")
-            )
-
-            tlNews.addTab(
-                tlNews.newTab().setText("Global")
+                tlNews.newTab().setText("International News")
             )
 
             vpNews.adapter = adapter
@@ -79,6 +75,16 @@ class NewsFragment(
             })
 
             addTabsVp()
+
+            GlobeNewsFragment.setOnItemClickListener {
+                val action = NewsFragmentDirections.actionNewsFragmentToDetailedRemoteFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+
+            IndiaNewsFragment.setOnItemClickListener {
+                val action = NewsFragmentDirections.actionNewsFragmentToDetailedRemoteFragment(it)
+                requireView().findNavController().navigate(action)
+            }
         }
     }
 
@@ -92,8 +98,6 @@ class NewsFragment(
                     refreshLayout.setOnRefreshListener {
                         refreshLayout.isRefreshing = false
                         if (position == 0) {
-                            viewModel.getLocalNews()
-                        } else if (position == 1) {
                             viewModel.getNationalNewsHeadlines("in", "hi")
                         } else {
                             viewModel.getWorldNewsHeadlines("world", "in", "hi")
@@ -103,12 +107,5 @@ class NewsFragment(
                 }
             })
         }
-    }
-
-    private fun observeUser() {
-        viewModel.curUser.observe(requireActivity(), Observer {
-            viewModel.getLocalNews()
-            addTabsVp()
-        })
     }
 }

@@ -9,15 +9,15 @@
 
 
     <item
-        android:id="@+id/newsVpFragment"
-        android:title="Media"
-        android:icon="@drawable/discovery"/>
+        android:id="@+id/localNewsFragment"
+        android:title="Local"
+        android:icon="@drawable/location"/>
 
 
     <item
         android:id="@+id/newsFragment"
-        android:title="Reports"
-        android:icon="@drawable/document"/>
+        android:title="Explore"
+        android:icon="@drawable/discovery"/>
 
     <item
         android:id="@+id/adsFragment"

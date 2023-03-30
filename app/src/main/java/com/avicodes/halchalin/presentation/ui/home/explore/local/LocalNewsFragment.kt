@@ -1,5 +1,6 @@
-package com.avicodes.halchalin.presentation.ui.home.reports.local
+package com.avicodes.halchalin.presentation.ui.home.explore.local
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.MainActivity
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -40,12 +43,73 @@ class LocalNewsFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         setUpLocalNewsRecyclerView()
+        viewModel.getLocalNews()
         getNewsList()
 
-        localNewsAdapter.setOnItemClickListener { pos ->
-            viewModel.exploreNewsTab.value = Result.Success(pos)
+        observeLinkCreated()
+
+        localNewsAdapter.setOnItemClickListener {
+            navigateToDetailedNews(it)
         }
 
+        localNewsAdapter.setOnCommentClickListener {
+            showCommentDialog(it)
+        }
+
+        localNewsAdapter.setOnShareClickListener {
+            viewModel.createDeepLink(it)
+        }
+
+        binding.apply {
+            refreshLayout.setOnRefreshListener {
+                refreshLayout.isRefreshing = false
+                viewModel.getLocalNews()
+            }
+        }
+
+    }
+
+    private fun navigateToDetailedNews(news: News) {
+        val action = LocalNewsFragmentDirections.actionLocalNewsFragmentToLocalNewsDescFragment(news)
+        requireView().findNavController().navigate(action)
+    }
+
+    private fun observeLinkCreated() {
+        viewModel.linkCreated.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Loading -> {
+                    showProgressBar()
+                }
+                is Result.Success -> {
+                    hideProgressBar()
+                    it.data?.let { link ->
+                        shareLink(link)
+                    }
+                    viewModel.linkCreated.postValue(Result.NotInitialized)
+                }
+                is Result.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else -> {}
+            }
+        })
+    }
+
+    private fun shareLink(link: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "$link")
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Share News")
+        startActivity(shareIntent)
+    }
+
+    private fun showCommentDialog(news: News) {
+        val action = LocalNewsFragmentDirections.actionLocalNewsFragmentToCommentFragment(news)
+        requireView().findNavController().navigate(action)
     }
 
     private fun setUpLocalNewsRecyclerView() {
@@ -57,11 +121,11 @@ class LocalNewsFragment : Fragment() {
     }
 
     private fun getNewsList() {
-        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
+        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
                 is Result.Error -> {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occurred", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
                     Log.e("Error", response.exception?.message.toString())
                 }
 
