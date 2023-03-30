@@ -39,7 +39,7 @@ class HomeActivityViewModel(
     val worldHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
-    val exploreNewsTab: MutableLiveData<Result<Int>> = MutableLiveData(Result.NotInitialized)
+    val linkNews: MutableLiveData<Result<News>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
     val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
@@ -227,7 +227,7 @@ class HomeActivityViewModel(
             newsId?.let {
                 getLocalNews()
                 getNewsById(newsId)
-                exploreNewsTab.postValue(Result.Success(-1))
+                linkNews.postValue(Result.Success(News()))
             }
         }
     }

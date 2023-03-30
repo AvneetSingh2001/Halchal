@@ -72,7 +72,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun observeTabs() {
-        viewModel.exploreNewsTab.observe(this, Observer { response ->
+        viewModel.linkNews.observe(this, Observer { response ->
             when(response) {
                 is Result.Success -> {
                     binding.bottomNavigation.selectedItemId = R.id.localNewsFragment

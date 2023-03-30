@@ -67,6 +67,30 @@ class LocalNewsFragment : Fragment() {
             }
         }
 
+        viewModel.sharedNews.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Result.Success -> {
+                    hideProgressBar()
+                    it.data?.let {news ->
+                        navigateToDetailedNews(news)
+                        viewModel.sharedNews.postValue(Result.NotInitialized)
+                    } ?: Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
+
+                }
+
+                is Result.Loading -> {
+                    showProgressBar()
+                }
+
+                is Result.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
+                }
+
+                is Result.NotInitialized -> {}
+            }
+        })
+
     }
 
     private fun navigateToDetailedNews(news: News) {
