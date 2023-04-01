@@ -6,44 +6,42 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.Categories
 import com.avicodes.halchalin.data.models.LatestNews
-import com.avicodes.halchalin.data.models.NewsRemote
+import com.avicodes.halchalin.databinding.ItemCategoriesBinding
 import com.avicodes.halchalin.databinding.ItemLatestNewsBinding
-import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
-import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import com.bumptech.glide.Glide
 
-class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {
+class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: ItemLatestNewsBinding) :
+    inner class ViewHolder(private val binding: ItemCategoriesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
                 val data = differ.currentList[position]
                 data?.let {
-                    tvHeadline.text = data.newsHeadline
-                    tvTime.text = data.time
-                    tvType.text = data.type
-
-                    Glide.with(ivNews.context)
+                    Glide.with(ivCategory.context)
                         .load(data.imgUrl)
-                        .error(R.drawable.halchal_logo_2)
-                        .into(ivNews)
+                        .circleCrop()
+                        .error(R.drawable.world)
+                        .into(ivCategory)
+
+                    tvName.text = data.name
 
                     root.setOnClickListener {
                         onItemClickListener?.let {
                             it(data)
                         }
                     }
-
                 }
+
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
-            ItemLatestNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemCategoriesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -57,22 +55,21 @@ class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<LatestNews>() {
-        override fun areItemsTheSame(oldItem: LatestNews, newItem: LatestNews): Boolean {
+    private var callback = object : DiffUtil.ItemCallback<Categories>() {
+        override fun areItemsTheSame(oldItem: Categories, newItem: Categories): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: LatestNews, newItem: LatestNews): Boolean {
+        override fun areContentsTheSame(oldItem: Categories, newItem: Categories): Boolean {
             return oldItem == newItem
         }
     }
 
-
     val differ = AsyncListDiffer(this, callback)
 
-    private var onItemClickListener: ((LatestNews) -> Unit)? = null
+    private var onItemClickListener: ((Categories) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (LatestNews) -> Unit) {
+    fun setOnItemClickListener(listener: (Categories) -> Unit) {
         onItemClickListener = listener
     }
 }

@@ -15,8 +15,6 @@ interface NewsApiService {
         lang: String,
         @Query("apikey")
         apiKey: String = BuildConfig.API_KEY,
-        @Query("domain")
-        domain: String = "aajtak,ndtv_in,navbharattimes,hindinews18"
     ): Response<NewsResponse>
 
     @GET("news")
@@ -29,7 +27,5 @@ interface NewsApiService {
         lang: String,
         @Query("apikey")
         apiKey: String = BuildConfig.API_KEY,
-        @Query("domain")
-        domain: String = "aajtak,ndtv_in,navbharattimes,hindinews18"
     ): Response<NewsResponse>
 }

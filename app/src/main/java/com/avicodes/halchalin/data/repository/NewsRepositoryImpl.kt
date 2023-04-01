@@ -68,6 +68,10 @@ class NewsRepositoryImpl(
         return remoteNewsDataSource.createRemoteNewsDynamicLink(newsRemote)
     }
 
+    override fun getCategories(): Flow<Result<List<Categories>>> {
+        return remoteNewsDataSource.getCategories()
+    }
+
 
     fun responseToResource(response: Response<NewsResponse>): Result<NewsResponse> {
         if (response.isSuccessful) {

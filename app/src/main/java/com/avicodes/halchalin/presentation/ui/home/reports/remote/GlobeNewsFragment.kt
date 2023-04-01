@@ -23,10 +23,6 @@ class GlobeNewsFragment : Fragment() {
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var remoteNewsAdapter: RemoteNewsAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,6 +68,7 @@ class GlobeNewsFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
+                        Log.e("Avneet", it.results.toString())
                         remoteNewsAdapter.differ.submitList(it.results)
                     }
                 }

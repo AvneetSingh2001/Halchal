@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.data.repository.dataSource
 
+import com.avicodes.halchalin.data.models.Categories
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
 import com.avicodes.halchalin.data.utils.Result
@@ -20,5 +21,7 @@ interface RemoteNewsDataSource {
     ): Response<NewsResponse>
 
     fun createRemoteNewsDynamicLink(newsRemote: NewsRemote): Flow<Result<String>>
+
+    fun getCategories() : Flow<Result<List<Categories>>>
 
 }

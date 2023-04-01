@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.ui.home.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.format.Time
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.avicodes.halchalin.data.models.LatestNews
 import com.avicodes.halchalin.data.utils.Result
+import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
@@ -30,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var featuredAdapter: SliderAdapter
     private lateinit var latestNewsAdapter: LatestNewsAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,15 +57,50 @@ class HomeFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         viewModel.getLocalNews()
+        viewModel.getCategories()
 
         getFeaturedAds()
         getLatestNews()
         Log.e("Initialise Home", "HOme Fragment")
 
-        viewModel.curUser.observe(requireActivity(), Observer {
-            binding.etLoc.setText(it?.location.toString())
-        })
+        binding.apply {
 
+
+            viewModel.curUser.observe(requireActivity(), Observer {
+                etLoc.setText(it?.location.toString())
+            })
+
+            categoriesAdapter = CategoriesAdapter()
+            rvCategories.adapter = categoriesAdapter
+            rvCategories.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            viewModel.categories.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Result.Success -> {
+                        it.data?.let { categorieslist ->
+                            if (categorieslist.isNotEmpty()) {
+                                Log.e("Categories", categorieslist.toString())
+                                categoriesAdapter.differ.submitList(categorieslist)
+                                tv3.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                    is Result.Error -> {
+                        Log.e("Categories", "Error")
+
+                        tv3.visibility = View.GONE
+                    }
+                    else -> {
+                        tv3.visibility = View.GONE
+                    }
+                }
+            })
+
+            categoriesAdapter.setOnItemClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToCategoryNewsFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+        }
     }
 
     private fun getFeaturedAds() {
@@ -106,20 +146,24 @@ class HomeFragment : Fragment() {
             latestNewsAdapter = LatestNewsAdapter()
             rvLatestLocal.adapter = latestNewsAdapter
             rvLatestLocal.layoutManager = LinearLayoutManager(activity)
-            var latestHeadlines = mutableListOf<String>()
-            var one = false
-            var two = false
-            var three = false
+
+            val latestNews = mutableListOf<LatestNews>()
 
             viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
-                        response.data?.let {
-                            if(it.isNotEmpty()) {
-                                it[0].newsHeadline?.let { news -> latestHeadlines.add(news) }
-                                one = true
-                                if (one and two and three) {
-                                    latestNewsAdapter.differ.submitList(latestHeadlines)
+                        response.data?.let {newslist ->
+                            if(newslist.isNotEmpty()) {
+                                val news = newslist[0]
+                                val latest = LatestNews(
+                                    imgUrl = news.coverUrl,
+                                    newsHeadline = news.newsHeadline,
+                                    type = "Local",
+                                    time = TimeCalc.getTimeAgo(news.createdAt)
+                                )
+                                latestNews.add(latest)
+                                if(latestNews.size == 3) {
+                                    latestNewsAdapter.differ.submitList(latestNews)
                                 }
                             }
                         }
@@ -131,13 +175,19 @@ class HomeFragment : Fragment() {
             viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
-                        response.data?.let {
-                            if (it.results.isNotEmpty())
-                                it.results[0].title?.let { news -> latestHeadlines.add(news) }
-                            two = true
-                            if(one and two and three) {
-                                latestNewsAdapter.differ.submitList(latestHeadlines)
-                            }
+                        response.data?.let { newslist ->
+                            if(newslist.results.isNotEmpty()) {
+                                val news = newslist.results[0]
+                                val latest = LatestNews(
+                                    imgUrl = news.image_url,
+                                    newsHeadline = news.title,
+                                    type = "National",
+                                    time = news.pubDate
+                                )
+                                latestNews.add(latest)
+                                if(latestNews.size == 3) {
+                                    latestNewsAdapter.differ.submitList(latestNews)
+                                }                            }
                         }
                     }
                     else -> {}
@@ -147,13 +197,19 @@ class HomeFragment : Fragment() {
             viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
                 when (response) {
                     is Result.Success -> {
-                        response.data?.let {
-                            if (it.results.isNotEmpty())
-                                it.results[0].title?.let { news -> latestHeadlines.add(news) }
-                            three = true
-                            if(one and two and three) {
-                                latestNewsAdapter.differ.submitList(latestHeadlines)
-                            }
+                        response.data?.let { newslist ->
+                            if(newslist.results.isNotEmpty()) {
+                                val news = newslist.results[0]
+                                val latest = LatestNews(
+                                    imgUrl = news.image_url,
+                                    newsHeadline = news.title,
+                                    type = "International",
+                                    time = news.pubDate
+                                )
+                                latestNews.add(latest)
+                                if(latestNews.size == 3) {
+                                    latestNewsAdapter.differ.submitList(latestNews)
+                                }                            }
                         }
                     }
                     else -> {}

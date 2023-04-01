@@ -46,6 +46,7 @@ class HomeActivity : AppCompatActivity() {
         fetchDataAds()
         fetchLocalNewss()
         fetchRemoteNews()
+        fetchCategories()
 
 
 
@@ -91,8 +92,12 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun fetchRemoteNews() = lifecycleScope.launch(Dispatchers.IO) {
-        viewModel.getNationalNewsHeadlines("IN", "hi")
-        viewModel.getWorldNewsHeadlines("WORLD", "IN", "hi")
+        viewModel.getNationalNewsHeadlines("in", "hi")
+        viewModel.getWorldNewsHeadlines("world", "in", "hi")
+    }
+
+    private fun fetchCategories() = lifecycleScope.launch(Dispatchers.IO) {
+        viewModel.getCategories()
     }
 
     private fun showBottomNav() {

@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_categoryNewsFragment"
+            app:destination="@id/categoryNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/localNewsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.explore.local.LocalNewsFragment"
@@ -117,5 +121,17 @@
             android:id="@+id/action_newsVpFragment_to_localNewsDescFragment"
             app:destination="@id/localNewsDescFragment"
             app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.home.CategoryNewsFragment"
+        android:label="fragment_category_news"
+        tools:layout="@layout/fragment_category_news" >
+        <argument
+            android:name="category"
+            app:argType="com.avicodes.halchalin.data.models.Categories" />
+        <action
+            android:id="@+id/action_categoryNewsFragment_to_detailedRemoteFragment"
+            app:destination="@id/detailedRemoteFragment" />
     </fragment>
 </navigation>

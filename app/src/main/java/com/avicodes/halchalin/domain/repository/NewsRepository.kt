@@ -37,4 +37,6 @@ interface NewsRepository {
     fun getNewsById(newsId: String): Flow<Result<News>>
 
     fun createRemoteNewsDynamicLink(newsRemote: NewsRemote): Flow<Result<String>>
+
+    fun getCategories() : Flow<Result<List<Categories>>>
 }

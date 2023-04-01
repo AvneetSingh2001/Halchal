@@ -33,20 +33,27 @@ class HomeActivityViewModel(
     private val updateUserPicUseCase: updateUserPicUseCase,
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository
-): ViewModel() {
+) : ViewModel() {
 
-    val nationalHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
-    val worldHeadlines: MutableLiveData<Result<NewsResponse>> = MutableLiveData(Result.NotInitialized)
+    val nationalHeadlines: MutableLiveData<Result<NewsResponse>> =
+        MutableLiveData(Result.NotInitialized)
+    val worldHeadlines: MutableLiveData<Result<NewsResponse>> =
+        MutableLiveData(Result.NotInitialized)
+    val categoryHeadlines: MutableLiveData<Result<NewsResponse>> =
+        MutableLiveData(Result.NotInitialized)
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
     val linkNews: MutableLiveData<Result<News>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
-    val comments: MutableLiveData<Result<List<CommentProcessed>>> = MutableLiveData(Result.NotInitialized)
+    val comments: MutableLiveData<Result<List<CommentProcessed>>> =
+        MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
     val linkCreated: MutableLiveData<Result<String>> = MutableLiveData()
     val remoteLinkCreated: MutableLiveData<Result<String>> = MutableLiveData()
     val sharedNews: MutableLiveData<Result<News>> = MutableLiveData()
+    val categories: MutableLiveData<Result<List<Categories>>> =
+        MutableLiveData(Result.NotInitialized)
 
     fun getNationalNewsHeadlines(
         country: String,
@@ -60,7 +67,7 @@ class HomeActivityViewModel(
                 lang = lang
             )
             nationalHeadlines.postValue(apiResult)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             nationalHeadlines.postValue(Result.Error(e))
         }
 
@@ -80,13 +87,31 @@ class HomeActivityViewModel(
                 lang = lang
             )
             worldHeadlines.postValue(apiResult)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             worldHeadlines.postValue(Result.Error(e))
         }
     }
 
+    fun getCategoryNewsHeadlines(
+        topic: String,
+        country: String,
+        lang: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        categoryHeadlines.postValue(Result.Loading("Loading"))
+        try {
+            val apiResult = remoteNewsRepository.getTopicHeadlines(
+                topic = topic,
+                country = country,
+                lang = lang
+            )
+            categoryHeadlines.postValue(apiResult)
+        } catch (e: Exception) {
+            categoryHeadlines.postValue(Result.Error(e))
+        }
+    }
+
     fun getLocalNews(
-    ) = viewModelScope.launch{
+    ) = viewModelScope.launch {
         val loc = curUser.value?.location
         remoteNewsRepository.getLocalNews(loc.toString()).collectLatest {
             localHeadlines.postValue(it)
@@ -99,11 +124,11 @@ class HomeActivityViewModel(
     ) = viewModelScope.launch(Dispatchers.IO) {
         remoteNewsRepository.getComment(newsId)
             .collectLatest {
-                when(it) {
+                when (it) {
                     is Result.Success -> {
-                        it.data?.let {commentsList ->
+                        it.data?.let { commentsList ->
                             var commentProcessed: MutableList<CommentProcessed> = mutableListOf()
-                            for(comment in commentsList) {
+                            for (comment in commentsList) {
                                 val user = async { getUserById(comment.userId) }.await()
                                 commentProcessed.add(
                                     CommentProcessed(
@@ -125,7 +150,7 @@ class HomeActivityViewModel(
                     else -> {}
                 }
 
-        }
+            }
     }
 
     fun getFeaturedAds() = viewModelScope.launch {
@@ -149,7 +174,7 @@ class HomeActivityViewModel(
         return userRespository.getUserById(userId)
     }
 
-    fun saveUserImage(image: String) = viewModelScope.launch{
+    fun saveUserImage(image: String) = viewModelScope.launch {
         updateUserPicUseCase.execute(image, curUser.value?.userId!!).collectLatest {
             updateUserPic.postValue(it)
         }
@@ -167,7 +192,7 @@ class HomeActivityViewModel(
             userId = userId.toString(),
             name = name.toString(),
             mobile = phone.toString(),
-            location =  location.toString(),
+            location = location.toString(),
             imgUrl = image.toString(),
             about = about.toString()
         )
@@ -184,7 +209,7 @@ class HomeActivityViewModel(
         }
     }
 
-    fun logout()  = viewModelScope.launch(Dispatchers.IO){
+    fun logout() = viewModelScope.launch(Dispatchers.IO) {
         userRespository.logout()
         auth.signOut()
     }
@@ -228,6 +253,14 @@ class HomeActivityViewModel(
                 getLocalNews()
                 getNewsById(newsId)
                 linkNews.postValue(Result.Success(News()))
+            }
+        }
+    }
+
+    fun getCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            remoteNewsRepository.getCategories().collectLatest {
+                categories.postValue(it)
             }
         }
     }

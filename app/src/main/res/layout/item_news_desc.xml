@@ -5,232 +5,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="50dp"
     app:layout_constraintBottom_toBottomOf="parent">
 
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cvTop"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvSocial">
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvSocial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:outlineSpotShadowColor="@color/black"
+        app:cardBackgroundColor="#F6F3F3"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvBottom">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="80dp">
+            android:layout_height="wrap_content">
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cvTop"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvThumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
+                android:layout_height="220dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="5dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tvHeadline"
+                <ProgressBar
+                    android:id="@+id/vvLoader"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="MLA Speech at Rajiv Gandhi padrk lkfadsj lkdaj dlkafj lakdfj adklfj aklfdj lkafdj klj"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvSocial"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:outlineSpotShadowColor="@color/black"
-                app:cardBackgroundColor="#F6F3F3"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvTop">
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.exoplayer2.ui.StyledPlayerView
+                    android:id="@+id/vvNews"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:resize_mode="fill" />
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cvThumbnail"
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardElevation="5dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ProgressBar
-                            android:id="@+id/vvLoader"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:visibility="gone" />
-
-                        <com.google.android.exoplayer2.ui.StyledPlayerView
-                            android:id="@+id/vvNews"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:visibility="gone"
-                            app:resize_mode="fill" />
-
-                        <com.smarteist.autoimageslider.SliderView
-                            android:id="@+id/ivNews"
-                            android:layout_width="match_parent"
-                            android:layout_height="220dp"
-                            android:nestedScrollingEnabled="true"
-                            app:sliderAnimationDuration="2000"
-                            app:sliderAutoCycleDirection="back_and_forth"
-                            app:sliderAutoCycleEnabled="true"
-                            app:sliderIndicatorAnimationDuration="100"
-                            app:sliderIndicatorGravity="center_horizontal|bottom"
-                            app:sliderIndicatorMargin="15dp"
-                            app:sliderIndicatorOrientation="horizontal"
-                            app:sliderIndicatorPadding="3dp"
-                            app:sliderIndicatorRadius="2dp"
-                            app:sliderIndicatorSelectedColor="@color/mainRed"
-                            app:sliderIndicatorUnselectedColor="#FFF"
-                            app:sliderScrollTimeInSec="0" />
-
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <ImageButton
-                        android:id="@+id/btnShare"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginRight="30dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/circle_button"
-                        android:padding="10dp"
-                        android:src="@drawable/share"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/btnComment"
-                        app:layout_constraintTop_toBottomOf="@id/cvThumbnail"
-                        app:layout_constraintVertical_bias="0" />
-
-                    <ImageButton
-                        android:id="@+id/btnComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@drawable/circle_button"
-                        android:padding="10dp"
-                        android:src="@drawable/comment"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/btnShare"
-                        app:layout_constraintVertical_bias="0" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/ivNews"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:nestedScrollingEnabled="true"
+                    app:sliderAnimationDuration="2000"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderIndicatorAnimationDuration="100"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="@color/mainRed"
+                    app:sliderIndicatorUnselectedColor="#FFF"
+                    app:sliderScrollTimeInSec="0" />
 
 
             </com.google.android.material.card.MaterialCardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
+                android:id="@+id/tvHeadline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="MLA Speech at Rajiv Gandhi padrk lkfadsj lkdaj dlkafj lakdfj adklfj aklfdj lkafdj klj"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/cvThumbnail"
                 app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvSocial">
+                />
 
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="March 28, 2023"
-                    android:textColor="#555454"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/circle"
-                    app:layout_constraintTop_toTopOf="@id/circle"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    />
-
-                <View
-                    android:id="@+id/circle"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_marginLeft="10dp"
-app:layout_constraintBottom_toTopOf="@id/tvDesc"
-                    android:background="@drawable/circle"
-                    app:layout_constraintLeft_toRightOf="@id/tvTime"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                <TextView
-                    android:id="@+id/tvLoc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="Kichha, Uttarakhand"
-                    android:textColor="#555454"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/circle"
-                    app:layout_constraintTop_toTopOf="@id/circle"
-                    app:layout_constraintLeft_toRightOf="@id/circle"
-                    />
-
-                <TextView
-                    android:id="@+id/tvDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="80dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="Lorem ipsum dolor sit amet consectetur. Sagittis eget sed mollis non cursus in urna. Vitae massa eget posuere in platea placerat placerat. Posuere sodales phasellus a vitae faucibus. Adipiscing nec magna montes aliquet in. Sit tellus blandit id elementum...."
-                    android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvTime"
-                    app:layout_constraintVertical_bias="0" />
-
-                <TextView
-                    android:id="@+id/tvSeeMore"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="See More"
-                    android:textColor="@color/mainBlue"
-                    android:textSize="14sp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDesc"
-                    app:layout_constraintVertical_bias="0" />
-
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cvBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="March 28, 2023"
+            android:textColor="#555454"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/circle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/circle" />
+
+        <View
+            android:id="@+id/circle"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tvTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Kichha, Uttarakhand"
+            android:textColor="#555454"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/circle"
+            app:layout_constraintLeft_toRightOf="@id/circle"
+            app:layout_constraintTop_toTopOf="@id/circle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <ImageButton
+        android:id="@+id/btnShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/circle_button"
+        android:padding="10dp"
+        android:src="@drawable/share"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvTop"
+        app:layout_constraintVertical_bias="0" />
+
+    <ImageButton
+        android:id="@+id/btnComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/circle_button"
+        android:padding="10dp"
+
+        android:src="@drawable/comment"
+        app:layout_constraintBottom_toBottomOf="@id/btnShare"
+        app:layout_constraintTop_toTopOf="@id/btnShare"
+        app:layout_constraintRight_toLeftOf="@id/btnShare"
+        app:layout_constraintVertical_bias="0" />
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -37,9 +37,10 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRemoteNewsDataSource(newsApiService: NewsApiService): RemoteNewsDataSource {
+    fun provideRemoteNewsDataSource(firestore: FirebaseFirestore, newsApiService: NewsApiService): RemoteNewsDataSource {
         return RemoteNewsDataSourceImpl(
-            newsApiService
+            newsApiService,
+            firestore
         )
     }
 

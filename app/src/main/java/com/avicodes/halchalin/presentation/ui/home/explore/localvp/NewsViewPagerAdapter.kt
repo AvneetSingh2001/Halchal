@@ -43,19 +43,6 @@ class NewsViewPagerAdapter(
                 tvHeadline.text = data.newsHeadline
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvLoc.text = data.location
-                val desc = data.newsDesc
-                val stIdx = 0
-                var enIdx = desc?.length ?: 0
-
-                var displayDesc = desc?.substring(stIdx, enIdx)
-
-                if (enIdx > 200) {
-                    enIdx = 200
-                    displayDesc = desc?.substring(stIdx, enIdx).plus("...")
-                    tvSeeMore.visibility = View.VISIBLE
-                }
-
-                tvDesc.text = displayDesc
 
                 val resourceAdapter = data.resUrls?.let { NewsResAdapter(it) }
                 resourceAdapter?.let {
@@ -82,7 +69,7 @@ class NewsViewPagerAdapter(
                     }
                 }
 
-                tvSeeMore.setOnClickListener {
+                cvSocial.setOnClickListener {
                     seeMoreClickListener?.let {
                         it(data)
                     }
