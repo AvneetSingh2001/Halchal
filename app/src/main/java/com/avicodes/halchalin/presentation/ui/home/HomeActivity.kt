@@ -48,6 +48,7 @@ class HomeActivity : AppCompatActivity() {
         fetchRemoteNews()
         fetchCategories()
 
+        observeFeatured()
 
 
         val navController  = findNavController(R.id.fragmentContainerView)
@@ -66,6 +67,10 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         observeTabs()
+    }
+
+    private fun observeFeatured() {
+
     }
 
     private fun getCurUser() {

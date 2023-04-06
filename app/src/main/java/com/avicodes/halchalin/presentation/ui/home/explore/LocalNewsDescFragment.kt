@@ -74,12 +74,12 @@ class LocalNewsDescFragment : Fragment() {
             tvDesc.text = data.newsDesc
 
             data.videoUrl?.let {
-                data.resUrls?.let {
-                    setUpBottomImages(it)
+                data.resUrls?.let {res ->
+                    res.resUrls?.let { it1 -> setUpBottomImages(it1) }
                 }
                 setUpVideoView(it)
             } ?: data.resUrls?.let {
-                setUpHeaderImages(it)
+                it.resUrls?.let { it1 -> setUpHeaderImages(it1) }
             }
 
             tvHeadline.text = data.newsHeadline

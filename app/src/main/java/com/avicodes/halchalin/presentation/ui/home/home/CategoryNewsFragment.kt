@@ -59,11 +59,8 @@ class CategoryNewsFragment : Fragment() {
                 lang = category.lang
             )
         }
-
         setUpNationalRecyclerView()
         observeNewsList()
-
-
     }
 
     fun observeNewsList() {

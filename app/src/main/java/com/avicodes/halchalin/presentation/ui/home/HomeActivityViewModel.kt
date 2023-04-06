@@ -43,7 +43,7 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
-    val linkNews: MutableLiveData<Result<News>> = MutableLiveData(Result.NotInitialized)
+    val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
     val comments: MutableLiveData<Result<List<CommentProcessed>>> =
@@ -250,9 +250,8 @@ class HomeActivityViewModel(
             var newsUri = newsLink.toUri()
             var newsId = newsUri.getQueryParameter("news")
             newsId?.let {
-                getLocalNews()
                 getNewsById(newsId)
-                linkNews.postValue(Result.Success(News()))
+                linkNews.postValue(Result.Success("DeepLink"))
             }
         }
     }
