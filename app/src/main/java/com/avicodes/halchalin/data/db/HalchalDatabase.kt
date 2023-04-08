@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.avicodes.halchalin.data.db.featured.FeaturedDao
 import com.avicodes.halchalin.data.db.localNews.LocalNewsDao
-import com.avicodes.halchalin.data.db.remoteNews.RemoteNewsDao
+import com.avicodes.halchalin.data.db.remoteNews.InternationalNewsDao
+import com.avicodes.halchalin.data.db.remoteNews.NationalNewsDao
 import com.avicodes.halchalin.data.models.Featured
-import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsLocal
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.RoomTypeConverters
@@ -19,7 +19,8 @@ import com.avicodes.halchalin.data.utils.RoomTypeConverters
     exportSchema = false
 )
 abstract class HalchalDatabase : RoomDatabase() {
-    abstract fun remoteNewsDao(): RemoteNewsDao
+    abstract fun nationalNewsDao(): NationalNewsDao
     abstract fun localNewsDao(): LocalNewsDao
     abstract fun featuredDao(): FeaturedDao
+    abstract fun internationalNewsDao(): InternationalNewsDao
 }

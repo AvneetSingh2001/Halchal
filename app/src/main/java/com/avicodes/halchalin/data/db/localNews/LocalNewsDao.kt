@@ -13,7 +13,7 @@ interface LocalNewsDao {
     suspend fun insert(news: NewsLocal)
 
     @Query("SELECT * FROM local_news_table")
-    fun getAllArticles(): Flow<List<NewsLocal>>
+    suspend fun getAllArticles(): List<NewsLocal>
 
     @Delete
     suspend fun deleteArticle(news: NewsLocal)

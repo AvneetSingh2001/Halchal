@@ -10,7 +10,7 @@ interface FeaturedDao {
     suspend fun insert(featured: Featured)
 
     @Query("SELECT * FROM featured_table")
-    fun getAllArticles(): Flow<List<Featured>>
+    suspend fun getAllArticles(): List<Featured>
 
     @Delete
     suspend fun deleteArticle(featured: Featured)
