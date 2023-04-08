@@ -44,7 +44,7 @@ class NewsViewPagerAdapter(
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
                 tvLoc.text = data.location
 
-                val resourceAdapter = data.resUrls?.let { it.resUrls?.let { it1 -> NewsResAdapter(it1) } }
+                val resourceAdapter = data.resUrls?.let { NewsResAdapter(it) }
                 resourceAdapter?.let {
                     ivNews.setSliderAdapter(it)
                     ivNews.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!

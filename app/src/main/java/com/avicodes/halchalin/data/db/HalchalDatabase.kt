@@ -8,12 +8,13 @@ import com.avicodes.halchalin.data.db.localNews.LocalNewsDao
 import com.avicodes.halchalin.data.db.remoteNews.RemoteNewsDao
 import com.avicodes.halchalin.data.models.Featured
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.NewsLocal
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.RoomTypeConverters
 
 @TypeConverters(value = [RoomTypeConverters::class])
 @Database(
-    entities = [NewsRemote::class, News::class, Featured::class],
+    entities = [NewsRemote::class, NewsLocal::class, Featured::class],
     version = 1,
     exportSchema = false
 )
