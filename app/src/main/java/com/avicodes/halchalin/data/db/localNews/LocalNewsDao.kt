@@ -16,4 +16,7 @@ interface LocalNewsDao {
 
     @Delete
     suspend fun deleteArticle(news: News)
+
+    @Query("DELETE FROM local_news_table")
+    suspend fun deleteAll()
 }

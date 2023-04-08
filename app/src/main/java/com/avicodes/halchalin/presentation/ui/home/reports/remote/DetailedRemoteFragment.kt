@@ -43,21 +43,13 @@ class DetailedRemoteFragment : Fragment() {
         binding.apply {
             tvHeadline.text = news.title
 
-            if(news.content != null && news.description != null) {
-                if(news.content.length >= news.description.length) {
-                    tvDesc.text = news.content
-                } else {
-                    tvDesc.text = news.description
-                }
-            } else if(news.content != null) {
-                tvDesc.text = news.content
-            } else if(news.description != null) {
+            if(news.description != null) {
                 tvDesc.text = news.description
+            } else if(news.content != null){
+                tvDesc.text = news.content
             } else {
                 tvDesc.text = news.title
             }
-
-
 
 
             Glide.with(ivNews.context)
@@ -67,7 +59,12 @@ class DetailedRemoteFragment : Fragment() {
 
             tvSource.text = news.source_id
 
-            tvTime.text = news.pubDate
+            val date = news.pubDate
+
+            date?.let {
+                tvTime.text = it.removeRange(11, it.length)
+            }
+
 
             btnBack.setOnClickListener {
                 navigateBack()

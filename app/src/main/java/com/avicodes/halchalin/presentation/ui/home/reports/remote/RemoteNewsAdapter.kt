@@ -27,9 +27,13 @@ class RemoteNewsAdapter(
                     .error(R.drawable.halchal_logo_2)
                     .into(ivNews)
 
-                data.source_id?.let { tvSource.text = "${it}" }
+                data.source_id?.let { tvSource.text = it }
                 data.title?.let { tvHeadline.text = it }
-                data.pubDate?.let { tvTime.text = "$it" }
+                val date = data.pubDate
+
+                date?.let { date->
+                    tvTime.text = date.removeRange(11, date.length)
+                }
 
                 root.setOnClickListener {
                     onItemClickListener?.let {

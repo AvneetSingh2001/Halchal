@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var featuredAdapter: SliderAdapter
+    private lateinit var adAdapter: SliderAdapter
     private lateinit var latestNewsAdapter: LatestNewsAdapter
     private lateinit var categoriesAdapter: CategoriesAdapter
 
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
         viewModel.getCategories()
 
         getFeaturedAds()
+        getAds()
         getLatestNews()
         Log.e("Initialise Home", "HOme Fragment")
 
@@ -103,6 +105,31 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun getAds() {
+        viewModel.featuredAds.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Result.Error -> {
+                    hideProgressBar()
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Error", response.exception?.message.toString())
+                }
+
+                is Result.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        adAdapter = SliderAdapter(it)
+                        setupAdView()
+                        hideProgressBar()
+                    }
+                }
+
+                else -> {
+                    showProgressBar()
+                }
+            }
+        })
+    }
+
     private fun getFeaturedAds() {
         viewModel.featuredAds.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
@@ -138,6 +165,19 @@ class HomeFragment : Fragment() {
             imageSlider.indicatorUnselectedColor = Color.GRAY;
             imageSlider.scrollTimeInSec = 4; //set scroll delay in seconds :
             imageSlider.startAutoCycle();
+        }
+    }
+
+    private fun setupAdView(){
+        binding.apply {
+            adSlider.setSliderAdapter(adAdapter)
+            adSlider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+            adSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+            adSlider.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH;
+            adSlider.indicatorSelectedColor = Color.WHITE;
+            adSlider.indicatorUnselectedColor = Color.GRAY;
+            adSlider.scrollTimeInSec = 4; //set scroll delay in seconds :
+            adSlider.startAutoCycle();
         }
     }
 
@@ -209,7 +249,8 @@ class HomeFragment : Fragment() {
                                 latestNews.add(latest)
                                 if(latestNews.size == 3) {
                                     latestNewsAdapter.differ.submitList(latestNews)
-                                }                            }
+                                }
+                            }
                         }
                     }
                     else -> {}

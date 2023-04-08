@@ -14,4 +14,7 @@ interface FeaturedDao {
 
     @Delete
     suspend fun deleteArticle(featured: Featured)
+
+    @Query("DELETE FROM featured_table")
+    suspend fun deleteAll()
 }

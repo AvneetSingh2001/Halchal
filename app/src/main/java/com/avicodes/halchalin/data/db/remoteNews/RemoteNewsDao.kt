@@ -15,4 +15,7 @@ interface RemoteNewsDao {
 
     @Delete
     suspend fun deleteArticle(news: NewsRemote)
+
+    @Query("DELETE FROM remote_news_table")
+    suspend fun deleteAll()
 }
