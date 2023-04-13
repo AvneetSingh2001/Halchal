@@ -97,8 +97,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun fetchRemoteNews() = lifecycleScope.launch(Dispatchers.IO) {
-        viewModel.getNationalNewsHeadlines("in", "hi")
-        viewModel.getWorldNewsHeadlines("world", "in", "hi")
+        viewModel.getNationalNewsHeadlines()
+        viewModel.getInternationalNewsHeadlines()
     }
 
     private fun fetchCategories() = lifecycleScope.launch(Dispatchers.IO) {

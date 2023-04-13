@@ -71,7 +71,7 @@ class DetailedRemoteFragment : Fragment() {
             }
 
             btnShare.setOnClickListener {
-                viewModel.createRemoteDeepLink(news)
+                //viewModel.createRemoteDeepLink(news)
             }
 
         }

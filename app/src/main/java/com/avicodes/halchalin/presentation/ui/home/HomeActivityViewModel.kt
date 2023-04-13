@@ -9,12 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.*
-import com.avicodes.halchalin.domain.repository.NewsRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.domain.repository.AdsRepository
-import com.avicodes.halchalin.domain.repository.CityRepository
-import com.avicodes.halchalin.domain.repository.UserRespository
+import com.avicodes.halchalin.domain.repository.*
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
@@ -27,7 +24,10 @@ import kotlin.math.exp
 
 class HomeActivityViewModel(
     val auth: FirebaseAuth,
-    private val remoteNewsRepository: NewsRepository,
+    private val categoryNewsRepository: CategoryNewsRepository,
+    private val internationalNewsRepository: InternationalNewsRepository,
+    private val localNewsRepository: LocalNewsRepository,
+    private val nationalNewsRepository: NationalNewsRepository,
     private val adsRepository: AdsRepository,
     private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserPicUseCase: updateUserPicUseCase,
@@ -56,39 +56,16 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     fun getNationalNewsHeadlines(
-        country: String,
-        lang: String
     ) = viewModelScope.launch(Dispatchers.IO) {
-        nationalHeadlines.postValue(Result.Loading("Loading"))
-
-        try {
-            val apiResult = remoteNewsRepository.getNationalHeadlines(
-                country = country,
-                lang = lang
-            )
-            nationalHeadlines.postValue(apiResult)
-        } catch (e: Exception) {
-            nationalHeadlines.postValue(Result.Error(e))
+        nationalNewsRepository.getNews().collectLatest {
+            nationalHeadlines.postValue(it)
         }
-
     }
 
-    fun getWorldNewsHeadlines(
-        topic: String,
-        country: String,
-        lang: String
+    fun getInternationalNewsHeadlines(
     ) = viewModelScope.launch(Dispatchers.IO) {
-        worldHeadlines.postValue(Result.Loading("Loading"))
-
-        try {
-            val apiResult = remoteNewsRepository.getTopicHeadlines(
-                topic = topic,
-                country = country,
-                lang = lang
-            )
-            worldHeadlines.postValue(apiResult)
-        } catch (e: Exception) {
-            worldHeadlines.postValue(Result.Error(e))
+        internationalNewsRepository.getNews().collectLatest {
+            worldHeadlines.postValue(it)
         }
     }
 
@@ -97,32 +74,46 @@ class HomeActivityViewModel(
         country: String,
         lang: String
     ) = viewModelScope.launch(Dispatchers.IO) {
-        categoryHeadlines.postValue(Result.Loading("Loading"))
-        try {
-            val apiResult = remoteNewsRepository.getTopicHeadlines(
-                topic = topic,
-                country = country,
-                lang = lang
-            )
-            categoryHeadlines.postValue(apiResult)
-        } catch (e: Exception) {
-            categoryHeadlines.postValue(Result.Error(e))
+        categoryNewsRepository.getNews(
+            topic = topic,
+            country = country,
+            lang = lang,
+            page = 1
+        ).collectLatest {
+            categoryHeadlines.postValue(it)
         }
     }
 
     fun getLocalNews(
     ) = viewModelScope.launch {
         val loc = curUser.value?.location
-        remoteNewsRepository.getLocalNews(loc.toString()).collectLatest {
+        localNewsRepository.getNews(loc.toString()).collectLatest {
             localHeadlines.postValue(it)
-            Log.e("Avneet Local viewmodel", it.toString())
+        }
+    }
+
+    fun updateLocalNews() = viewModelScope.launch(Dispatchers.IO) {
+        val loc = curUser.value?.location
+        localNewsRepository.updateNews(loc.toString()).collectLatest {
+            localHeadlines.postValue(it)
+        }
+    }
+
+    fun updateInternationalNews(page: Int) = viewModelScope.launch{
+        internationalNewsRepository.updateNews(page).collectLatest {
+            worldHeadlines.postValue(it)
+        }
+    }
+    fun updateNationalNews(page: Int) = viewModelScope.launch{
+        nationalNewsRepository.updateNews(page).collectLatest {
+            nationalHeadlines.postValue(it)
         }
     }
 
     fun getComments(
         newsId: String
     ) = viewModelScope.launch(Dispatchers.IO) {
-        remoteNewsRepository.getComment(newsId)
+        localNewsRepository.getComment(newsId)
             .collectLatest {
                 when (it) {
                     is Result.Success -> {
@@ -161,7 +152,7 @@ class HomeActivityViewModel(
 
     fun postComment(newsId: String, comment: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            remoteNewsRepository.postComment(
+            localNewsRepository.postComment(
                 newsId = newsId,
                 comment = comment,
             ).collectLatest {
@@ -227,19 +218,13 @@ class HomeActivityViewModel(
     }
 
     fun createDeepLink(news: News) = viewModelScope.launch(Dispatchers.IO) {
-        remoteNewsRepository.createDynamicLink(news).collectLatest {
+        localNewsRepository.createDynamicLink(news).collectLatest {
             linkCreated.postValue(it)
         }
     }
 
-    fun createRemoteDeepLink(newsRemote: NewsRemote) = viewModelScope.launch(Dispatchers.IO) {
-        remoteNewsRepository.createRemoteNewsDynamicLink(newsRemote).collectLatest {
-            remoteLinkCreated.postValue(it)
-        }
-    }
-
     fun getNewsById(newsId: String) = viewModelScope.launch(Dispatchers.IO) {
-        remoteNewsRepository.getNewsById(newsId).collectLatest {
+        localNewsRepository.getNewsById(newsId).collectLatest {
             sharedNews.postValue(it)
         }
     }
@@ -258,9 +243,11 @@ class HomeActivityViewModel(
 
     fun getCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            remoteNewsRepository.getCategories().collectLatest {
+            categoryNewsRepository.getCategories().collectLatest {
                 categories.postValue(it)
             }
         }
     }
+
+
 }

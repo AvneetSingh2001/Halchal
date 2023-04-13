@@ -15,6 +15,8 @@ interface NewsApiService {
         lang: String,
         @Query("apikey")
         apiKey: String = BuildConfig.API_KEY,
+        @Query("page")
+        page: Int = 1
     ): Response<NewsResponse>
 
     @GET("news")
@@ -27,5 +29,7 @@ interface NewsApiService {
         lang: String,
         @Query("apikey")
         apiKey: String = BuildConfig.API_KEY,
+        @Query("page")
+        page: Int = 1
     ): Response<NewsResponse>
 }

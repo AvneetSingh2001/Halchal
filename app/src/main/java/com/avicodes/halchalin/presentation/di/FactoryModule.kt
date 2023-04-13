@@ -1,16 +1,12 @@
 package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.MainActivityViewModelFactory
-import com.avicodes.halchalin.domain.repository.AdsRepository
-import com.avicodes.halchalin.domain.repository.CityRepository
-import com.avicodes.halchalin.domain.repository.NewsRepository
-import com.avicodes.halchalin.domain.repository.UserRespository
+import com.avicodes.halchalin.domain.repository.*
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,8 +57,11 @@ class FactoryModule {
     @Provides
     fun provideHomeActivityViewModelFactory(
         auth: FirebaseAuth,
-        newsRepository: NewsRepository,
         adsRepository: AdsRepository,
+        categoryNewsRepository: CategoryNewsRepository,
+        internationalNewsRepository: InternationalNewsRepository,
+        nationalNewsRepository: NationalNewsRepository,
+        localNewsRepository: LocalNewsRepository,
         getUserByIdUseCase: GetUserByIdUseCase,
         updateUserPicUseCase: updateUserPicUseCase,
         userRespository: UserRespository,
@@ -70,7 +69,10 @@ class FactoryModule {
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
-            newsRepository = newsRepository,
+            categoryNewsRepository = categoryNewsRepository,
+            internationalNewsRepository = internationalNewsRepository,
+            nationalNewsRepository = nationalNewsRepository,
+            localNewsRepository = localNewsRepository,
             adsRepository = adsRepository,
             getUserByIdUseCase = getUserByIdUseCase,
             updateUserPicUseCase = updateUserPicUseCase,
