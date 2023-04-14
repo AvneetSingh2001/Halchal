@@ -9,7 +9,7 @@ class RemoteInternationalNewsDataSourceImpl(
     private val newsApiService: NewsApiService,
 ): RemoteInternationalNewsDataSource {
     override suspend fun getNews(
-        page: Int
+        page: String?
     ): Response<NewsResponse> {
         return newsApiService.getTopicHeadlines(
             topic = "world",

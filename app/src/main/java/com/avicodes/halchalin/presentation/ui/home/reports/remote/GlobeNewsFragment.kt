@@ -68,7 +68,9 @@ class GlobeNewsFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        Log.e("Avneet", it.results.toString())
+                        it.results.forEachIndexed { index, rem->
+                            Log.e("News List ${index}", rem.title.toString())
+                        }
                         remoteNewsAdapter.differ.submitList(it.results)
                     }
                 }

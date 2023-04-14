@@ -61,7 +61,7 @@ class RepositoryModule {
     fun provideNationalNewsRepository(cacheNationalNewsDataSource: CacheNationalNewsDataSource, remoteNationalNewsDataSource: RemoteNationalNewsDataSource): NationalNewsRepository {
         return NationalNewsRepositoryImpl(
             cacheNationalNewsDataSource = cacheNationalNewsDataSource,
-            remoteNationaNewsDataSource = remoteNationalNewsDataSource
+            remoteNationalNewsDataSource = remoteNationalNewsDataSource
         )
     }
 

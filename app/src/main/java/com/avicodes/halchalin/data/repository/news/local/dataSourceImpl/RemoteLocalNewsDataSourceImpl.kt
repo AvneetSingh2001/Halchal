@@ -32,7 +32,6 @@ class RemoteLocalNewsDataSourceImpl(
             .whereEqualTo("location", location)
             .get().await()
         val news = snapshot.toObjects(News::class.java)
-        Log.e("Avneet Local Source", news.toString())
         emit(Result.Success(news))
     }.catch {
         emit(Result.Error(it))

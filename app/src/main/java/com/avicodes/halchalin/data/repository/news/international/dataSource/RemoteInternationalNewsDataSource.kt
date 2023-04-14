@@ -4,5 +4,5 @@ import com.avicodes.halchalin.data.models.NewsResponse
 import retrofit2.Response
 
 interface RemoteInternationalNewsDataSource {
-    suspend fun getNews(page: Int): Response<NewsResponse>
+    suspend fun getNews(page: String?): Response<NewsResponse>
 }

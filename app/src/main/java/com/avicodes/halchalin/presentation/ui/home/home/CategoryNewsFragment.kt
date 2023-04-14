@@ -50,13 +50,15 @@ class CategoryNewsFragment : Fragment() {
             viewModel.getCategoryNewsHeadlines(
                 topic = "technology",
                 country = "in",
-                lang = category.lang
+                lang = category.lang,
+                page = null
             )
         } else {
             viewModel.getCategoryNewsHeadlines(
                 topic = category.name,
                 country = "in",
-                lang = category.lang
+                lang = category.lang,
+                page = null
             )
         }
         setUpNationalRecyclerView()

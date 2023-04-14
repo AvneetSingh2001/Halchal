@@ -57,14 +57,16 @@ class HomeActivityViewModel(
 
     fun getNationalNewsHeadlines(
     ) = viewModelScope.launch(Dispatchers.IO) {
-        nationalNewsRepository.getNews().collectLatest {
+        nationalNewsRepository.getNews()
+        nationalNewsRepository.news.collectLatest {
             nationalHeadlines.postValue(it)
         }
     }
 
     fun getInternationalNewsHeadlines(
     ) = viewModelScope.launch(Dispatchers.IO) {
-        internationalNewsRepository.getNews().collectLatest {
+        internationalNewsRepository.getNews()
+        internationalNewsRepository.news.collectLatest {
             worldHeadlines.postValue(it)
         }
     }
@@ -72,14 +74,17 @@ class HomeActivityViewModel(
     fun getCategoryNewsHeadlines(
         topic: String,
         country: String,
-        lang: String
+        lang: String,
+        page: String?
     ) = viewModelScope.launch(Dispatchers.IO) {
+        categoryHeadlines.postValue(Result.Loading("Started Loading"))
         categoryNewsRepository.getNews(
             topic = topic,
             country = country,
             lang = lang,
-            page = 1
-        ).collectLatest {
+            page = page
+        )
+        categoryNewsRepository.news.collectLatest {
             categoryHeadlines.postValue(it)
         }
     }
@@ -87,25 +92,30 @@ class HomeActivityViewModel(
     fun getLocalNews(
     ) = viewModelScope.launch {
         val loc = curUser.value?.location
-        localNewsRepository.getNews(loc.toString()).collectLatest {
+        localNewsRepository.getNews(loc.toString())
+        localNewsRepository.news.collectLatest {
             localHeadlines.postValue(it)
         }
     }
 
     fun updateLocalNews() = viewModelScope.launch(Dispatchers.IO) {
         val loc = curUser.value?.location
-        localNewsRepository.updateNews(loc.toString()).collectLatest {
+        localNewsRepository.updateNews(loc.toString())
+        localNewsRepository.news.collectLatest {
             localHeadlines.postValue(it)
         }
     }
 
-    fun updateInternationalNews(page: Int) = viewModelScope.launch{
-        internationalNewsRepository.updateNews(page).collectLatest {
+    fun updateInternationalNews(page: String?) = viewModelScope.launch {
+        internationalNewsRepository.updateNews(page)
+        internationalNewsRepository.news.collectLatest {
             worldHeadlines.postValue(it)
         }
     }
-    fun updateNationalNews(page: Int) = viewModelScope.launch{
-        nationalNewsRepository.updateNews(page).collectLatest {
+
+    fun updateNationalNews(page: String?) = viewModelScope.launch {
+        nationalNewsRepository.updateNews(page)
+        nationalNewsRepository.news.collectLatest {
             nationalHeadlines.postValue(it)
         }
     }

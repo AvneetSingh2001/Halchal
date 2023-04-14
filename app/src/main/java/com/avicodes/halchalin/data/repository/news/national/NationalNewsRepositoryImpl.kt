@@ -12,74 +12,61 @@ import com.avicodes.halchalin.data.repository.news.national.dataSource.RemoteNat
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.InternationalNewsRepository
 import com.avicodes.halchalin.domain.repository.NationalNewsRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 class NationalNewsRepositoryImpl(
     private val cacheNationalNewsDataSource: CacheNationalNewsDataSource,
-    private val remoteNationaNewsDataSource: RemoteNationalNewsDataSource
+    private val remoteNationalNewsDataSource: RemoteNationalNewsDataSource
 ) : NationalNewsRepository {
 
-    override suspend fun getNews() = flow<Result<NewsResponse>> {
-        emit(Result.Loading("Fetching"))
+    private var _news: MutableStateFlow<Result<NewsResponse>> =
+        MutableStateFlow(Result.NotInitialized)
+
+    override val news: MutableStateFlow<Result<NewsResponse>>
+        get() = _news
+
+    override suspend fun getNews() {
+        _news.value = Result.Loading("Fetching")
+        getNewsFromCache()
+    }
+
+    override suspend fun updateNews(page: String?) {
         try {
-            var newsRes = getNewsFromCache()
-            if (newsRes != null) {
-                emit(Result.Success(newsRes))
+            getNewsFromRemote(page)
+        } catch (e: Exception) {
+            _news.value = Result.Error(e)
+        }
+    }
+
+    suspend fun getNewsFromRemote(page: String?) {
+        val response = remoteNationalNewsDataSource.getNews(page)
+        if (response.isSuccessful) {
+            response.body()?.let {
+                cacheNationalNewsDataSource.saveNewsInCache(it)
+                Log.e("Avneet", it.results.toString())
+            }
+            _news.value = Result.Success(response.body())
+        } else {
+            _news.value = Result.Error(Exception(response.errorBody().toString()))
+        }
+    }
+
+    suspend fun getNewsFromCache() {
+        try {
+            var newsList: NewsResponse? = cacheNationalNewsDataSource.getNewsFromCache()
+
+            if (newsList != null) {
+                _news.value = Result.Success(newsList)
             } else {
-                newsRes = getNewsFromRemote(1)
-                emit(Result.Success(newsRes))
+                getNewsFromRemote(null)
             }
         } catch (e: Exception) {
-            emit(Result.Error(e))
+            _news.value = Result.Error(e)
         }
-    }
-
-    override suspend fun updateNews(page: Int) = flow<Result<NewsResponse>> {
-        emit(Result.Loading("Fetching"))
-        try {
-            val newsRes = getNewsFromRemote(page)
-            if (newsRes != null) {
-                cacheNationalNewsDataSource.saveNewsInCache(newsRes)
-                emit(Result.Success(newsRes))
-            }
-        } catch (e: Exception) {
-            emit(Result.Error(e))
-        }
-    }
-
-    private suspend fun getNewsFromRemote(page: Int): NewsResponse? {
-        var newsRes: NewsResponse? = null
-        try {
-            val response = remoteNationaNewsDataSource.getNews(page)
-            val body = response.body()
-            if (body != null) {
-                newsRes = body
-            }
-        } catch (exception: Exception) {
-            Log.i("MyTag", exception.message.toString())
-        }
-        return newsRes
-    }
-
-    private suspend fun getNewsFromCache(): NewsResponse? {
-        var newsList: NewsResponse? = null
-
-        try {
-            newsList = cacheNationalNewsDataSource.getNewsFromCache()
-        } catch (exception: Exception) {
-        }
-
-        newsList?.let {
-            if (it.results.isNotEmpty()) {
-                return newsList
-            }
-        }
-
-        newsList = getNewsFromRemote(page = 1)
-        newsList?.let { cacheNationalNewsDataSource.saveNewsInCache(it) }
-
-        return newsList
     }
 
 }

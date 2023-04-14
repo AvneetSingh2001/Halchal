@@ -20,7 +20,7 @@ class RemoteCategoryNewsDataSourceImpl(
 ): RemoteCategoryNewsDataSource {
 
     override suspend fun getNews(
-        page: Int,
+        page: String?,
         topic: String,
         country: String,
         lang: String

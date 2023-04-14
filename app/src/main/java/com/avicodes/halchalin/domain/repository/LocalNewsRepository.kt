@@ -5,11 +5,15 @@ import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface LocalNewsRepository {
-    suspend fun getNews(location: String): Flow<Result<List<News>>>
 
-    suspend fun updateNews(location: String): Flow<Result<List<News>>>
+    val news: MutableStateFlow<Result<List<News>>>
+
+    suspend fun getNews(location: String)
+
+    suspend fun updateNews(location: String)
 
     fun postComment(
         newsId: String,

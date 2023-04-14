@@ -10,11 +10,12 @@ class RemoteNationalNewsDataSourceImpl(
 ): RemoteNationalNewsDataSource {
 
     override suspend fun getNews(
-        page: Int
+        page: String?
     ): Response<NewsResponse> {
         return newsApiService.getTopHeadlines(
             country = "in",
-            lang = "hi"
+            lang = "hi",
+            page = page
         )
     }
 }

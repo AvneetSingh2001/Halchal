@@ -98,9 +98,11 @@ class NewsFragment(
                     refreshLayout.setOnRefreshListener {
                         refreshLayout.isRefreshing = false
                         if (position == 0) {
-                            viewModel.updateNationalNews(1)
+                            viewModel.nationalHeadlines.postValue(Result.Loading(""))
+                            viewModel.updateNationalNews(null)
                         } else {
-                            viewModel.updateInternationalNews(1)
+                            viewModel.worldHeadlines.postValue(Result.Loading(""))
+                            viewModel.updateInternationalNews(null)
                         }
                     }
 

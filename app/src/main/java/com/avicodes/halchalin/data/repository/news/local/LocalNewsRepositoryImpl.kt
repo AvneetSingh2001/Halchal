@@ -2,6 +2,7 @@ package com.avicodes.halchalin.data.repository.news.local
 
 import android.location.Location
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
@@ -14,20 +15,29 @@ import com.avicodes.halchalin.data.repository.news.local.dataSource.RemoteLocalN
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.InternationalNewsRepository
 import com.avicodes.halchalin.domain.repository.LocalNewsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 
 class LocalNewsRepositoryImpl(
     private val cacheLocalNewsDataSource: CacheLocalNewsDataSource,
-    private val remoteLocalNewsDataSource: RemoteLocalNewsDataSource
+    private val remoteLocalNewsDataSource: RemoteLocalNewsDataSource,
 ) : LocalNewsRepository {
 
-    override suspend fun getNews(location: String): Flow<Result<List<News>>> {
-        return getNewsFromCache(location)
+    private var _news : MutableStateFlow<Result<List<News>>> = MutableStateFlow(Result.NotInitialized)
+
+    override val news: MutableStateFlow<Result<List<News>>>
+        get() = _news
+
+    override suspend fun getNews(location: String) {
+        _news.value = Result.Loading("Fetching")
+        getNewsFromCache(location)
     }
 
-    override suspend fun updateNews(location: String) = flow<Result<List<News>>> {
+    override suspend fun updateNews(location: String) {
         getNewsFromRemote(location).collectLatest {
-            emit(it)
+            _news.value = it
             when (it) {
                 is Result.Success -> {
                     it.data?.let { news ->
@@ -43,19 +53,14 @@ class LocalNewsRepositoryImpl(
         return remoteLocalNewsDataSource.getNews(location)
     }
 
-    suspend fun getNewsFromCache(location: String) = flow<Result<List<News>>> {
-        var newsList: List<News>? = null
+    suspend fun getNewsFromCache(location: String) {
+        var newsList = cacheLocalNewsDataSource.getNewsFromCache()
 
-        try {
-            newsList = cacheLocalNewsDataSource.getNewsFromCache()
-        } catch (exception: Exception) {
-        }
-
-        if (newsList != null) {
-            emit(Result.Success(newsList))
+        if (newsList.size > 0) {
+            _news.value = Result.Success(newsList)
         } else {
             getNewsFromRemote(location).collectLatest {
-                emit(it)
+                _news.value = it
                 when (it) {
                     is Result.Success -> {
                         it.data?.let { news ->
@@ -65,7 +70,6 @@ class LocalNewsRepositoryImpl(
                     else -> {}
                 }
             }
-
         }
     }
 

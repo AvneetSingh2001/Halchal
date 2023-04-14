@@ -11,43 +11,41 @@ import com.avicodes.halchalin.domain.repository.CategoryNewsRepository
 import com.avicodes.halchalin.domain.repository.InternationalNewsRepository
 import com.google.android.datatransport.cct.StringMerger
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 
 class CategoryNewsRepositoryImpl(
     private val remoteCategoryNewsDataSource: RemoteCategoryNewsDataSource
-): CategoryNewsRepository {
+) : CategoryNewsRepository {
+
+    private var _news: MutableStateFlow<Result<NewsResponse>> =
+        MutableStateFlow(Result.NotInitialized)
+
+    override val news: MutableStateFlow<Result<NewsResponse>>
+        get() = _news
 
     override suspend fun getNews(
-        page: Int,
+        page: String?,
         lang: String,
         topic: String,
         country: String
-    ) = flow<Result<NewsResponse>> {
-        emit(Result.Loading("Fetching"))
-        try {
-            val newsRes = getNewsFromRemote(
-                page = page,
-                lang = lang,
-                topic = topic,
-                country = country
-            )
-            emit(Result.Success(newsRes))
-        }catch (e: Exception) {
-            emit(Result.Error(e))
-        }
-    }
+    ) {
 
-    override fun getCategories(): Flow<Result<List<Categories>>> {
-        return remoteCategoryNewsDataSource.getCategories()
+        getNewsFromRemote(
+            page = page,
+            lang = lang,
+            topic = topic,
+            country = country
+        )
     }
 
     suspend fun getNewsFromRemote(
-        page: Int,
+        page: String?,
         lang: String,
         topic: String,
         country: String
-    ): NewsResponse {
-        lateinit var newsRes : NewsResponse
+    ) {
+        _news.value = Result.Loading("Fetching")
         try {
             val response = remoteCategoryNewsDataSource.getNews(
                 page = page,
@@ -55,15 +53,19 @@ class CategoryNewsRepositoryImpl(
                 topic = topic,
                 country = country
             )
-            val body = response.body()
-            if(body!=null){
-                newsRes = body
+            if (response.isSuccessful) {
+                _news.value = Result.Success(response.body())
+            } else {
+                _news.value = Result.Error(Exception(response.errorBody().toString()))
             }
-        } catch (exception: Exception) {
-            Log.i("MyTag", exception.message.toString())
+        }catch (e: Exception) {
+            _news.value = Result.Error(e)
         }
-        return newsRes
     }
 
+
+    override fun getCategories(): Flow<Result<List<Categories>>> {
+        return remoteCategoryNewsDataSource.getCategories()
+    }
 
 }

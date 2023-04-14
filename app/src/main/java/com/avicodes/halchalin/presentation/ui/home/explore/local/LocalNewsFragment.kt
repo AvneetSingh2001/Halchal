@@ -62,8 +62,9 @@ class LocalNewsFragment : Fragment() {
 
         binding.apply {
             refreshLayout.setOnRefreshListener {
+                viewModel.localHeadlines.postValue(Result.Loading(""))
                 refreshLayout.isRefreshing = false
-                viewModel.getLocalNews()
+                viewModel.updateLocalNews()
             }
         }
 
@@ -157,7 +158,8 @@ class LocalNewsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let {
                         Log.e("Avneet Home Local", it.toString())
-                        localNewsAdapter.differ.submitList(it)
+                        val news = it
+                        localNewsAdapter.differ.submitList(news)
                     }
                 }
 
