@@ -88,7 +88,6 @@ class CategoryNewsFragment : Fragment() {
                 moveToDetailedNews(news)
             }
 
-
             refreshLayout.setOnRefreshListener {
                 getNews()
                 refreshLayout.isRefreshing = false

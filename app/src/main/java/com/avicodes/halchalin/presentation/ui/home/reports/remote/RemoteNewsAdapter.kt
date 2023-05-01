@@ -3,25 +3,27 @@ package com.avicodes.halchalin.presentation.ui.home.reports.remote
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.ItemLoadMoreBinding
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
+import com.avicodes.halchalin.presentation.ui.home.home.CategoryNewsAdapter
 import com.bumptech.glide.Glide
 
 
 class RemoteNewsAdapter(
-) : Adapter<RemoteNewsAdapter.ViewHolder>() {
+) : PagingDataAdapter<NewsRemote, RemoteNewsAdapter.ViewHolder>(DiffUtilCallBack) {
 
     inner class ViewHolder(private val binding: ItemRemoteNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int) {
+        fun bind(data: NewsRemote) {
             binding.apply {
-                val data = differ.currentList[position]
 
                 Glide.with(ivNews.context)
                     .load(data.image_url)
@@ -54,16 +56,12 @@ class RemoteNewsAdapter(
     }
 
 
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
+        getItem(position)?.let { holder.bind(it) }
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<NewsRemote>() {
+    object DiffUtilCallBack : DiffUtil.ItemCallback<NewsRemote>() {
         override fun areItemsTheSame(oldItem: NewsRemote, newItem: NewsRemote): Boolean {
             return oldItem.link == newItem.link
         }
@@ -72,9 +70,6 @@ class RemoteNewsAdapter(
             return oldItem == newItem
         }
     }
-
-
-    val differ = AsyncListDiffer(this, callback)
 
     private var onItemClickListener: ((NewsRemote) -> Unit)? = null
 

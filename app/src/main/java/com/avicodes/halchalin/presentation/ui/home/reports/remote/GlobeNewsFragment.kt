@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class GlobeNewsFragment : Fragment() {
@@ -38,8 +41,21 @@ class GlobeNewsFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
         setUpNationalRecyclerView()
-        getNewsList()
+        getNews()
+    }
 
+    fun getNews() {
+        showProgressBar()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getInternationalNewsHeadlines(
+                topic = "world",
+                country = "in",
+                lang = "hi"
+            ).collect {
+                remoteNewsAdapter.submitData(it)
+            }
+        }
+        hideProgressBar()
     }
 
     fun setUpNationalRecyclerView() {
@@ -53,34 +69,6 @@ class GlobeNewsFragment : Fragment() {
                 }
             }
         }
-    }
-
-
-    private fun getNewsList() {
-
-        viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
-                is Result.Error -> {
-                    hideProgressBar()
-                    Toast.makeText(context,"An Error Occured", Toast.LENGTH_LONG).show()
-                }
-
-                is Result.Success -> {
-                    hideProgressBar()
-                    response.data?.let {
-                        it.results.forEachIndexed { index, rem->
-                            Log.e("News List ${index}", rem.title.toString())
-                        }
-                        remoteNewsAdapter.differ.submitList(it.results)
-                    }
-                }
-
-                else -> {
-                    Log.i("Avneet", "Data Loading")
-                    showProgressBar()
-                }
-            }
-        })
     }
 
     private fun showProgressBar() {

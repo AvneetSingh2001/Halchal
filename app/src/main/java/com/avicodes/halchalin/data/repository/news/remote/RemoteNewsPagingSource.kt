@@ -20,7 +20,6 @@ class RemoteNewsPagingSource(
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, NewsRemote> {
         val pageIndex = params.key ?: "null"
-        Log.e("Avneet Data page idx", pageIndex)
         return try {
             if (category == "national") {
                 val response = service.getTopHeadlines(
@@ -28,7 +27,6 @@ class RemoteNewsPagingSource(
                     lang = lang,
                     page = pageIndex,
                 )
-                Log.e("Avneet Data Source", response.body()?.results.toString())
 
                 if (response.isSuccessful && response.body() != null) {
                     val pageResponse = response.body()

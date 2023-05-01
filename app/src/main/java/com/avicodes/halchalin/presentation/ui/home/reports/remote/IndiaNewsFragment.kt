@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.FragmentIndiaNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.data.utils.Result
+import kotlinx.coroutines.launch
 
 class IndiaNewsFragment() : Fragment() {
 
@@ -43,7 +45,7 @@ class IndiaNewsFragment() : Fragment() {
 
         setUpNationalRecyclerView()
 
-        getNewsList()
+        getNews()
 
     }
 
@@ -60,27 +62,18 @@ class IndiaNewsFragment() : Fragment() {
         }
     }
 
-    private fun getNewsList() {
-        viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
-            when (response) {
-                is Result.Error -> {
-                    hideProgressBar()
-                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
-                    Log.e("Error", response.exception?.message.toString())
-                }
-
-                is Result.Success -> {
-                    hideProgressBar()
-                    response.data?.let {
-                        remoteNewsAdapter.differ.submitList(it.results)
-                    }
-                }
-
-                else -> {
-                    showProgressBar()
-                }
+    fun getNews() {
+        showProgressBar()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getNationalNewsHeadlines(
+                topic = "national",
+                country = "in",
+                lang = "hi"
+            ).collect {
+                remoteNewsAdapter.submitData(it)
             }
-        })
+        }
+        hideProgressBar()
     }
 
     private fun showProgressBar() {

@@ -56,19 +56,27 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     fun getNationalNewsHeadlines(
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        nationalNewsRepository.getNews()
-        nationalNewsRepository.news.collectLatest {
-            nationalHeadlines.postValue(it)
-        }
+        topic: String,
+        country: String,
+        lang: String,
+    )  : Flow<PagingData<NewsRemote>> {
+        return nationalNewsRepository.getNews(
+            lang = lang,
+            topic = topic,
+            country = country
+        ).cachedIn(viewModelScope)
     }
 
     fun getInternationalNewsHeadlines(
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        internationalNewsRepository.getNews()
-        internationalNewsRepository.news.collectLatest {
-            worldHeadlines.postValue(it)
-        }
+        topic: String,
+        country: String,
+        lang: String,
+    )  : Flow<PagingData<NewsRemote>> {
+        return internationalNewsRepository.getNews(
+            lang = lang,
+            topic = topic,
+            country = country
+        ).cachedIn(viewModelScope)
     }
 
     fun getCategoryNewsHeadlines(
@@ -97,20 +105,6 @@ class HomeActivityViewModel(
         localNewsRepository.updateNews(loc.toString())
         localNewsRepository.news.collectLatest {
             localHeadlines.postValue(it)
-        }
-    }
-
-    fun updateInternationalNews(page: String?) = viewModelScope.launch {
-        internationalNewsRepository.updateNews(page)
-        internationalNewsRepository.news.collectLatest {
-            worldHeadlines.postValue(it)
-        }
-    }
-
-    fun updateNationalNews(page: String?) = viewModelScope.launch {
-        nationalNewsRepository.updateNews(page)
-        nationalNewsRepository.news.collectLatest {
-            nationalHeadlines.postValue(it)
         }
     }
 

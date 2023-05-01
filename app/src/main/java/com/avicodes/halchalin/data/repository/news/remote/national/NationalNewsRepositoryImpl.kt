@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.repository.news.remote.national
 
 import android.util.Log
+import androidx.paging.PagingData
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
@@ -23,50 +24,15 @@ class NationalNewsRepositoryImpl(
     private val remoteNationalNewsDataSource: RemoteNationalNewsDataSource
 ) : NationalNewsRepository {
 
-    private var _news: MutableStateFlow<Result<NewsResponse>> =
-        MutableStateFlow(Result.NotInitialized)
-
-    override val news: MutableStateFlow<Result<NewsResponse>>
-        get() = _news
-
-    override suspend fun getNews() {
-        _news.value = Result.Loading("Fetching")
-        getNewsFromCache()
+    override fun getNews(
+        lang: String,
+        topic: String,
+        country: String
+    ): Flow<PagingData<NewsRemote>> {
+        return remoteNationalNewsDataSource.getNews(
+            lang = lang,
+            topic = topic,
+            country = country
+        )
     }
-
-    override suspend fun updateNews(page: String?) {
-        try {
-            getNewsFromRemote(page)
-        } catch (e: Exception) {
-            _news.value = Result.Error(e)
-        }
-    }
-
-    suspend fun getNewsFromRemote(page: String?) {
-        val response = remoteNationalNewsDataSource.getNews(page)
-        if (response.isSuccessful) {
-            response.body()?.let {
-                cacheNationalNewsDataSource.saveNewsInCache(it)
-                Log.e("Avneet", it.results.toString())
-            }
-            _news.value = Result.Success(response.body())
-        } else {
-            _news.value = Result.Error(Exception(response.errorBody().toString()))
-        }
-    }
-
-    suspend fun getNewsFromCache() {
-        try {
-            var newsList: NewsResponse? = cacheNationalNewsDataSource.getNewsFromCache()
-
-            if (newsList != null) {
-                _news.value = Result.Success(newsList)
-            } else {
-                getNewsFromRemote(null)
-            }
-        } catch (e: Exception) {
-            _news.value = Result.Error(e)
-        }
-    }
-
 }
