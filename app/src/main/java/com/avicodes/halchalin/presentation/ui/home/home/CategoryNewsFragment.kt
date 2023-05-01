@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,8 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class CategoryNewsFragment : Fragment() {
@@ -27,7 +30,7 @@ class CategoryNewsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: HomeActivityViewModel
-    private lateinit var remoteNewsAdapter: RemoteNewsAdapter
+    private lateinit var remoteNewsAdapter: CategoryNewsAdapter
 
     val args: CategoryNewsFragmentArgs by navArgs()
 
@@ -43,56 +46,42 @@ class CategoryNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val category = args.category
         viewModel = (activity as HomeActivity).viewModel
 
-        if(category.name == "Tech"){
-            viewModel.getCategoryNewsHeadlines(
-                topic = "technology",
-                country = "in",
-                lang = category.lang,
-                page = null
-            )
-        } else {
-            viewModel.getCategoryNewsHeadlines(
-                topic = category.name,
-                country = "in",
-                lang = category.lang,
-                page = null
-            )
-        }
         setUpNationalRecyclerView()
-        observeNewsList()
+
+        binding.tvContent.text = args.category.name.toString()
+        getNews()
     }
 
-    fun observeNewsList() {
-        viewModel.categoryHeadlines.observe(viewLifecycleOwner, Observer {response ->
-            when(response) {
-                is Result.Error -> {
+    private fun getNews() {
+        showProgressBar()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val category = args.category
+            if (category.name == "Tech") {
+                viewModel.getCategoryNewsHeadlines(
+                    topic = "technology",
+                    country = "in",
+                    lang = category.lang,
+                ).collect {
                     hideProgressBar()
-                    Toast.makeText(context,"An Error Occured", Toast.LENGTH_LONG).show()
+                    remoteNewsAdapter.submitData(it)
                 }
-
-                is Result.Success -> {
+            } else {
+                viewModel.getCategoryNewsHeadlines(
+                    topic = category.name,
+                    country = "in",
+                    lang = category.lang,
+                ).collect {
                     hideProgressBar()
-                    response.data?.let {
-                        Log.e("Avneet", it.results.toString())
-                        remoteNewsAdapter.differ.submitList(it.results)
-                        viewModel.categoryHeadlines.postValue(Result.NotInitialized)
-                    }
-                }
-                is Result.NotInitialized -> {}
-                else -> {
-                    Log.i("Avneet", "Data Loading")
-                    showProgressBar()
+                    remoteNewsAdapter.submitData(it)
                 }
             }
-        })
+        }
     }
-
     fun setUpNationalRecyclerView() {
         binding.apply {
-            remoteNewsAdapter = RemoteNewsAdapter()
+            remoteNewsAdapter = CategoryNewsAdapter()
             rvNationalNews.adapter = remoteNewsAdapter
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
             remoteNewsAdapter.setOnItemClickListener {news ->
@@ -101,6 +90,7 @@ class CategoryNewsFragment : Fragment() {
 
 
             refreshLayout.setOnRefreshListener {
+                getNews()
                 refreshLayout.isRefreshing = false
             }
         }
@@ -113,12 +103,10 @@ class CategoryNewsFragment : Fragment() {
 
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE
-        binding.mainCons.visibility = View.INVISIBLE
     }
 
 
     private fun hideProgressBar() {
         binding.progCons.visibility = View.GONE
-        binding.mainCons.visibility = View.VISIBLE
     }
 }

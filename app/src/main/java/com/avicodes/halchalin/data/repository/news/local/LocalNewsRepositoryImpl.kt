@@ -7,9 +7,9 @@ import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.repository.news.international.dataSource.CacheInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.international.dataSource.RemoteInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.CacheInternationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.RemoteInternationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
 import com.avicodes.halchalin.data.repository.news.local.dataSource.CacheLocalNewsDataSource
 import com.avicodes.halchalin.data.repository.news.local.dataSource.RemoteLocalNewsDataSource
 import com.avicodes.halchalin.data.utils.Result

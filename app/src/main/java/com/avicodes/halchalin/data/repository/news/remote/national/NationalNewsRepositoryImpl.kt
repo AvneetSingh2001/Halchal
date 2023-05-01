@@ -1,24 +1,27 @@
-package com.avicodes.halchalin.data.repository.news.international
+package com.avicodes.halchalin.data.repository.news.remote.national
 
 import android.util.Log
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.repository.news.international.dataSource.CacheInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.international.dataSource.RemoteInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.CacheInternationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.RemoteInternationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
+import com.avicodes.halchalin.data.repository.news.remote.national.dataSource.CacheNationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.national.dataSource.RemoteNationalNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.InternationalNewsRepository
-import kotlinx.coroutines.CoroutineScope
+import com.avicodes.halchalin.domain.repository.NationalNewsRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 
-class InternationalNewsRepositoryImpl(
-    private val cacheInternationalNewsDataSource: CacheInternationalNewsDataSource,
-    private val remoteInternationalNewsDataSource: RemoteInternationalNewsDataSource
-) : InternationalNewsRepository {
+class NationalNewsRepositoryImpl(
+    private val cacheNationalNewsDataSource: CacheNationalNewsDataSource,
+    private val remoteNationalNewsDataSource: RemoteNationalNewsDataSource
+) : NationalNewsRepository {
 
     private var _news: MutableStateFlow<Result<NewsResponse>> =
         MutableStateFlow(Result.NotInitialized)
@@ -40,26 +43,26 @@ class InternationalNewsRepositoryImpl(
     }
 
     suspend fun getNewsFromRemote(page: String?) {
-        val response = remoteInternationalNewsDataSource.getNews(page)
-        Log.e("Avneet Singh", response.toString())
+        val response = remoteNationalNewsDataSource.getNews(page)
         if (response.isSuccessful) {
             response.body()?.let {
-                cacheInternationalNewsDataSource.saveNewsInCache(it)
+                cacheNationalNewsDataSource.saveNewsInCache(it)
+                Log.e("Avneet", it.results.toString())
             }
             _news.value = Result.Success(response.body())
         } else {
-            _news.value = Result.Error(Exception(response.message().toString()))
+            _news.value = Result.Error(Exception(response.errorBody().toString()))
         }
     }
 
     suspend fun getNewsFromCache() {
         try {
-            var newsList: NewsResponse? = cacheInternationalNewsDataSource.getNewsFromCache()
+            var newsList: NewsResponse? = cacheNationalNewsDataSource.getNewsFromCache()
 
             if (newsList != null) {
                 _news.value = Result.Success(newsList)
             } else {
-                getNewsFromRemote(page = null)
+                getNewsFromRemote(null)
             }
         } catch (e: Exception) {
             _news.value = Result.Error(e)

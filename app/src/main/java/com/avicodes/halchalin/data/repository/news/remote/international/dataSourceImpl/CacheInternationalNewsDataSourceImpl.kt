@@ -1,15 +1,15 @@
-package com.avicodes.halchalin.data.repository.news.national.dataSourceImpl
+package com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl
 
 import android.util.Log
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.repository.news.national.dataSource.CacheNationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.CacheInternationalNewsDataSource
 
-class CacheNationalNewsDataSourceImpl(
-) : CacheNationalNewsDataSource {
+class CacheInternationalNewsDataSourceImpl(
+) : CacheInternationalNewsDataSource {
     private var newsList: NewsResponse? = null
     override suspend fun getNewsFromCache(): NewsResponse? {
-        Log.e("App Flow", "GetInterNationalNewsFromCache " + newsList?.results.toString())
+        Log.e("App Flow", "GetNationalNewsFromCache " + newsList?.results.toString())
         return newsList
     }
 
@@ -28,8 +28,7 @@ class CacheNationalNewsDataSourceImpl(
             status = news.status,
             totalResults = news.totalResults
         )
-
-        Log.e("App Flow", "SaveInterNationalNewsFromCache " + res.results.toString())
+        Log.e("App Flow", "SaveNationalNewsFromCache " + res.results.toString())
         newsList = res
     }
 }

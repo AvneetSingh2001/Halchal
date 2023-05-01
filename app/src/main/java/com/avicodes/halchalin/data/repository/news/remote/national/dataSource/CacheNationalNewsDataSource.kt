@@ -1,10 +1,9 @@
-package com.avicodes.halchalin.data.repository.news.international.dataSource
+package com.avicodes.halchalin.data.repository.news.remote.national.dataSource
 
-import com.avicodes.halchalin.data.models.NewsLocal
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.models.NewsResponse
 
-interface CacheInternationalNewsDataSource {
+interface CacheNationalNewsDataSource {
     suspend fun getNewsFromCache() : NewsResponse?
     suspend fun saveNewsInCache(news: NewsResponse)
 }

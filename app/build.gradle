@@ -51,6 +51,7 @@ dependencies {
     def nav_version = "2.5.3"
     def room_version = "2.4.3"
     def media3_version = "1.0.0"
+    def paging_version = "3.0.0"
 
 
     //ROOM
@@ -135,6 +136,9 @@ dependencies {
 
     //circular imageView
     implementation 'com.mikhaellopez:circularimageview:4.3.1'
+
+    //pagination
+    implementation "androidx.paging:paging-runtime:$paging_version"
 
 
 }

@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.data.repository.news.international.dataSource
+package com.avicodes.halchalin.data.repository.news.remote.international.dataSource
 
 import com.avicodes.halchalin.data.models.NewsResponse
 import retrofit2.Response

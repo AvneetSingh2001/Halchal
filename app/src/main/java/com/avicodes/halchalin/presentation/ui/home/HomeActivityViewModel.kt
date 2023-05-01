@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.avicodes.halchalin.data.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
@@ -16,9 +18,7 @@ import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUs
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.*
 import kotlin.math.exp
 
 
@@ -75,18 +75,12 @@ class HomeActivityViewModel(
         topic: String,
         country: String,
         lang: String,
-        page: String?
-    ) = viewModelScope.launch(Dispatchers.IO) {
-        categoryHeadlines.postValue(Result.Loading("Started Loading"))
-        categoryNewsRepository.getNews(
-            topic = topic,
-            country = country,
+    ) : Flow<PagingData<NewsRemote>> {
+        return categoryNewsRepository.getNews(
             lang = lang,
-            page = page
-        )
-        categoryNewsRepository.news.collectLatest {
-            categoryHeadlines.postValue(it)
-        }
+            topic = topic,
+            country = country
+        ).cachedIn(viewModelScope)
     }
 
     fun getLocalNews(

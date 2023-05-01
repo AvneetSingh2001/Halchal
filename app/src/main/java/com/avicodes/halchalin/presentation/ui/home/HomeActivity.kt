@@ -47,7 +47,6 @@ class HomeActivity : AppCompatActivity() {
         fetchLocalNewss()
         fetchRemoteNews()
         fetchCategories()
-
         observeFeatured()
 
 

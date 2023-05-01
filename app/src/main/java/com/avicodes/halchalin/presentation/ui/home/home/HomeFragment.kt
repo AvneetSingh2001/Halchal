@@ -223,7 +223,7 @@ class HomeFragment : Fragment() {
                                     imgUrl = news.image_url,
                                     newsHeadline = news.title,
                                     type = "National",
-                                    time = news.pubDate
+                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
                                 )
                                 latestNews.add(latest)
                                 if(latestNews.size == 3) {
@@ -245,7 +245,7 @@ class HomeFragment : Fragment() {
                                     imgUrl = news.image_url,
                                     newsHeadline = news.title,
                                     type = "International",
-                                    time = news.pubDate
+                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
                                 )
                                 latestNews.add(latest)
                                 if(latestNews.size == 3) {

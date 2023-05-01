@@ -1,8 +1,8 @@
-package com.avicodes.halchalin.data.repository.news.national.dataSourceImpl
+package com.avicodes.halchalin.data.repository.news.remote.national.dataSourceImpl
 
 import com.avicodes.halchalin.data.API.NewsApiService
 import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.repository.news.national.dataSource.RemoteNationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.national.dataSource.RemoteNationalNewsDataSource
 import retrofit2.Response
 
 class RemoteNationalNewsDataSourceImpl(
