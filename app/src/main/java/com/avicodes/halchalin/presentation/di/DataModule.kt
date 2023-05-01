@@ -7,26 +7,16 @@ import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSouceImpl
 import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSource
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSource
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSourceImpl
-import com.avicodes.halchalin.data.repository.news.remote.category.CategoryNewsRepositoryImpl
-import com.avicodes.halchalin.data.repository.news.remote.category.dataSource.RemoteCategoryNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.category.dataSourceImpl.RemoteCategoryNewsDataSourceImpl
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.CacheInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.RemoteInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl.RemoteInternationalNewsDataSourceImpl
 import com.avicodes.halchalin.data.repository.news.local.dataSource.CacheLocalNewsDataSource
 import com.avicodes.halchalin.data.repository.news.local.dataSource.RemoteLocalNewsDataSource
 import com.avicodes.halchalin.data.repository.news.local.dataSourceImpl.CacheLocalNewsDataSourceImpl
 import com.avicodes.halchalin.data.repository.news.local.dataSourceImpl.RemoteLocalNewsDataSourceImpl
-import com.avicodes.halchalin.data.repository.news.remote.national.dataSource.CacheNationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.national.dataSource.RemoteNationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.national.dataSourceImpl.CacheNationalNewsDataSourceImpl
-import com.avicodes.halchalin.data.repository.news.remote.national.dataSourceImpl.RemoteNationalNewsDataSourceImpl
+import com.avicodes.halchalin.data.repository.news.remote.dataSource.RemoteNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.dataSourceImpl.RemoteNewsDataSourceImpl
 import com.avicodes.halchalin.data.repository.settings.city.CityDataSource
 import com.avicodes.halchalin.data.repository.settings.city.CityDataSourceImpl
 import com.avicodes.halchalin.data.repository.settings.user.UserDataSource
 import com.avicodes.halchalin.data.repository.settings.user.UserDataSourceImpl
-import com.avicodes.halchalin.domain.repository.CategoryNewsRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -57,39 +47,11 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideCategoryNewsDataSource(firestore: FirebaseFirestore, newsApiService: NewsApiService): RemoteCategoryNewsDataSource {
-        return RemoteCategoryNewsDataSourceImpl(
+    fun provideNewsDataSource(firestore: FirebaseFirestore, newsApiService: NewsApiService): RemoteNewsDataSource {
+        return RemoteNewsDataSourceImpl(
             newsApiService,
             firestore
         )
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteInternationalNewsDataSource(newsApiService: NewsApiService): RemoteInternationalNewsDataSource {
-        return RemoteInternationalNewsDataSourceImpl(
-            newsApiService,
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideCacheInternationalNewsDataSource(): CacheInternationalNewsDataSource {
-        return CacheInternationalNewsDataSourceImpl()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRemoteNationalNewsDataSource(newsApiService: NewsApiService): RemoteNationalNewsDataSource {
-        return RemoteNationalNewsDataSourceImpl(
-            newsApiService,
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideCacheNationalNewsDataSource(): CacheNationalNewsDataSource {
-        return CacheNationalNewsDataSourceImpl()
     }
 
     @Provides

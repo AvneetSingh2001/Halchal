@@ -24,12 +24,9 @@ import kotlin.math.exp
 
 class HomeActivityViewModel(
     val auth: FirebaseAuth,
-    private val categoryNewsRepository: CategoryNewsRepository,
-    private val internationalNewsRepository: InternationalNewsRepository,
+    private val remoteNewsRepository: RemoteNewsRepository,
     private val localNewsRepository: LocalNewsRepository,
-    private val nationalNewsRepository: NationalNewsRepository,
     private val adsRepository: AdsRepository,
-    private val getUserByIdUseCase: GetUserByIdUseCase,
     private val updateUserPicUseCase: updateUserPicUseCase,
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository
@@ -60,7 +57,7 @@ class HomeActivityViewModel(
         country: String,
         lang: String,
     )  : Flow<PagingData<NewsRemote>> {
-        return nationalNewsRepository.getNews(
+        return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
             country = country
@@ -72,7 +69,7 @@ class HomeActivityViewModel(
         country: String,
         lang: String,
     )  : Flow<PagingData<NewsRemote>> {
-        return internationalNewsRepository.getNews(
+        return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
             country = country
@@ -84,7 +81,7 @@ class HomeActivityViewModel(
         country: String,
         lang: String,
     ) : Flow<PagingData<NewsRemote>> {
-        return categoryNewsRepository.getNews(
+        return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
             country = country
@@ -241,7 +238,7 @@ class HomeActivityViewModel(
 
     fun getCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            categoryNewsRepository.getCategories().collectLatest {
+            remoteNewsRepository.getCategories().collectLatest {
                 categories.postValue(it)
             }
         }

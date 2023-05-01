@@ -38,21 +38,8 @@ class RemoteNewsPagingSource(
                         nextKey = nextKey
                     )
                 } else {
-                    val dummy = listOf<NewsRemote>(
-                        NewsRemote(
-                            newsId = 2,
-                            title = "kjfad",
-                            content = "kld",
-                            description = "kafjd",
-                            source_id = "kjfd",
-                            pubDate = "jkfsd",
-                            link = "kljfd",
-                            language = "en",
-                            image_url = "klfd",
-                        )
-                    )
                     LoadResult.Page(
-                        data = dummy,
+                        data = ArrayList(),
                         prevKey = null,
                         nextKey = null
                     )
@@ -77,21 +64,8 @@ class RemoteNewsPagingSource(
                         nextKey = nextKey
                     )
                 } else {
-                    val dummy = listOf<NewsRemote>(
-                        NewsRemote(
-                            newsId = 2,
-                            title = "kjfad",
-                            content = "kld",
-                            description = "kafjd",
-                            source_id = "kjfd",
-                            pubDate = "jkfsd",
-                            link = "kljfd",
-                            language = "en",
-                            image_url = "klfd",
-                        )
-                    )
                     LoadResult.Page(
-                        data = dummy,
+                        data = ArrayList(),
                         prevKey = null,
                         nextKey = null
                     )

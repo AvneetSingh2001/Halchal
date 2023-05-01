@@ -1,23 +1,11 @@
 package com.avicodes.halchalin.data.repository.news.local
 
-import android.location.Location
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsRemote
-import com.avicodes.halchalin.data.models.NewsResponse
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.CacheInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.RemoteInternationalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSourceImpl.CacheInternationalNewsDataSourceImpl
 import com.avicodes.halchalin.data.repository.news.local.dataSource.CacheLocalNewsDataSource
 import com.avicodes.halchalin.data.repository.news.local.dataSource.RemoteLocalNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.domain.repository.InternationalNewsRepository
 import com.avicodes.halchalin.domain.repository.LocalNewsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 
 class LocalNewsRepositoryImpl(

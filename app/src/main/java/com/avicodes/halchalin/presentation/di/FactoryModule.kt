@@ -58,23 +58,17 @@ class FactoryModule {
     fun provideHomeActivityViewModelFactory(
         auth: FirebaseAuth,
         adsRepository: AdsRepository,
-        categoryNewsRepository: CategoryNewsRepository,
-        internationalNewsRepository: InternationalNewsRepository,
-        nationalNewsRepository: NationalNewsRepository,
+        remoteNewsRepository: RemoteNewsRepository,
         localNewsRepository: LocalNewsRepository,
-        getUserByIdUseCase: GetUserByIdUseCase,
         updateUserPicUseCase: updateUserPicUseCase,
         userRespository: UserRespository,
         cityRepository: CityRepository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
-            categoryNewsRepository = categoryNewsRepository,
-            internationalNewsRepository = internationalNewsRepository,
-            nationalNewsRepository = nationalNewsRepository,
+            remoteNewsRepository = remoteNewsRepository,
             localNewsRepository = localNewsRepository,
             adsRepository = adsRepository,
-            getUserByIdUseCase = getUserByIdUseCase,
             updateUserPicUseCase = updateUserPicUseCase,
             userRespository = userRespository,
             cityRepository = cityRepository

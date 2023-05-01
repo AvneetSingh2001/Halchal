@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.data.repository.news.remote.category.dataSourceImpl
+package com.avicodes.halchalin.data.repository.news.remote.dataSourceImpl
 
 import android.util.Log
 import androidx.paging.Pager
@@ -7,10 +7,8 @@ import androidx.paging.PagingData
 import com.avicodes.halchalin.data.API.NewsApiService
 import com.avicodes.halchalin.data.models.Categories
 import com.avicodes.halchalin.data.models.NewsRemote
-import com.avicodes.halchalin.data.models.NewsResponse
 import com.avicodes.halchalin.data.repository.news.remote.RemoteNewsPagingSource
-import com.avicodes.halchalin.data.repository.news.remote.category.dataSource.RemoteCategoryNewsDataSource
-import com.avicodes.halchalin.data.repository.news.remote.international.dataSource.RemoteInternationalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.dataSource.RemoteNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -19,12 +17,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
-import retrofit2.Response
 
-class RemoteCategoryNewsDataSourceImpl(
+class RemoteNewsDataSourceImpl(
     private val newsApiService: NewsApiService,
     private val firestore: FirebaseFirestore
-) : RemoteCategoryNewsDataSource {
+): RemoteNewsDataSource {
 
     override fun getNews(
         topic: String,
