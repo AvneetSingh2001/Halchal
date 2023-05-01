@@ -147,22 +147,6 @@
             app:layout_constraintTop_toTopOf="@id/time" />
 
 
-        <ImageButton
-            android:id="@+id/btnShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="1dp"
-
-            android:layout_marginBottom="1dp"
-            android:background="@drawable/circle_button"
-            android:padding="6dp"
-            android:src="@drawable/share"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

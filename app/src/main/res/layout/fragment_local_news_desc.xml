@@ -303,25 +303,25 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Swipe News"
-                    android:id="@+id/tvSwipe"
-                    android:textColor="@color/mainBlue"
-                    android:fontFamily="@font/roboto_bold"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
-                <View
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:backgroundTint="@color/mainBlue"
-                    app:layout_constraintTop_toBottomOf="@id/tvSwipe"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:background="@drawable/down"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Swipe News"-->
+<!--                    android:id="@+id/tvSwipe"-->
+<!--                    android:textColor="@color/mainBlue"-->
+<!--                    android:fontFamily="@font/roboto_bold"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"/>-->
+<!--                <View-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="30dp"-->
+<!--                    android:backgroundTint="@color/mainBlue"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/tvSwipe"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    android:background="@drawable/down"-->
+<!--                    />-->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,9 +43,9 @@ class DetailedRemoteFragment : Fragment() {
         binding.apply {
             tvHeadline.text = news.title
 
-            if(news.description != null) {
+            if (news.description != null) {
                 tvDesc.text = news.description
-            } else if(news.content != null){
+            } else if (news.content != null) {
                 tvDesc.text = news.content
             } else {
                 tvDesc.text = news.title
@@ -70,9 +70,6 @@ class DetailedRemoteFragment : Fragment() {
                 navigateBack()
             }
 
-            btnShare.setOnClickListener {
-                //viewModel.createRemoteDeepLink(news)
-            }
 
         }
 
@@ -89,6 +86,7 @@ class DetailedRemoteFragment : Fragment() {
                 is Result.Loading -> {
                     showProgressBar()
                 }
+
                 is Result.Success -> {
                     hideProgressBar()
                     it.data?.let { link ->
@@ -96,11 +94,13 @@ class DetailedRemoteFragment : Fragment() {
                     }
                     viewModel.remoteLinkCreated.postValue(Result.NotInitialized)
                 }
+
                 is Result.Error -> {
                     hideProgressBar()
                     Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
                         .show()
                 }
+
                 else -> {}
             }
         })

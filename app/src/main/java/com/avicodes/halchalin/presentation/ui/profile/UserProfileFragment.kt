@@ -5,13 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.FragmentUserProfileBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class UserProfileFragment : BottomSheetDialogFragment() {
+class UserProfileFragment : DialogFragment() {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
