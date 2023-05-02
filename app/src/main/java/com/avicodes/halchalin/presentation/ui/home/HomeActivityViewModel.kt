@@ -8,8 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.avicodes.halchalin.data.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
@@ -18,14 +16,18 @@ import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUs
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.transform
 import kotlin.math.exp
 
 
 class HomeActivityViewModel(
     val auth: FirebaseAuth,
-    private val remoteNewsRepository: RemoteNewsRepository,
+    private val categoryNewsRepository: CategoryNewsRepository,
+    private val internationalNewsRepository: InternationalNewsRepository,
     private val localNewsRepository: LocalNewsRepository,
+    private val nationalNewsRepository: NationalNewsRepository,
     private val adsRepository: AdsRepository,
     private val updateUserPicUseCase: updateUserPicUseCase,
     private val userRespository: UserRespository,
@@ -53,39 +55,37 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     fun getNationalNewsHeadlines(
-        topic: String,
-        country: String,
-        lang: String,
-    )  : Flow<PagingData<NewsRemote>> {
-        return remoteNewsRepository.getNews(
-            lang = lang,
-            topic = topic,
-            country = country
-        ).cachedIn(viewModelScope)
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        nationalNewsRepository.getNews()
+        nationalNewsRepository.news.collectLatest {
+            nationalHeadlines.postValue(it)
+        }
     }
 
     fun getInternationalNewsHeadlines(
-        topic: String,
-        country: String,
-        lang: String,
-    )  : Flow<PagingData<NewsRemote>> {
-        return remoteNewsRepository.getNews(
-            lang = lang,
-            topic = topic,
-            country = country
-        ).cachedIn(viewModelScope)
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        internationalNewsRepository.getNews()
+        internationalNewsRepository.news.collectLatest {
+            worldHeadlines.postValue(it)
+        }
     }
 
     fun getCategoryNewsHeadlines(
         topic: String,
         country: String,
         lang: String,
-    ) : Flow<PagingData<NewsRemote>> {
-        return remoteNewsRepository.getNews(
-            lang = lang,
+        page: String?
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        categoryHeadlines.postValue(Result.Loading("Started Loading"))
+        categoryNewsRepository.getNews(
             topic = topic,
-            country = country
-        ).cachedIn(viewModelScope)
+            country = country,
+            lang = lang,
+            page = page
+        )
+        categoryNewsRepository.news.collectLatest {
+            categoryHeadlines.postValue(it)
+        }
     }
 
     fun getLocalNews(
@@ -102,6 +102,20 @@ class HomeActivityViewModel(
         localNewsRepository.updateNews(loc.toString())
         localNewsRepository.news.collectLatest {
             localHeadlines.postValue(it)
+        }
+    }
+
+    fun updateInternationalNews(page: String?) = viewModelScope.launch {
+        internationalNewsRepository.updateNews(page)
+        internationalNewsRepository.news.collectLatest {
+            worldHeadlines.postValue(it)
+        }
+    }
+
+    fun updateNationalNews(page: String?) = viewModelScope.launch {
+        nationalNewsRepository.updateNews(page)
+        nationalNewsRepository.news.collectLatest {
+            nationalHeadlines.postValue(it)
         }
     }
 
@@ -238,7 +252,7 @@ class HomeActivityViewModel(
 
     fun getCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            remoteNewsRepository.getCategories().collectLatest {
+            categoryNewsRepository.getCategories().collectLatest {
                 categories.postValue(it)
             }
         }
