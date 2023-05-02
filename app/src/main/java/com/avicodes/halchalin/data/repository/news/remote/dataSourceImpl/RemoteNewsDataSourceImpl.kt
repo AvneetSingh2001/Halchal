@@ -31,7 +31,7 @@ class RemoteNewsDataSourceImpl(
         Log.e("Avneet Data getNews","at getnews")
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 1,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {

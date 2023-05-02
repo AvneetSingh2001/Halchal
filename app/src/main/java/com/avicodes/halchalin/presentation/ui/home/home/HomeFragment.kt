@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
 
         getFeaturedAds()
         getAds()
-        getLatestNews()
+        //getLatestNews()
         Log.e("Initialise Home", "HOme Fragment")
 
         binding.apply {
@@ -182,84 +182,84 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getLatestNews() {
-        binding.apply {
-            latestNewsAdapter = LatestNewsAdapter()
-            rvLatestLocal.adapter = latestNewsAdapter
-            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
-
-            val latestNews = mutableListOf<LatestNews>()
-
-            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
-                when (response) {
-                    is Result.Success -> {
-                        response.data?.let {newslist ->
-                            if(newslist.isNotEmpty()) {
-                                val news = newslist[0]
-                                val latest = LatestNews(
-                                    imgUrl = news.coverUrl,
-                                    newsHeadline = news.newsHeadline,
-                                    type = "Local",
-                                    time = TimeCalc.getTimeAgo(news.createdAt)
-                                )
-                                latestNews.add(latest)
-                                if(latestNews.size == 3) {
-                                    latestNewsAdapter.differ.submitList(latestNews)
-                                }
-                            }
-                        }
-                    }
-                    else -> {}
-                }
-            })
-
-            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
-                when (response) {
-                    is Result.Success -> {
-                        response.data?.let { newslist ->
-                            if(newslist.results.isNotEmpty()) {
-                                val news = newslist.results[0]
-                                val latest = LatestNews(
-                                    imgUrl = news.image_url,
-                                    newsHeadline = news.title,
-                                    type = "National",
-                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
-                                )
-                                latestNews.add(latest)
-                                if(latestNews.size == 3) {
-                                    latestNewsAdapter.differ.submitList(latestNews)
-                                }                            }
-                        }
-                    }
-                    else -> {}
-                }
-            })
-
-            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
-                when (response) {
-                    is Result.Success -> {
-                        response.data?.let { newslist ->
-                            if(newslist.results.isNotEmpty()) {
-                                val news = newslist.results[0]
-                                val latest = LatestNews(
-                                    imgUrl = news.image_url,
-                                    newsHeadline = news.title,
-                                    type = "International",
-                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
-                                )
-                                latestNews.add(latest)
-                                if(latestNews.size == 3) {
-                                    latestNewsAdapter.differ.submitList(latestNews)
-                                }
-                            }
-                        }
-                    }
-                    else -> {}
-                }
-            })
-        }
-    }
-
+//    private fun getLatestNews() {
+//        binding.apply {
+//            latestNewsAdapter = LatestNewsAdapter()
+//            rvLatestLocal.adapter = latestNewsAdapter
+//            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
+//
+//            val latestNews = mutableListOf<LatestNews>()
+//
+//            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+//                when (response) {
+//                    is Result.Success -> {
+//                        response.data?.let {newslist ->
+//                            if(newslist.isNotEmpty()) {
+//                                val news = newslist[0]
+//                                val latest = LatestNews(
+//                                    imgUrl = news.coverUrl,
+//                                    newsHeadline = news.newsHeadline,
+//                                    type = "Local",
+//                                    time = TimeCalc.getTimeAgo(news.createdAt)
+//                                )
+//                                latestNews.add(latest)
+//                                if(latestNews.size == 3) {
+//                                    latestNewsAdapter.differ.submitList(latestNews)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    else -> {}
+//                }
+//            })
+//
+//            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
+//                when (response) {
+//                    is Result.Success -> {
+//                        response.data?.let { newslist ->
+//                            if(newslist.results.isNotEmpty()) {
+//                                val news = newslist.results[0]
+//                                val latest = LatestNews(
+//                                    imgUrl = news.image_url,
+//                                    newsHeadline = news.title,
+//                                    type = "National",
+//                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
+//                                )
+//                                latestNews.add(latest)
+//                                if(latestNews.size == 3) {
+//                                    latestNewsAdapter.differ.submitList(latestNews)
+//                                }                            }
+//                        }
+//                    }
+//                    else -> {}
+//                }
+//            })
+//
+//            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
+//                when (response) {
+//                    is Result.Success -> {
+//                        response.data?.let { newslist ->
+//                            if(newslist.results.isNotEmpty()) {
+//                                val news = newslist.results[0]
+//                                val latest = LatestNews(
+//                                    imgUrl = news.image_url,
+//                                    newsHeadline = news.title,
+//                                    type = "International",
+//                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
+//                                )
+//                                latestNews.add(latest)
+//                                if(latestNews.size == 3) {
+//                                    latestNewsAdapter.differ.submitList(latestNews)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    else -> {}
+//                }
+//            })
+//        }
+//    }
+//
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE
         binding.mainCons.visibility = View.INVISIBLE

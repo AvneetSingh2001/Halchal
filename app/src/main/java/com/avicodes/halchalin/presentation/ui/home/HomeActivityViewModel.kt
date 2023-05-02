@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -19,6 +20,7 @@ import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCas
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.lang.Exception
 import kotlin.math.exp
 
 
@@ -32,12 +34,12 @@ class HomeActivityViewModel(
     private val cityRepository: CityRepository
 ) : ViewModel() {
 
-    val nationalHeadlines: MutableLiveData<Result<NewsResponse>> =
-        MutableLiveData(Result.NotInitialized)
-    val worldHeadlines: MutableLiveData<Result<NewsResponse>> =
-        MutableLiveData(Result.NotInitialized)
-    val categoryHeadlines: MutableLiveData<Result<NewsResponse>> =
-        MutableLiveData(Result.NotInitialized)
+//    val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
+//        MutableLiveData(Result.NotInitialized)
+//
+//    val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
+//        MutableLiveData(Result.NotInitialized)
+
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
     val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
@@ -56,7 +58,7 @@ class HomeActivityViewModel(
         topic: String,
         country: String,
         lang: String,
-    )  : Flow<PagingData<NewsRemote>> {
+    ) : Flow<PagingData<NewsRemote>> {
         return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
@@ -68,7 +70,7 @@ class HomeActivityViewModel(
         topic: String,
         country: String,
         lang: String,
-    )  : Flow<PagingData<NewsRemote>> {
+    ): Flow<PagingData<NewsRemote>> {
         return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
@@ -80,7 +82,7 @@ class HomeActivityViewModel(
         topic: String,
         country: String,
         lang: String,
-    ) : Flow<PagingData<NewsRemote>> {
+    ): Flow<PagingData<NewsRemote>> {
         return remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
@@ -127,12 +129,15 @@ class HomeActivityViewModel(
                             comments.postValue(Result.Success(commentProcessed))
                         }
                     }
+
                     is Result.Loading -> {
                         comments.postValue(it)
                     }
+
                     is Result.Error -> {
                         comments.postValue(it)
                     }
+
                     else -> {}
                 }
 
