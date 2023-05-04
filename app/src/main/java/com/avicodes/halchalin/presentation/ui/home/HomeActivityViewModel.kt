@@ -7,6 +7,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -34,8 +35,8 @@ class HomeActivityViewModel(
     private val cityRepository: CityRepository
 ) : ViewModel() {
 
-//    val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
-//        MutableLiveData(Result.NotInitialized)
+    val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
+        MutableLiveData(Result.NotInitialized)
 //
 //    val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
 //        MutableLiveData(Result.NotInitialized)
@@ -54,16 +55,19 @@ class HomeActivityViewModel(
     val categories: MutableLiveData<Result<List<Categories>>> =
         MutableLiveData(Result.NotInitialized)
 
-    fun getNationalNewsHeadlines(
+
+    suspend fun getNationalNewsHeadlines(
         topic: String,
         country: String,
         lang: String,
-    ) : Flow<PagingData<NewsRemote>> {
-        return remoteNewsRepository.getNews(
+    ) {
+        remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
             country = country
-        ).cachedIn(viewModelScope)
+        ).cachedIn(viewModelScope).collectLatest {
+            nationalHeadlines.postValue(Result.Success(it))
+        }
     }
 
     fun getInternationalNewsHeadlines(

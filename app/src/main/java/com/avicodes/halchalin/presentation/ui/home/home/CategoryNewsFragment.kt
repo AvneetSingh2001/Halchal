@@ -19,6 +19,7 @@ import com.avicodes.halchalin.databinding.FragmentCategoryNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
+import com.avicodes.halchalin.presentation.ui.home.reports.remote.LoaderStateAdapter
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class CategoryNewsFragment : Fragment() {
 
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var remoteNewsAdapter: CategoryNewsAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
 
     val args: CategoryNewsFragmentArgs by navArgs()
 
@@ -82,7 +84,8 @@ class CategoryNewsFragment : Fragment() {
     fun setUpNationalRecyclerView() {
         binding.apply {
             remoteNewsAdapter = CategoryNewsAdapter()
-            rvNationalNews.adapter = remoteNewsAdapter
+            loaderStateAdapter = LoaderStateAdapter { remoteNewsAdapter.retry() }
+            rvNationalNews.adapter = remoteNewsAdapter.withLoadStateFooter(loaderStateAdapter)
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
             remoteNewsAdapter.setOnItemClickListener {news ->
                 moveToDetailedNews(news)

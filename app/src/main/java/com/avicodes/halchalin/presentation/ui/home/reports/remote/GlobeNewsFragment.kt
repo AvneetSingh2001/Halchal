@@ -25,6 +25,8 @@ class GlobeNewsFragment : Fragment() {
 
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var remoteNewsAdapter: RemoteNewsAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +63,8 @@ class GlobeNewsFragment : Fragment() {
     fun setUpNationalRecyclerView() {
         binding.apply {
             remoteNewsAdapter = RemoteNewsAdapter()
-            rvNationalNews.adapter = remoteNewsAdapter
+            loaderStateAdapter = LoaderStateAdapter { remoteNewsAdapter.retry() }
+            rvNationalNews.adapter = remoteNewsAdapter.withLoadStateFooter(loaderStateAdapter)
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
             remoteNewsAdapter.setOnItemClickListener {news ->
                 onItemClickListener?.let {

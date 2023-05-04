@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NewsFragment(
@@ -96,12 +98,15 @@ class NewsFragment(
                     tlNews.selectTab(tlNews.getTabAt(position))
 
                     refreshLayout.setOnRefreshListener {
-                        refreshLayout.isRefreshing = false
-                        if (position == 0) {
+                        lifecycleScope.launch {
+                            if (position == 0) {
+                                viewModel.getNationalNewsHeadlines("national", "in", "hi")
+                            } else {
 
-                        } else {
-
+                            }
                         }
+                        refreshLayout.isRefreshing = false
+
                     }
 
                 }

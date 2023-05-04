@@ -45,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
         getCurUser()
         fetchDataAds()
         fetchLocalNewss()
+        fetchRemoteNews()
         fetchCategories()
         observeFeatured()
 
@@ -65,6 +66,16 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         observeTabs()
+    }
+
+    private fun fetchRemoteNews() {
+        lifecycleScope.launch {
+            viewModel.getNationalNewsHeadlines(
+                "national",
+                "in",
+                "hi"
+            )
+        }
     }
 
     private fun observeFeatured() {

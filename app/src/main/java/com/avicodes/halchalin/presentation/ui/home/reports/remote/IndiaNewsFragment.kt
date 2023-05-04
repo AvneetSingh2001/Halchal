@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.FragmentIndiaNewsBinding
@@ -24,6 +25,7 @@ class IndiaNewsFragment() : Fragment() {
 
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var remoteNewsAdapter: RemoteNewsAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,8 @@ class IndiaNewsFragment() : Fragment() {
     fun setUpNationalRecyclerView() {
         binding.apply {
             remoteNewsAdapter = RemoteNewsAdapter()
-            rvNationalNews.adapter = remoteNewsAdapter
+            loaderStateAdapter = LoaderStateAdapter { remoteNewsAdapter.retry() }
+            rvNationalNews.adapter = remoteNewsAdapter.withLoadStateFooter(loaderStateAdapter)
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
             remoteNewsAdapter.setOnItemClickListener {news ->
                 onItemClickListener?.let {
@@ -65,13 +68,27 @@ class IndiaNewsFragment() : Fragment() {
     fun getNews() {
         showProgressBar()
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getNationalNewsHeadlines(
-                topic = "national",
-                country = "in",
-                lang = "hi"
-            ).collect {
-                remoteNewsAdapter.submitData(it)
-            }
+//            viewModel.getNationalNewsHeadlines(
+//                topic = "national",
+//                country = "in",
+//                lang = "hi"
+//            ).collect {
+//                remoteNewsAdapter.submitData(it)
+//            }
+
+            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    is Result.Success -> {
+                        it.data?.let {it2->
+                            lifecycleScope.launch {
+                                remoteNewsAdapter.submitData(it2)
+                            }
+                        }
+                    }
+
+                    else -> {}
+                }
+            })
         }
         hideProgressBar()
     }

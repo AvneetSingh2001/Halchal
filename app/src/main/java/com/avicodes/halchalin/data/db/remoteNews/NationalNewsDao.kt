@@ -1,18 +1,16 @@
 package com.avicodes.halchalin.data.db.remoteNews
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.avicodes.halchalin.data.models.NewsRemote
 
 @Dao
 interface NationalNewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(news: NewsRemote)
+    suspend fun insert(news: List<NewsRemote>)
 
     @Query("SELECT * FROM remote_news_table")
-    suspend fun getAllArticles(): List<NewsRemote>
-
-    @Delete
-    suspend fun deleteArticle(news: NewsRemote)
+    suspend fun getAllArticles(): PagingSource<String, NewsRemote>
 
     @Query("DELETE FROM remote_news_table")
     suspend fun deleteAll()
