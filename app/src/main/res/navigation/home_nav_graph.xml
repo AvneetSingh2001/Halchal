@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_categoryNewsFragment"
             app:destination="@id/categoryNewsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_localNewsDescFragment"
+            app:destination="@id/localNewsDescFragment" />
     </fragment>
     <fragment
         android:id="@+id/localNewsFragment"

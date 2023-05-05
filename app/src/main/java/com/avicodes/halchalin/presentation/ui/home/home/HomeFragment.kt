@@ -14,12 +14,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.LatestNews
+import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.NewsLocal
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -63,19 +67,29 @@ class HomeFragment : Fragment() {
 
         getFeaturedAds()
         getAds()
-        //getLatestNews()
+        getLatestNews()
         Log.e("Initialise Home", "HOme Fragment")
 
         binding.apply {
 
-
             viewModel.curUser.observe(requireActivity(), Observer {
-                etLoc.setText(it?.location.toString())
+                it?.let {
+                    val loc = it.location.split(", ").toTypedArray()
+                    if(loc.size == 2) {
+                        tvCity.text = loc[0]
+                        tvState.text = loc[1]
+                    }
+                    Glide.with(ivProfile.context)
+                        .load(it.imgUrl)
+                        .circleCrop()
+                        .into(ivProfile)
+                }
             })
 
             categoriesAdapter = CategoriesAdapter()
             rvCategories.adapter = categoriesAdapter
-            rvCategories.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            rvCategories.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
             viewModel.categories.observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -88,11 +102,13 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
+
                     is Result.Error -> {
                         Log.e("Categories", "Error")
 
                         tv3.visibility = View.GONE
                     }
+
                     else -> {
                         tv3.visibility = View.GONE
                     }
@@ -101,6 +117,15 @@ class HomeFragment : Fragment() {
 
             categoriesAdapter.setOnItemClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToCategoryNewsFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+
+            Glide.with(ivFooter.context)
+                .load(R.drawable.tahglinekkh)
+                .into(ivFooter)
+
+            latestNewsAdapter.setOnItemClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToLocalNewsDescFragment(it)
                 requireView().findNavController().navigate(action)
             }
         }
@@ -169,7 +194,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupAdView(){
+    private fun setupAdView() {
         binding.apply {
             adSlider.setSliderAdapter(adAdapter)
             adSlider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
@@ -182,84 +207,30 @@ class HomeFragment : Fragment() {
         }
     }
 
-//    private fun getLatestNews() {
-//        binding.apply {
-//            latestNewsAdapter = LatestNewsAdapter()
-//            rvLatestLocal.adapter = latestNewsAdapter
-//            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
-//
-//            val latestNews = mutableListOf<LatestNews>()
-//
-//            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
-//                when (response) {
-//                    is Result.Success -> {
-//                        response.data?.let {newslist ->
-//                            if(newslist.isNotEmpty()) {
-//                                val news = newslist[0]
-//                                val latest = LatestNews(
-//                                    imgUrl = news.coverUrl,
-//                                    newsHeadline = news.newsHeadline,
-//                                    type = "Local",
-//                                    time = TimeCalc.getTimeAgo(news.createdAt)
-//                                )
-//                                latestNews.add(latest)
-//                                if(latestNews.size == 3) {
-//                                    latestNewsAdapter.differ.submitList(latestNews)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    else -> {}
-//                }
-//            })
-//
-//            viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer { response ->
-//                when (response) {
-//                    is Result.Success -> {
-//                        response.data?.let { newslist ->
-//                            if(newslist.results.isNotEmpty()) {
-//                                val news = newslist.results[0]
-//                                val latest = LatestNews(
-//                                    imgUrl = news.image_url,
-//                                    newsHeadline = news.title,
-//                                    type = "National",
-//                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
-//                                )
-//                                latestNews.add(latest)
-//                                if(latestNews.size == 3) {
-//                                    latestNewsAdapter.differ.submitList(latestNews)
-//                                }                            }
-//                        }
-//                    }
-//                    else -> {}
-//                }
-//            })
-//
-//            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer { response ->
-//                when (response) {
-//                    is Result.Success -> {
-//                        response.data?.let { newslist ->
-//                            if(newslist.results.isNotEmpty()) {
-//                                val news = newslist.results[0]
-//                                val latest = LatestNews(
-//                                    imgUrl = news.image_url,
-//                                    newsHeadline = news.title,
-//                                    type = "International",
-//                                    time = news.pubDate?.let { it.removeRange(11, it.length) }
-//                                )
-//                                latestNews.add(latest)
-//                                if(latestNews.size == 3) {
-//                                    latestNewsAdapter.differ.submitList(latestNews)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    else -> {}
-//                }
-//            })
-//        }
-//    }
-//
+    private fun getLatestNews() {
+        binding.apply {
+            latestNewsAdapter = LatestNewsAdapter()
+            rvLatestLocal.adapter = latestNewsAdapter
+            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
+            val latestNews = mutableListOf<News>()
+            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+                when (response) {
+                    is Result.Success -> {
+                        response.data?.let { newslist ->
+                            if (newslist.isNotEmpty()) {
+                                val news = newslist[0]
+                                latestNews.clear()
+                                latestNews.add(0, news)
+                                latestNewsAdapter.differ.submitList(latestNews)
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+            })
+        }
+    }
+
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE
         binding.mainCons.visibility = View.INVISIBLE

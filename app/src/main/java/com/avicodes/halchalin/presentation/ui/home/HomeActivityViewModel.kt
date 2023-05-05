@@ -37,9 +37,9 @@ class HomeActivityViewModel(
 
     val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
-//
-//    val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
-//        MutableLiveData(Result.NotInitialized)
+
+    val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
+        MutableLiveData(Result.NotInitialized)
 
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
     val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
@@ -70,16 +70,18 @@ class HomeActivityViewModel(
         }
     }
 
-    fun getInternationalNewsHeadlines(
+    suspend fun getInternationalNewsHeadlines(
         topic: String,
         country: String,
         lang: String,
-    ): Flow<PagingData<NewsRemote>> {
-        return remoteNewsRepository.getNews(
+    ) {
+        remoteNewsRepository.getNews(
             lang = lang,
             topic = topic,
             country = country
-        ).cachedIn(viewModelScope)
+        ).cachedIn(viewModelScope).collectLatest {
+            worldHeadlines.postValue(Result.Success(it))
+        }
     }
 
     fun getCategoryNewsHeadlines(

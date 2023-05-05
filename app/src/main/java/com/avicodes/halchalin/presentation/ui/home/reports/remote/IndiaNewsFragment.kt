@@ -16,6 +16,8 @@ import com.avicodes.halchalin.databinding.FragmentIndiaNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.data.utils.Result
+import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class IndiaNewsFragment() : Fragment() {
@@ -44,10 +46,14 @@ class IndiaNewsFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as HomeActivity).viewModel
-
+        showProgressBar()
         setUpNationalRecyclerView()
 
         getNews()
+
+        NewsFragment.setOnNationalTabClickListener {
+            binding.rvNationalNews.smoothScrollToPosition(0)
+        }
 
     }
 
@@ -57,7 +63,7 @@ class IndiaNewsFragment() : Fragment() {
             loaderStateAdapter = LoaderStateAdapter { remoteNewsAdapter.retry() }
             rvNationalNews.adapter = remoteNewsAdapter.withLoadStateFooter(loaderStateAdapter)
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
-            remoteNewsAdapter.setOnItemClickListener {news ->
+            remoteNewsAdapter.setOnItemClickListener { news ->
                 onItemClickListener?.let {
                     it(news)
                 }
@@ -65,8 +71,11 @@ class IndiaNewsFragment() : Fragment() {
         }
     }
 
+    fun scrollRecycler() {
+        binding.rvNationalNews.scrollToPosition(0)
+    }
+
     fun getNews() {
-        showProgressBar()
         viewLifecycleOwner.lifecycleScope.launch {
 //            viewModel.getNationalNewsHeadlines(
 //                topic = "national",
@@ -75,22 +84,27 @@ class IndiaNewsFragment() : Fragment() {
 //            ).collect {
 //                remoteNewsAdapter.submitData(it)
 //            }
-
             viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer {
-                when(it) {
+                when (it) {
                     is Result.Success -> {
-                        it.data?.let {it2->
+                        hideProgressBar()
+                        it.data?.let { it2 ->
                             lifecycleScope.launch {
                                 remoteNewsAdapter.submitData(it2)
                             }
                         }
                     }
 
-                    else -> {}
+                    is Result.NotInitialized -> {
+                        showProgressBar()
+                    }
+
+                    else -> {
+                        showProgressBar()
+                    }
                 }
             })
         }
-        hideProgressBar()
     }
 
     private fun showProgressBar() {
@@ -110,5 +124,4 @@ class IndiaNewsFragment() : Fragment() {
             onItemClickListener = listener
         }
     }
-
 }

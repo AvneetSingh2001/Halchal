@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.LatestNews
+import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
+import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.ItemLatestNewsBinding
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
@@ -22,11 +24,20 @@ class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {
                 val data = differ.currentList[position]
                 data?.let {
                     tvHeadline.text = data.newsHeadline
-                    tvTime.text = data.time
-                    tvType.text = data.type
+
+
+                    val loc = data.location?.split(", ")?.toTypedArray()
+                    loc?.let {
+                        if (loc.isNotEmpty()) {
+                            tvType.text = loc[0]
+                        }
+                    }
+
+                    tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
+
 
                     Glide.with(ivNews.context)
-                        .load(data.imgUrl)
+                        .load(data.coverUrl)
                         .error(R.drawable.halchal_logo_2)
                         .into(ivNews)
 
@@ -57,12 +68,12 @@ class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {
     }
 
 
-    private var callback = object : DiffUtil.ItemCallback<LatestNews>() {
-        override fun areItemsTheSame(oldItem: LatestNews, newItem: LatestNews): Boolean {
+    private var callback = object : DiffUtil.ItemCallback<News>() {
+        override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: LatestNews, newItem: LatestNews): Boolean {
+        override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
             return oldItem == newItem
         }
     }
@@ -70,9 +81,9 @@ class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {
 
     val differ = AsyncListDiffer(this, callback)
 
-    private var onItemClickListener: ((LatestNews) -> Unit)? = null
+    private var onItemClickListener: ((News) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (LatestNews) -> Unit) {
+    fun setOnItemClickListener(listener: (News) -> Unit) {
         onItemClickListener = listener
     }
 }

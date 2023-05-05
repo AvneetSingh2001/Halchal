@@ -66,6 +66,10 @@ class LocalNewsFragment : Fragment() {
                 refreshLayout.isRefreshing = false
                 viewModel.updateLocalNews()
             }
+
+            tv0.setOnClickListener {
+                rvNationalNews.smoothScrollToPosition(0)
+            }
         }
 
         viewModel.sharedNews.observe(viewLifecycleOwner, Observer {

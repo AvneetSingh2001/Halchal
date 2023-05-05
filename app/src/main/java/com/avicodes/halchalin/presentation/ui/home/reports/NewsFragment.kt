@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -66,14 +67,26 @@ class NewsFragment(
 
             tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tab?.let {
+                    tab?.let { tab ->
                         vpNews.currentItem = tab.position
                     }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    tab?.position.let { pos ->
+                        if (pos == 0) {
+                            onNationalTabClickListener?.let {
+                                it(0)
+                            }
 
+                        } else {
+                            onInternationalTabClickListener?.let {
+                                it(0)
+                            }
+                        }
+                    }
+                }
             })
 
             addTabsVp()
@@ -100,17 +113,37 @@ class NewsFragment(
                     refreshLayout.setOnRefreshListener {
                         lifecycleScope.launch {
                             if (position == 0) {
+                                viewModel.nationalHeadlines.postValue(Result.NotInitialized)
+                                delay(200)
                                 viewModel.getNationalNewsHeadlines("national", "in", "hi")
                             } else {
-
+                                viewModel.worldHeadlines.postValue(Result.NotInitialized)
+                                delay(200)
+                                viewModel.getInternationalNewsHeadlines(
+                                    topic = "world",
+                                    country = "in",
+                                    lang = "hi"
+                                )
                             }
                         }
                         refreshLayout.isRefreshing = false
-
                     }
 
                 }
             })
+        }
+    }
+
+
+    companion object {
+        private var onNationalTabClickListener: ((Int) -> Unit)? = null
+        fun setOnNationalTabClickListener(listener: (Int) -> Unit) {
+            onNationalTabClickListener = listener
+        }
+
+        private var onInternationalTabClickListener: ((Int) -> Unit)? = null
+        fun setOnInternationalTabClickListener(listener: (Int) -> Unit) {
+            onInternationalTabClickListener = listener
         }
     }
 }

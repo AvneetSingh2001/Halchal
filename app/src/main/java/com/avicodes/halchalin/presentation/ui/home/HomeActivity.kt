@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
+import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,14 +46,16 @@ class HomeActivity : AppCompatActivity() {
         getCurUser()
         fetchDataAds()
         fetchLocalNewss()
+        fetchRemoteNationalNews()
         fetchRemoteNews()
         fetchCategories()
         observeFeatured()
 
 
-        val navController  = findNavController(R.id.fragmentContainerView)
+        val navController = findNavController(R.id.fragmentContainerView)
         navController.setGraph(
-            R.navigation.home_nav_graph)
+            R.navigation.home_nav_graph
+        )
         binding.bottomNavigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -68,12 +71,22 @@ class HomeActivity : AppCompatActivity() {
         observeTabs()
     }
 
-    private fun fetchRemoteNews() {
+    private fun fetchRemoteNationalNews() {
         lifecycleScope.launch {
             viewModel.getNationalNewsHeadlines(
                 "national",
                 "in",
                 "hi"
+            )
+        }
+    }
+
+    private fun fetchRemoteNews() {
+        lifecycleScope.launch {
+            viewModel.getInternationalNewsHeadlines(
+                topic = "world",
+                country = "in",
+                lang = "hi"
             )
         }
     }
@@ -88,16 +101,17 @@ class HomeActivity : AppCompatActivity() {
 
     private fun observeTabs() {
         viewModel.linkNews.observe(this, Observer { response ->
-            when(response) {
+            when (response) {
                 is Result.Success -> {
                     binding.bottomNavigation.selectedItemId = R.id.localNewsFragment
                 }
+
                 else -> {}
             }
         })
     }
 
-    private fun fetchDataAds() = lifecycleScope.launch(Dispatchers.IO){
+    private fun fetchDataAds() = lifecycleScope.launch(Dispatchers.IO) {
         viewModel.getFeaturedAds()
     }
 

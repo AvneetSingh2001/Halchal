@@ -15,8 +15,11 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class GlobeNewsFragment : Fragment() {
@@ -41,23 +44,36 @@ class GlobeNewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as HomeActivity).viewModel
-
+        showProgressBar()
         setUpNationalRecyclerView()
         getNews()
+
+        NewsFragment.setOnInternationalTabClickListener {
+            binding.rvNationalNews.smoothScrollToPosition(it)
+        }
     }
 
     fun getNews() {
-        showProgressBar()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getInternationalNewsHeadlines(
-                topic = "world",
-                country = "in",
-                lang = "hi"
-            ).collect {
-                remoteNewsAdapter.submitData(it)
-            }
+        lifecycleScope.launch {
+            viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    is Result.Success -> {
+                        hideProgressBar()
+                        lifecycleScope.launch {
+                            it.data?.let { data ->
+                                remoteNewsAdapter.submitData(data)
+                            }
+                        }
+                    }
+                    is Result.NotInitialized -> {
+                        showProgressBar()
+                    }
+                    else -> {
+                        showProgressBar()
+                    }
+                }
+            })
         }
-        hideProgressBar()
     }
 
     fun setUpNationalRecyclerView() {
@@ -86,12 +102,12 @@ class GlobeNewsFragment : Fragment() {
     }
 
 
-
     companion object {
         private var onItemClickListener: ((NewsRemote) -> Unit)? = null
         fun setOnItemClickListener(listener: (NewsRemote) -> Unit) {
             onItemClickListener = listener
         }
     }
+
 
 }

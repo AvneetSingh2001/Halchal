@@ -12,7 +12,7 @@ import com.avicodes.halchalin.databinding.FragmentUserProfileBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class UserProfileFragment : DialogFragment() {
+class UserProfileFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
