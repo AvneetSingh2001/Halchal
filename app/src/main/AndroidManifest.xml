@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".presentation.HalchalApp"
@@ -19,29 +19,33 @@
         android:theme="@style/Theme.Halchalin"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.home.HomeActivity"
-            android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
+            android:name=".presentation.NoConnectionActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".presentation.ui.home.HomeActivity"
+            android:exported="false"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:exported="true">
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="https"
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
                     android:host="halchalin.com"
-                    />
+                    android:scheme="https" />
             </intent-filter>
 
             <meta-data
@@ -50,8 +54,7 @@
         </activity>
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Theme.Halchalin.cropper"
-            />
+            android:theme="@style/Theme.Halchalin.cropper" />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +42,7 @@ class SettingsFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
+        val kkhUrl = "https://www.kichhakihalchal.com/contact"
         binding.run {
             btnSignOut.setOnClickListener {
                 (activity as HomeActivity).logout()
@@ -49,6 +52,18 @@ class SettingsFragment : Fragment() {
                 navigateToEditScreen()
             }
 
+
+            btnReport.setOnClickListener {
+                val openURL = Intent(Intent.ACTION_VIEW)
+                openURL.data = Uri.parse(kkhUrl)
+                startActivity(openURL)
+            }
+
+            btnJoinUs.setOnClickListener {
+                val openURL = Intent(Intent.ACTION_VIEW)
+                openURL.data = Uri.parse(kkhUrl)
+                startActivity(openURL)
+            }
 
             viewModel.curUser.observe(requireActivity(), Observer { user ->
                 user?.let {

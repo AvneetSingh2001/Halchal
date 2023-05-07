@@ -21,7 +21,7 @@
 
     <item
         android:id="@+id/adsFragment"
-        android:title="Ads"
+        android:title="Hall"
         android:icon="@drawable/category"/>
 
     <item

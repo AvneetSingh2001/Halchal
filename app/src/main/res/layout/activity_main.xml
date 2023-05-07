@@ -14,4 +14,11 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/auth_nav_graph"/>
 
+    <include
+        android:id="@+id/lConnection"
+        layout="@layout/layout_no_internet"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </FrameLayout>

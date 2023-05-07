@@ -73,20 +73,7 @@ class NewsFragment(
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                    tab?.position.let { pos ->
-                        if (pos == 0) {
-                            onNationalTabClickListener?.let {
-                                it(0)
-                            }
-
-                        } else {
-                            onInternationalTabClickListener?.let {
-                                it(0)
-                            }
-                        }
-                    }
-                }
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
 
             addTabsVp()

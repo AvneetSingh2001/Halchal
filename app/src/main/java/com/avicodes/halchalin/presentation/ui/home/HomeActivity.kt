@@ -6,18 +6,16 @@ import com.avicodes.halchalin.data.utils.Result
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
-import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
+import com.avicodes.halchalin.presentation.CheckNetworkConnection
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,14 +32,16 @@ class HomeActivity : AppCompatActivity() {
 
     lateinit var viewModel: HomeActivityViewModel
 
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         viewModel = ViewModelProvider(this, viewModelFactory)[HomeActivityViewModel::class.java]
 
+        callNetworkConnection()
 
         getCurUser()
         fetchDataAds()
@@ -69,6 +69,23 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         observeTabs()
+    }
+
+    private fun callNetworkConnection() {
+        checkNetworkConnection = CheckNetworkConnection(application)
+        checkNetworkConnection.observe(this) { isConnected ->
+            if (!isConnected) {
+                binding.lConnection.root.visibility = View.VISIBLE
+                Glide.with(applicationContext)
+                    .asGif()
+                    .load(R.drawable.connection)
+                    .into(
+                        binding.lConnection.ivConnection
+                    )
+            } else {
+                binding.lConnection.root.visibility = View.GONE
+            }
+        }
     }
 
     private fun fetchRemoteNationalNews() {

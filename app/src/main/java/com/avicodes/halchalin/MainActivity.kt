@@ -1,30 +1,23 @@
 package com.avicodes.halchalin
 
-import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.Observer
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.avicodes.halchalin.databinding.ActivityMainBinding
-import com.avicodes.halchalin.presentation.HalchalApp
+import com.avicodes.halchalin.presentation.CheckNetworkConnection
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
-import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
+import com.bumptech.glide.Glide
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -41,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private val binding get() = _binding!!
     private lateinit var navController: NavController
 
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
+
     @Inject
     lateinit var viewModelFactory: MainActivityViewModelFactory
 
@@ -51,12 +46,31 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        callNetworkConnection()
+
         viewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
     }
 
+
+    private fun callNetworkConnection() {
+        checkNetworkConnection = CheckNetworkConnection(application)
+        checkNetworkConnection.observe(this) { isConnected ->
+            if (!isConnected) {
+                binding.lConnection.root.visibility = View.VISIBLE
+                Glide.with(applicationContext)
+                    .asGif()
+                    .load(R.drawable.connection)
+                    .into(
+                        binding.lConnection.ivConnection
+                    )
+            } else {
+                binding.lConnection.root.visibility = View.GONE
+            }
+        }
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
