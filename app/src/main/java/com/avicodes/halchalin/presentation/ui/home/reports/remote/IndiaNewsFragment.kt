@@ -1,24 +1,25 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.AbsListView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.data.models.NewsRemote
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentIndiaNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class IndiaNewsFragment() : Fragment() {
 
@@ -46,13 +47,73 @@ class IndiaNewsFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as HomeActivity).viewModel
-        showProgressBar()
         setUpNationalRecyclerView()
 
         getNews()
 
         NewsFragment.setOnNationalTabClickListener {
             binding.rvNationalNews.smoothScrollToPosition(0)
+        }
+
+        binding.apply {
+
+            rvNationalNews.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (dy < 0) {
+                        // Scrolling up
+                        if (!btnTop.isVisible)
+                            btnTop.visibility = View.VISIBLE
+                    } else {
+                        // Scrolling down
+                        if (btnTop.isVisible)
+                            btnTop.visibility = View.GONE
+                    }
+                }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+
+                        AbsListView.OnScrollListener.SCROLL_STATE_FLING -> {
+                            // Do something
+                            if (btnTop.isVisible) {
+                                lifecycleScope.launch {
+                                    delay(100)
+                                    btnTop.visibility = View.GONE
+                                }
+                            }
+
+                        }
+
+                        AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> {
+                            // Do something
+                            if (btnTop.isVisible) {
+                                lifecycleScope.launch {
+                                    delay(100)
+                                    btnTop.visibility = View.GONE
+                                }
+                            }
+                        }
+
+                        else -> {
+                            // Do something
+                            if (btnTop.isVisible) {
+                                lifecycleScope.launch {
+                                    delay(100)
+                                    btnTop.visibility = View.GONE
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+
+
+            btnTop.setOnClickListener {
+                rvNationalNews.scrollToPosition(0)
+            }
+
         }
 
     }
@@ -77,17 +138,14 @@ class IndiaNewsFragment() : Fragment() {
 
     fun getNews() {
         viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.getNationalNewsHeadlines(
-//                topic = "national",
-//                country = "in",
-//                lang = "hi"
-//            ).collect {
-//                remoteNewsAdapter.submitData(it)
-//            }
+
             viewModel.nationalHeadlines.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     is Result.Success -> {
-                        hideProgressBar()
+                        lifecycleScope.launch {
+                            delay(2000)
+                            hideProgressBar()
+                        }
                         it.data?.let { it2 ->
                             lifecycleScope.launch {
                                 remoteNewsAdapter.submitData(it2)
@@ -117,7 +175,6 @@ class IndiaNewsFragment() : Fragment() {
         binding.progCons.visibility = View.GONE
         binding.mainCons.visibility = View.VISIBLE
     }
-
     companion object {
         private var onItemClickListener: ((NewsRemote) -> Unit)? = null
         fun setOnItemClickListener(listener: (NewsRemote) -> Unit) {

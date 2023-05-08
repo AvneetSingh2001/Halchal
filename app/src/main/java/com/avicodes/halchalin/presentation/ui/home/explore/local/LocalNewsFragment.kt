@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
@@ -19,6 +23,8 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import com.avicodes.halchalin.presentation.ui.home.settings.EditFragment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LocalNewsFragment : Fragment() {
 
@@ -69,6 +75,69 @@ class LocalNewsFragment : Fragment() {
 
             tv0.setOnClickListener {
                 rvNationalNews.smoothScrollToPosition(0)
+            }
+
+
+
+            binding.apply {
+
+                lifecycleScope.launch {
+                    rvNationalNews.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            if (dy < 0) {
+                                // Scrolling up
+                                if (!btnTop.isVisible)
+                                    btnTop.visibility = View.VISIBLE
+                            } else {
+                                // Scrolling down
+                                if (btnTop.isVisible)
+                                    btnTop.visibility = View.GONE
+                            }
+                        }
+
+                        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                            super.onScrollStateChanged(recyclerView, newState)
+                            when (newState) {
+
+                                AbsListView.OnScrollListener.SCROLL_STATE_FLING -> {
+                                    // Do something
+                                    if (btnTop.isVisible) {
+                                        lifecycleScope.launch {
+                                            delay(100)
+                                            btnTop.visibility = View.GONE
+                                        }
+                                    }
+
+                                }
+
+                                AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> {
+                                    // Do something
+                                    if (btnTop.isVisible) {
+                                        lifecycleScope.launch {
+                                            delay(100)
+                                            btnTop.visibility = View.GONE
+                                        }
+                                    }
+                                }
+
+                                else -> {
+                                    // Do something
+                                    if (btnTop.isVisible) {
+                                        lifecycleScope.launch {
+                                            delay(100)
+                                            btnTop.visibility = View.GONE
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+
+                btnTop.setOnClickListener {
+                    rvNationalNews.scrollToPosition(0)
+                }
             }
         }
 

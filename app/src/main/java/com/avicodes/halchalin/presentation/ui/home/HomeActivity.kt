@@ -69,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         observeTabs()
+
     }
 
     private fun callNetworkConnection() {

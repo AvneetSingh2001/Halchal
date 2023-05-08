@@ -5,11 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
@@ -51,23 +54,91 @@ class GlobeNewsFragment : Fragment() {
         NewsFragment.setOnInternationalTabClickListener {
             binding.rvNationalNews.smoothScrollToPosition(it)
         }
+
+
+        binding.apply {
+
+            lifecycleScope.launch {
+                rvNationalNews.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (dy < 0) {
+                            // Scrolling up
+                            if (!btnTop.isVisible)
+                                btnTop.visibility = View.VISIBLE
+                        } else {
+                            // Scrolling down
+                            if (btnTop.isVisible)
+                                btnTop.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        when (newState) {
+
+                            AbsListView.OnScrollListener.SCROLL_STATE_FLING -> {
+                                // Do something
+                                if (btnTop.isVisible) {
+                                    lifecycleScope.launch {
+                                        delay(100)
+                                        btnTop.visibility = View.GONE
+                                    }
+                                }
+
+                            }
+
+                            AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> {
+                                // Do something
+                                if (btnTop.isVisible) {
+                                    lifecycleScope.launch {
+                                        delay(100)
+                                        btnTop.visibility = View.GONE
+                                    }
+                                }
+                            }
+
+                            else -> {
+                                // Do something
+                                if (btnTop.isVisible) {
+                                    lifecycleScope.launch {
+                                        delay(100)
+                                        btnTop.visibility = View.GONE
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+
+            btnTop.setOnClickListener {
+                rvNationalNews.scrollToPosition(0)
+            }
+        }
     }
 
     fun getNews() {
         lifecycleScope.launch {
             viewModel.worldHeadlines.observe(viewLifecycleOwner, Observer {
-                when(it) {
+                when (it) {
                     is Result.Success -> {
-                        hideProgressBar()
                         lifecycleScope.launch {
-                            it.data?.let { data ->
-                                remoteNewsAdapter.submitData(data)
+                            delay(2000)
+                            hideProgressBar()
+                        }
+                        it.data?.let { it2 ->
+                            lifecycleScope.launch {
+                                remoteNewsAdapter.submitData(it2)
                             }
                         }
+
                     }
+
                     is Result.NotInitialized -> {
                         showProgressBar()
                     }
+
                     else -> {
                         showProgressBar()
                     }
@@ -82,7 +153,7 @@ class GlobeNewsFragment : Fragment() {
             loaderStateAdapter = LoaderStateAdapter { remoteNewsAdapter.retry() }
             rvNationalNews.adapter = remoteNewsAdapter.withLoadStateFooter(loaderStateAdapter)
             rvNationalNews.layoutManager = LinearLayoutManager(activity)
-            remoteNewsAdapter.setOnItemClickListener {news ->
+            remoteNewsAdapter.setOnItemClickListener { news ->
                 onItemClickListener?.let {
                     it(news)
                 }
