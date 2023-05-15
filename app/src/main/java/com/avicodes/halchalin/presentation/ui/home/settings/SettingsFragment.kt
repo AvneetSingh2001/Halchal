@@ -77,6 +77,9 @@ class SettingsFragment : Fragment() {
                 }
             })
 
+            Glide.with(ivFooter.context)
+                .load(R.drawable.tagline)
+                .into(ivFooter)
         }
     }
 

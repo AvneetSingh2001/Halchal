@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.reports
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
@@ -17,6 +19,8 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
+import com.avicodes.halchalin.presentation.ui.home.home.CategoriesAdapter
+import com.avicodes.halchalin.presentation.ui.home.home.HomeFragmentDirections
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
 import kotlinx.coroutines.delay
@@ -33,6 +37,7 @@ class NewsFragment(
     private lateinit var adapter: NewsAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
+    private lateinit var categoriesAdapter: CategoriesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,7 +57,7 @@ class NewsFragment(
 
         adapter = NewsAdapter(childFragmentManager, lifecycle)
         viewModel = (activity as HomeActivity).viewModel
-
+        viewModel.getCategories()
         binding.run {
 
             tlNews.addTab(
@@ -85,6 +90,36 @@ class NewsFragment(
 
             IndiaNewsFragment.setOnItemClickListener {
                 val action = NewsFragmentDirections.actionNewsFragmentToDetailedRemoteFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+
+            categoriesAdapter = CategoriesAdapter()
+            rvCategories.adapter = categoriesAdapter
+            rvCategories.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            viewModel.categories.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Result.Success -> {
+                        it.data?.let { categorieslist ->
+                            if (categorieslist.isNotEmpty()) {
+                                Log.e("Categories", categorieslist.toString())
+                                categoriesAdapter.differ.submitList(categorieslist)
+                            }
+                        }
+                    }
+
+                    is Result.Error -> {
+                        Log.e("Categories", "Error")
+                    }
+
+                    else -> {
+                    }
+                }
+            })
+
+            categoriesAdapter.setOnItemClickListener {
+                val action = NewsFragmentDirections.actionNewsFragmentToCategoryNewsFragment(it)
                 requireView().findNavController().navigate(action)
             }
         }

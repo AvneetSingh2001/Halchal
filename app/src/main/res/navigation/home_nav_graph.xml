@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/localNewsFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_newsFragment_to_detailedRemoteFragment"
             app:destination="@id/detailedRemoteFragment" />
+        <action
+            android:id="@+id/action_newsFragment_to_categoryNewsFragment"
+            app:destination="@id/categoryNewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/adsFragment"

@@ -119,10 +119,10 @@ class HomeFragment : Fragment() {
                 val action = HomeFragmentDirections.actionHomeFragmentToCategoryNewsFragment(it)
                 requireView().findNavController().navigate(action)
             }
-
-            Glide.with(ivFooter.context)
-                .load(R.drawable.tagline)
-                .into(ivFooter)
+//
+//            Glide.with(ivFooter.context)
+//                .load(R.drawable.tagline)
+//                .into(ivFooter)
 
             latestNewsAdapter.setOnItemClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToLocalNewsDescFragment(it)

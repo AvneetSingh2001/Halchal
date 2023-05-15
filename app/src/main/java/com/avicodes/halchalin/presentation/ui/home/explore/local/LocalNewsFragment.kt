@@ -23,6 +23,7 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import com.avicodes.halchalin.presentation.ui.home.settings.EditFragment
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,15 @@ class LocalNewsFragment : Fragment() {
                 viewModel.updateLocalNews()
             }
 
-            tv0.setOnClickListener {
+
+
+            viewModel.curUser.observe(requireActivity(), Observer {
+                it?.let {
+                    tvCity.text = it.location
+                }
+            })
+
+            infoCons.setOnClickListener {
                 rvNationalNews.smoothScrollToPosition(0)
             }
 

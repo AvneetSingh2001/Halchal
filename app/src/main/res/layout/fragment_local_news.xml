@@ -36,32 +36,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv0"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Local News"
-            android:textColor="#000000"
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="20dp"
-            android:textAlignment="center"
-            app:layout_constraintRight_toRightOf="parent"
+            android:padding="10dp"
+            android:id="@+id/infoCons"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="20dp"
-            />
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/icLocation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/location"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toRightOf="@id/icLocation"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+
+                <TextView
+                    android:id="@+id/tvCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text=""
+                    android:textColor="@color/black"/>
+                />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvNationalNews"
-            android:paddingTop="2dp"
+            android:paddingTop="1dp"
             android:paddingBottom="50dp"
-            app:layout_constraintTop_toBottomOf="@id/tv0"
+            app:layout_constraintTop_toBottomOf="@id/infoCons"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
             tools:itemCount="4"
+            android:layout_marginTop="2dp"
             tools:listitem="@layout/item_local_news" />
 
         <com.google.android.material.card.MaterialCardView
