@@ -21,6 +21,7 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import com.avicodes.halchalin.presentation.ui.home.settings.EditFragment
 import com.bumptech.glide.Glide
@@ -175,6 +176,7 @@ class LocalNewsFragment : Fragment() {
         })
 
     }
+
 
     private fun navigateToDetailedNews(news: News) {
         val action = LocalNewsFragmentDirections.actionLocalNewsFragmentToLocalNewsDescFragment(news)

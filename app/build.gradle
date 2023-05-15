@@ -140,5 +140,8 @@ dependencies {
     //pagination
     implementation "androidx.paging:paging-runtime:$paging_version"
 
+    //bottom bar
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
+
 
 }

@@ -2,7 +2,7 @@ package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.data.repository.*
 import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSource
-import com.avicodes.halchalin.data.repository.ads.featured.AdsRepositoryImpl
+import com.avicodes.halchalin.data.repository.ads.AdsRepositoryImpl
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSource
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthRepositoryImpl
 import com.avicodes.halchalin.data.repository.news.local.LocalNewsRepositoryImpl

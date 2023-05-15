@@ -10,11 +10,13 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentDetailedRemoteBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.explore.AdsAdapter
 import com.bumptech.glide.Glide
 
 
@@ -24,6 +26,9 @@ class DetailedRemoteFragment : Fragment() {
 
     val args: DetailedRemoteFragmentArgs by navArgs()
     private lateinit var viewModel: HomeActivityViewModel
+
+    private lateinit var adAdapter: AdsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +56,10 @@ class DetailedRemoteFragment : Fragment() {
                 tvDesc.text = news.title
             }
 
+            adAdapter = AdsAdapter()
+            binding.rvAds.adapter = adAdapter
+            binding.rvAds.layoutManager = LinearLayoutManager(activity)
+            getNewsAds()
 
             Glide.with(ivNews.context)
                 .load(news.image_url)
@@ -125,6 +134,28 @@ class DetailedRemoteFragment : Fragment() {
     private fun hideProgressBar() {
         binding.progCons.visibility = View.GONE
         binding.mainCons.visibility = View.VISIBLE
+    }
+
+
+    private fun getNewsAds() {
+
+        binding.apply {
+            viewModel.adsData.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Result.Success -> {
+                        it.data?.let { list ->
+                            if(list.isNotEmpty()) {
+                                cvAds.visibility = View.VISIBLE
+                                adAdapter.differ.submitList(list)
+                            }
+                        }
+                    }
+                    else -> {
+                        cvAds.visibility = View.INVISIBLE
+                    }
+                }
+            })
+        }
     }
 
 }

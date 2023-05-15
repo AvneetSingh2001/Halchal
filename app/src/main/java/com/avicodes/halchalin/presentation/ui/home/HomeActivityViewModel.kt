@@ -42,7 +42,7 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
-    val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData()
+    val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData(Result.NotInitialized)
     val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
@@ -55,6 +55,7 @@ class HomeActivityViewModel(
     val categories: MutableLiveData<Result<List<Categories>>> =
         MutableLiveData(Result.NotInitialized)
 
+    val adsData: MutableLiveData<Result<List<ads>>> = MutableLiveData(Result.NotInitialized)
 
     suspend fun getNationalNewsHeadlines(
         topic: String,
@@ -153,6 +154,12 @@ class HomeActivityViewModel(
     fun getFeaturedAds() = viewModelScope.launch {
         adsRepository.getAllFeaturedAds().collectLatest {
             featuredAds.postValue(it)
+        }
+    }
+
+    fun getNormaldAds() = viewModelScope.launch {
+        adsRepository.getAllNormalAds().collectLatest {
+            adsData.postValue(it)
         }
     }
 

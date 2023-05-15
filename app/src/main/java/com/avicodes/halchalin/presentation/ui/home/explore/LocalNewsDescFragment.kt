@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
@@ -20,6 +22,7 @@ import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentLocalNewsDescBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment
 import com.bumptech.glide.util.Util
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.MediaSource
@@ -47,6 +50,7 @@ class LocalNewsDescFragment : Fragment() {
 
 
     private lateinit var viewModel: HomeActivityViewModel
+    private lateinit var adAdapter: AdsAdapter
 
 
     override fun onCreateView(
@@ -73,6 +77,10 @@ class LocalNewsDescFragment : Fragment() {
 
             tvDesc.text = data.newsDesc
 
+            adAdapter = AdsAdapter()
+            binding.rvAds.adapter = adAdapter
+            binding.rvAds.layoutManager = LinearLayoutManager(activity)
+
             data.videoUrl?.let {
                 data.resUrls?.let {res ->
                     setUpBottomImages(res)
@@ -81,6 +89,8 @@ class LocalNewsDescFragment : Fragment() {
             } ?: data.resUrls?.let {
                 setUpHeaderImages(it)
             }
+
+            getNewsAds()
 
             tvHeadline.text = data.newsHeadline
 
@@ -92,10 +102,6 @@ class LocalNewsDescFragment : Fragment() {
                 viewModel.createDeepLink(data)
             }
 
-            btnSwipeNews.setOnClickListener {
-                val action = LocalNewsDescFragmentDirections.actionLocalNewsDescFragmentToNewsVpFragment()
-                requireView().findNavController().navigate(action)
-            }
 
             btnBack.setOnClickListener {
                 requireView().findNavController().popBackStack()
@@ -105,6 +111,27 @@ class LocalNewsDescFragment : Fragment() {
 
         }
 
+    }
+
+    private fun getNewsAds() {
+
+        binding.apply {
+            viewModel.adsData.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Result.Success -> {
+                        it.data?.let { list ->
+                            if(list.isNotEmpty()) {
+                                cvAds.visibility = View.VISIBLE
+                                adAdapter.differ.submitList(list)
+                            }
+                        }
+                    }
+                    else -> {
+                        cvAds.visibility = View.INVISIBLE
+                    }
+                }
+            })
+        }
     }
 
     private fun setUpVideoView(videoUrl: String) {

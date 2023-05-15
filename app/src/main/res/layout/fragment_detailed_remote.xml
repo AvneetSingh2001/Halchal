@@ -160,10 +160,81 @@
         android:fontFamily="@font/roboto_regular"
         android:textColor="#000000"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="80dp"
         android:text="Lorem ipsum dolor sit amet consectetur. Sit nulla et nibh a orci pharetra enim metus commodo. Rhoncus vitae id amet mi. Elit nulla proin odio ultrices. Velit accumsan lacus pellentesque in. Vitae justo sapien egestas tristique iaculis montes nunc sapien. Lacus id neque eget commodo morbi at nunc eget egestas.
 Non mauris nunc mattis aliquam et morbi in accumsan. Mauris congue ut interdum sit proin aliquet ut id ipsum. Eget ornare nisl aenean malesuada nullam vulputate. Viverra blandit nulla urna in sed. Pretium amet eget scelerisque pretium. Tempus in libero tempor semper nunc quam. Vitae elementum fermentum eu eu vel tristique. Nisl amet dui vestibulum nam faucibus diam consequat euismod. Sit lacus faucibus sed netus scelerisque aliquet. Feugiat nibh semper enim volutpat felis aliquam quam ante. Placerat ultrices neque at id arcu. Sollicitudin dolor ut imperdiet nisi a scelerisque donec nam tortor."
         app:layout_constraintTop_toBottomOf="@id/cvUtils" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvDesc"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="20dp"
+            android:id="@+id/cvAds"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="40dp"
+            >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                app:layout_constraintTop_toTopOf="@id/AdsCons"
+                app:layout_constraintBottom_toBottomOf="@id/AdsCons"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/AdsCons"
+                android:background="#d9d9d9"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintTop_toTopOf="@id/AdsCons"
+                app:layout_constraintBottom_toBottomOf="@id/AdsCons"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/AdsCons"
+                android:background="#d9d9d9"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@+id/AdsCons"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="80dp"
+                android:padding="10dp"
+                android:background="@drawable/outline"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Advertisements"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rvAds"
+                app:layout_constraintTop_toBottomOf="@id/AdsCons"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView></androidx.constraintlayout.widget.ConstraintLayout>
