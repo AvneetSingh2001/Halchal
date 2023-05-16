@@ -62,7 +62,8 @@ class FactoryModule {
         localNewsRepository: LocalNewsRepository,
         updateUserPicUseCase: updateUserPicUseCase,
         userRespository: UserRespository,
-        cityRepository: CityRepository
+        cityRepository: CityRepository,
+        articleRepository: ArticleRepository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
@@ -71,7 +72,8 @@ class FactoryModule {
             adsRepository = adsRepository,
             updateUserPicUseCase = updateUserPicUseCase,
             userRespository = userRespository,
-            cityRepository = cityRepository
+            cityRepository = cityRepository,
+            articleRepository = articleRepository
         )
     }
 

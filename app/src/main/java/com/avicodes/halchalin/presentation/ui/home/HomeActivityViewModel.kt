@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.home
 
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -32,7 +33,8 @@ class HomeActivityViewModel(
     private val adsRepository: AdsRepository,
     private val updateUserPicUseCase: updateUserPicUseCase,
     private val userRespository: UserRespository,
-    private val cityRepository: CityRepository
+    private val cityRepository: CityRepository,
+    private val articleRepository: ArticleRepository
 ) : ViewModel() {
 
     val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
@@ -42,7 +44,8 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
-    val featuredAds: MutableLiveData<Result<List<Featured>>> = MutableLiveData(Result.NotInitialized)
+    val featuredAds: MutableLiveData<Result<List<Featured>>> =
+        MutableLiveData(Result.NotInitialized)
     val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
@@ -56,6 +59,20 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     val adsData: MutableLiveData<Result<List<ads>>> = MutableLiveData(Result.NotInitialized)
+
+
+    val articleUploaded: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
+
+
+    suspend fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri) {
+        viewModelScope.launch(Dispatchers.IO) {
+            articleRepository.uploadArticle(
+                title, desc, tag, imgUri
+            ).collectLatest {
+                articleUploaded.postValue(it)
+            }
+        }
+    }
 
     suspend fun getNationalNewsHeadlines(
         topic: String,

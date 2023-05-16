@@ -1,10 +1,13 @@
 package com.avicodes.halchalin.presentation.di
 
+import android.net.Uri
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.API.NewsApiService
 import com.avicodes.halchalin.data.prefs.UserPrefs
 import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSouceImpl
 import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSource
+import com.avicodes.halchalin.data.repository.article.ArticleDataSource
+import com.avicodes.halchalin.data.repository.article.ArticleDataSourceImpl
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSource
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSourceImpl
 import com.avicodes.halchalin.data.repository.news.local.dataSource.CacheLocalNewsDataSource
@@ -33,13 +36,35 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providePhoneAuthDataSource(auth: FirebaseAuth, activity: MainActivity) : PhoneAuthDataSource {
+    fun providePhoneAuthDataSource(
+        auth: FirebaseAuth,
+        activity: MainActivity
+    ): PhoneAuthDataSource {
         return PhoneAuthDataSourceImpl(auth, activity)
     }
 
     @Provides
     @Singleton
-    fun provideUserDataSource(auth:FirebaseAuth, firestoreDb: FirebaseFirestore, storage: FirebaseStorage, userPrefs: UserPrefs) : UserDataSource {
+    fun provideArticleDataSource(
+        userPrefs: UserPrefs,
+        firestore: FirebaseFirestore,
+        storage: FirebaseStorage
+    ): ArticleDataSource {
+        return ArticleDataSourceImpl(
+            userPrefs = userPrefs,
+            firestore = firestore,
+            storage = storage
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDataSource(
+        auth: FirebaseAuth,
+        firestoreDb: FirebaseFirestore,
+        storage: FirebaseStorage,
+        userPrefs: UserPrefs
+    ): UserDataSource {
         return UserDataSourceImpl(
             auth, firestoreDb, storage, userPrefs
         )
@@ -47,7 +72,10 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideNewsDataSource(firestore: FirebaseFirestore, newsApiService: NewsApiService): RemoteNewsDataSource {
+    fun provideNewsDataSource(
+        firestore: FirebaseFirestore,
+        newsApiService: NewsApiService
+    ): RemoteNewsDataSource {
         return RemoteNewsDataSourceImpl(
             newsApiService,
             firestore
@@ -56,7 +84,11 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRemoteLocalNewsDataSource(auth: FirebaseAuth,firestoreDb: FirebaseFirestore, userPrefs: UserPrefs) : RemoteLocalNewsDataSource {
+    fun provideRemoteLocalNewsDataSource(
+        auth: FirebaseAuth,
+        firestoreDb: FirebaseFirestore,
+        userPrefs: UserPrefs
+    ): RemoteLocalNewsDataSource {
         return RemoteLocalNewsDataSourceImpl(
             auth, firestoreDb, userPrefs
         )

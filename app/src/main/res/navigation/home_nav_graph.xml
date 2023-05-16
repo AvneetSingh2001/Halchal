@@ -45,7 +45,11 @@
         android:id="@+id/adsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment"
         android:label="fragment_ads"
-        tools:layout="@layout/fragment_ads" />
+        tools:layout="@layout/fragment_ads" >
+        <action
+            android:id="@+id/action_adsFragment_to_writeArticleFragment"
+            app:destination="@id/writeArticleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.settings.SettingsFragment"
@@ -140,4 +144,9 @@
             android:id="@+id/action_categoryNewsFragment_to_detailedRemoteFragment"
             app:destination="@id/detailedRemoteFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/writeArticleFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.ads.WriteArticleFragment"
+        android:label="fragment_write_articel"
+        tools:layout="@layout/fragment_write_articel" />
 </navigation>
