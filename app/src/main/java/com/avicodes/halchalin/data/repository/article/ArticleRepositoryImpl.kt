@@ -12,4 +12,12 @@ class ArticleRepositoryImpl(
     override fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri): Flow<Result<String>> {
         return articleDataSource.uploadArticle(title, desc, tag, imgUri)
     }
+
+    override fun getAllArticles(): Flow<Result<List<Article>>> {
+        return articleDataSource.getAllArticles()
+    }
+
+    override fun getFeaturedArticles(): Flow<Result<List<Article>>> {
+        return articleDataSource.getFeaturedArticles()
+    }
 }

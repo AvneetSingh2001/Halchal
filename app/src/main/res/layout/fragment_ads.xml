@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.ui.home.ads.AdsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +23,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="20dp"
             app:cardCornerRadius="20dp"
-            app:layout_constraintTop_toBottomOf="@id/btnQues"
+            app:layout_constraintTop_toBottomOf="@id/cvSocial"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             >
@@ -59,196 +63,155 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvSocial"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:outlineSpotShadowColor="@color/black"
-        app:cardBackgroundColor="#F6F3F3"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv0">
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvSocial"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/circle_shape"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/ivUser"
-                android:layout_margin="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                />
-
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Avneet Singh"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ivUser"
-                app:layout_constraintBottom_toBottomOf="@id/ivUser"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginLeft="12dp"
-                app:layout_constraintStart_toEndOf="@id/ivUser"
-                />
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:outlineSpotShadowColor="@color/black"
+            app:cardBackgroundColor="#F6F3F3"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintTop_toBottomOf="@id/tv0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:padding="4dp"
-                android:background="@drawable/red_light"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/like"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/circle_shape"
                     app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/ivUser"
+                    android:layout_margin="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:src="@drawable/heart"
                     />
 
                 <TextView
+                    android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@id/like"
-                    app:layout_constraintBottom_toBottomOf="@id/like"
-                    app:layout_constraintRight_toRightOf="parent"
-                    android:text="12.3K"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@color/black"
-                    android:layout_marginLeft="5dp"
+                    android:ellipsize="end"
                     android:fontFamily="@font/roboto_bold"
-                    app:layout_constraintLeft_toRightOf="@id/like"
-                    android:id="@+id/tvLike"/>
+                    android:text="Avneet Singh"
+                    app:layout_constraintRight_toLeftOf="@id/cvDate"
+                    app:layout_constraintTop_toTopOf="@id/ivUser"
+                    app:layout_constraintBottom_toBottomOf="@id/ivUser"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="12dp"
+                    app:layout_constraintStart_toEndOf="@id/ivUser"
+                    />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="4dp"
+                    android:id="@+id/cvDate"
+                    android:background="@drawable/red_light"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
+
+                    <ImageView
+                        android:id="@+id/like"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:src="@drawable/clock_blue"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/like"
+                        app:layout_constraintBottom_toBottomOf="@id/like"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:text="4 hrs ago"
+                        android:layout_marginRight="5dp"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="5dp"
+                        android:fontFamily="@font/roboto_bold"
+                        app:layout_constraintLeft_toRightOf="@id/like"
+                        android:id="@+id/tvLike"/>
 
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvThumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            app:cardCornerRadius="20dp"
-            android:layout_marginTop="10dp"
-            app:cardElevation="5dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivUser"
-            >
-
-            <ImageView
-                android:foreground="@drawable/red_gradient"
-                android:id="@+id/ivFeaturedArticle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/flower" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:padding="10dp"
-                android:layout_margin="20dp"
-                android:background="@drawable/btn_bg_light"
-                >
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cvThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    app:cardCornerRadius="20dp"
+                    android:layout_marginTop="10dp"
+                    app:cardElevation="5dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/bookmark"/>
+                    app:layout_constraintTop_toBottomOf="@id/ivUser"
+                    >
+
+                    <ImageView
+                        android:foreground="@drawable/red_gradient"
+                        android:id="@+id/ivFeaturedArticle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/flower" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:padding="10dp"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/btn_bg_light"
+                        >
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/bookmark"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        app:layout_constraintTop_toBottomOf="@id/cvThumbnail"
+                        android:textColor="@color/white"
+                        android:id="@+id/tvArticleTitle"
+                        android:layout_margin="10dp"
+                        android:lines="2"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/roboto_medium"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="20dp"
+                        android:text="Blog App designs, themes, templates and downloadable graphic elements"
+                        />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:layout_constraintTop_toBottomOf="@id/cvThumbnail"
-                android:textColor="@color/white"
-                android:id="@+id/tvArticleTitle"
-                android:layout_margin="10dp"
-                android:lines="2"
-                android:ellipsize="end"
-                android:fontFamily="@font/roboto_medium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="20dp"
-                android:text="Blog App designs, themes, templates and downloadable graphic elements"
-                />
-
         </com.google.android.material.card.MaterialCardView>
 
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        app:layout_constraintTop_toBottomOf="@id/cvSocial"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/btnQues"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/outline"
-        >
-
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/writing"
-            android:id="@+id/ivQues"
-            android:layout_marginHorizontal="12dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
-
-
-        <TextView
-            android:id="@+id/tvQues"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="Write Your Articles"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginLeft="12dp"
-            app:layout_constraintStart_toEndOf="@id/ivQues"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TextView
@@ -270,6 +233,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv2"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:paddingRight="20dp"
+            android:clipToPadding="false"
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/rvArticles"
             android:layout_marginTop="10dp"
@@ -281,6 +246,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvArticles"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:id="@+id/btnViewAll"
@@ -321,6 +287,29 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:id="@+id/btnQues"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/pen"
+        >
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

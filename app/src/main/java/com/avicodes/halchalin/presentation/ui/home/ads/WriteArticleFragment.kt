@@ -55,7 +55,6 @@ class WriteArticleFragment : Fragment() {
                 val check1 = tvTitle.editText?.text?.isNotEmpty() ?: false
                 val check2 = tvDesc.editText?.text?.isNotEmpty() ?: false
                 val check3 = tvTag.editText?.text?.isNotEmpty() ?: false
-
                 if (imageUri != null) {
                     if (check1 and check2) {
                         lifecycleScope.launch {
@@ -75,23 +74,16 @@ class WriteArticleFragment : Fragment() {
                     Toast.makeText(context, "Please upload image", Toast.LENGTH_LONG).show()
                 }
             }
-
-
             uploadImageButton.setOnClickListener {
                 val pickImg =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
                 changeImage.launch(pickImg)
             }
-
             observeUpload()
-
         }
-
-
     }
 
-    fun toggleButton()
-    {
+    fun toggleButton() {
         binding.uploadImageButton.text = if (notPicked) {
             "Add Image"
         } else {

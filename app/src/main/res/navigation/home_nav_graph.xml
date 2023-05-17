@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_adsFragment_to_writeArticleFragment"
             app:destination="@id/writeArticleFragment" />
+        <action
+            android:id="@+id/action_adsFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -149,4 +152,13 @@
         android:name="com.avicodes.halchalin.presentation.ui.home.ads.WriteArticleFragment"
         android:label="fragment_write_articel"
         tools:layout="@layout/fragment_write_articel" />
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.ads.ArticleDetailFragment"
+        android:label="fragment_article_detail"
+        tools:layout="@layout/fragment_article_detail" >
+        <argument
+            android:name="article"
+            app:argType="com.avicodes.halchalin.data.models.ArticleProcessed" />
+    </fragment>
 </navigation>

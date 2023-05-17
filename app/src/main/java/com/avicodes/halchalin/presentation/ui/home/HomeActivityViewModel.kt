@@ -57,15 +57,96 @@ class HomeActivityViewModel(
     val sharedNews: MutableLiveData<Result<News>> = MutableLiveData()
     val categories: MutableLiveData<Result<List<Categories>>> =
         MutableLiveData(Result.NotInitialized)
-
     val adsData: MutableLiveData<Result<List<ads>>> = MutableLiveData(Result.NotInitialized)
-
-
     val articleUploaded: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
+    val allArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
+        MutableLiveData(Result.NotInitialized)
+    val featuredArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
+        MutableLiveData(Result.NotInitialized)
 
+    fun getFeaturedArticles() = viewModelScope.launch {
+        articleRepository.getFeaturedArticles().collectLatest {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { articleList ->
+                        var articles: MutableList<ArticleProcessed> = mutableListOf()
+                        for (article in articleList) {
+                            val user = async { getUserById(article.userId) }.await()
+                            user?.let {
+                                articles.add(
+                                    ArticleProcessed(
+                                        article.articleId,
+                                        article.articleTitle,
+                                        article.articleImage,
+                                        article.articleDesc,
+                                        article.articleTag,
+                                        user,
+                                        article.date
+                                    )
+                                )
+                            }
+                        }
+                        featuredArticles.postValue(Result.Success(articles))
+                    }
+                }
+
+                is Result.Loading -> {
+                    featuredArticles.postValue(it)
+                }
+
+                is Result.Error -> {
+                    featuredArticles.postValue(it)
+                }
+
+                else -> {}
+            }
+
+        }
+    }
+
+    fun getAllArticles() = viewModelScope.launch {
+        articleRepository.getAllArticles().collectLatest {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { articleList ->
+                        Log.e("Avneet articles vm", articleList.toString() )
+                        var articles: MutableList<ArticleProcessed> = mutableListOf()
+                        for (article in articleList) {
+                            val user = async { getUserById(article.userId) }.await()
+                            user?.let {
+                                articles.add(
+                                    ArticleProcessed(
+                                        article.articleId,
+                                        article.articleTitle,
+                                        article.articleImage,
+                                        article.articleDesc,
+                                        article.articleTag,
+                                        user,
+                                        article.date
+                                    )
+                                )
+                            }
+                        }
+                        allArticles.postValue(Result.Success(articles))
+                    }
+                }
+
+                is Result.Loading -> {
+                    allArticles.postValue(it)
+                }
+
+                is Result.Error -> {
+                    allArticles.postValue(it)
+                }
+
+                else -> {}
+            }
+
+        }
+    }
 
     suspend fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             articleRepository.uploadArticle(
                 title, desc, tag, imgUri
             ).collectLatest {
@@ -142,13 +223,15 @@ class HomeActivityViewModel(
                             var commentProcessed: MutableList<CommentProcessed> = mutableListOf()
                             for (comment in commentsList) {
                                 val user = async { getUserById(comment.userId) }.await()
-                                commentProcessed.add(
-                                    CommentProcessed(
-                                        comment.time,
-                                        comment.comment,
-                                        user!!
+                                user?.let {
+                                    commentProcessed.add(
+                                        CommentProcessed(
+                                            comment.time,
+                                            comment.comment,
+                                            user
+                                        )
                                     )
-                                )
+                                }
                             }
                             comments.postValue(Result.Success(commentProcessed))
                         }
@@ -235,11 +318,6 @@ class HomeActivityViewModel(
         auth.signOut()
     }
 
-    fun getUser(uid: String) = liveData<Result<User>> {
-        userRespository.getUserRemotely(uid).collectLatest {
-            emit(it)
-        }
-    }
 
     fun getCities() = liveData {
         cityRepository.getAllCities().collectLatest {
@@ -278,6 +356,4 @@ class HomeActivityViewModel(
             }
         }
     }
-
-
 }

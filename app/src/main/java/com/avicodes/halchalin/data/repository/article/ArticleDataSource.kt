@@ -7,4 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ArticleDataSource {
     fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri): Flow<Result<String>>
+
+    fun getAllArticles() : Flow<Result<List<Article>>>
+
+    fun getFeaturedArticles() : Flow<Result<List<Article>>>
 }

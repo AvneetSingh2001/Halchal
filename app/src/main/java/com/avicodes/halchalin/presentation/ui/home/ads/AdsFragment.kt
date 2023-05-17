@@ -10,11 +10,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAdsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.explore.CommentsAdapter
 import com.avicodes.halchalin.presentation.ui.home.home.SliderAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -32,6 +34,7 @@ class AdsFragment : Fragment() {
     private lateinit var featuredAdapter: SliderAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
+    private lateinit var articleAdapter: ArticlesAdapter
 
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +57,68 @@ class AdsFragment : Fragment() {
 
             viewModel = (activity as HomeActivity).viewModel
 
-           getFeaturedAds()
-
             btnQues.setOnClickListener {
                 val action = AdsFragmentDirections.actionAdsFragmentToWriteArticleFragment()
                 requireView().findNavController().navigate(action)
             }
+
+
+            articleAdapter = ArticlesAdapter {
+                val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+            binding.rvArticles.adapter = articleAdapter
+            binding.rvArticles.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+            viewModel.getAllArticles()
+
+            getFeaturedAds()
+            getAllArticles()
+
         }
+    }
+
+    private fun getFeaturedArticles() {
+        viewModel.getFeaturedArticles()
+        viewModel.featuredArticles.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Result.Error -> {
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Error", response.exception?.message.toString())
+                }
+
+                is Result.Success -> {
+                    response.data?.let {
+                        Log.e("Error", it.toString())
+                    }
+                }
+
+                else -> {
+                }
+            }
+        })
+    }
+
+    private fun getAllArticles() {
+        viewModel.allArticles.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Result.Error -> {
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Avneet Error", response.exception?.message.toString())
+                }
+
+                is Result.Success -> {
+                    binding.rvArticles.smoothScrollToPosition(0)
+                    Log.e("Avneet article", response.data.toString())
+                    response.data?.take(8).let {
+                        articleAdapter.differ.submitList(it)
+                    }
+                }
+
+                else -> {
+                }
+            }
+        })
     }
 
     private fun getFeaturedAds() {
