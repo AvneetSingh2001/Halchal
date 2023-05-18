@@ -25,11 +25,15 @@ class RemoteLocalNewsDataSourceImpl(
 
     override fun getNews(location: String) = flow<Result<List<News>>> {
         emit(Result.Loading("Fetching News"))
-
+        var arr = location.split(", ").toTypedArray()
+        var district = ""
+        if (arr.size == 3) {
+            district = arr[1] + ", " + arr[2]
+        }
         val snapshot = firestore
             .collection("News")
             .orderBy("createdAt", Query.Direction.DESCENDING)
-            .whereEqualTo("location", location)
+            .whereEqualTo("district", district)
             .get().await()
         val news = snapshot.toObjects(News::class.java)
         emit(Result.Success(news))

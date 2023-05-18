@@ -12,6 +12,7 @@ data class News(
     var newsHeadline: String? = null,
     var newsDesc: String? = null,
     var location: String? = null,
+    var district: String? = null,
     var videoUrl: String? = null,
     var coverUrl: String? = null,
     var resUrls: List<String>? = ArrayList(),

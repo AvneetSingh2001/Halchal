@@ -57,15 +57,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:padding="4dp"
-                android:background="@drawable/red_light"
+                android:background="@drawable/bg_green"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 >
 
                 <ImageView
                     android:id="@+id/like"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
                     app:tint="@color/white"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -83,6 +83,7 @@
                     android:layout_marginRight="5dp"
                     android:textColor="@color/white"
                     android:layout_marginLeft="7dp"
+                    android:textSize="11sp"
                     android:fontFamily="@font/roboto_bold"
                     app:layout_constraintLeft_toRightOf="@id/like"
                     android:id="@+id/tvUser"/>

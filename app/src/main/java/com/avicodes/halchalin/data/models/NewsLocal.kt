@@ -17,6 +17,8 @@ data class NewsLocal(
     var newsDesc: String? = null,
     @SerializedName("location")
     var location: String? = null,
+    @SerializedName("district")
+    var district: String? = null,
     @SerializedName("videoUrl")
     var videoUrl: String? = null,
     @SerializedName("coverUrl")

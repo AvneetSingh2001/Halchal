@@ -33,6 +33,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:id="@+id/cvCity"
+                android:layout_gravity="right"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_green"
+                app:layout_constraintTop_toTopOf="@id/btnComment"
+                app:layout_constraintBottom_toBottomOf="@id/btnComment"
+                app:layout_constraintLeft_toLeftOf="parent"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="Kichha"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:id="@+id/tvCity"/>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             <TextView
                 android:id="@+id/tvHeadline"
                 android:layout_width="match_parent"
@@ -116,31 +149,44 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <View
-                android:id="@+id/time"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnComment"
-                android:layout_marginRight="6dp"
-                app:layout_constraintBottom_toBottomOf="@id/btnComment"
-                android:background="@drawable/clock"
-
-                />
-
-            <TextView
-                android:id="@+id/tvTime"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4 hrs ago"
-                app:layout_constraintLeft_toRightOf="@id/time"
-                android:textColor="#747272"
-                android:layout_marginHorizontal="6dp"
-                android:fontFamily="@font/roboto_regular"
-                app:layout_constraintTop_toTopOf="@id/time"
-                app:layout_constraintBottom_toBottomOf="@id/time"
-                android:textSize="14sp"
-                />
+                android:padding="4dp"
+                android:id="@+id/cvDate"
+                android:background="@drawable/outline"
+                app:layout_constraintTop_toTopOf="@id/btnComment"
+                app:layout_constraintBottom_toBottomOf="@id/btnComment"
+                app:layout_constraintLeft_toLeftOf="parent"
+                >
+
+                <ImageView
+                    android:id="@+id/like"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:src="@drawable/clock_blue"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/like"
+                    app:layout_constraintBottom_toBottomOf="@id/like"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="4 hrs ago"
+                    android:textSize="12sp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/roboto_medium"
+                    app:layout_constraintLeft_toRightOf="@id/like"
+                    android:id="@+id/tvTime"/>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

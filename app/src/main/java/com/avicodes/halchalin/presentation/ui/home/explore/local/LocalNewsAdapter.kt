@@ -29,7 +29,7 @@ class LocalNewsAdapter: Adapter<LocalNewsAdapter.ViewHolder>(){
                // tvCity.text = data.location
                 tvDesc.text = data.newsDesc
                 tvTime.text = TimeCalc.getTimeAgo(data.createdAt)
-
+                tvCity.text = data.location
                 root.setOnClickListener {
                     onItemClickListener?.let {
                         it(data)

@@ -79,7 +79,13 @@ class LocalNewsFragment : Fragment() {
 
             viewModel.curUser.observe(requireActivity(), Observer {
                 it?.let {
-                    tvCity.text = it.location
+                    var location = it.location
+                    var arr = location.split(", ").toTypedArray()
+                    var district = ""
+                    if (arr.size == 3) {
+                        district = arr[1] + ", " + arr[2]
+                    }
+                    tvCity.text = district
                 }
             })
 
