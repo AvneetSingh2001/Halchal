@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.Article
+import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAdsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -25,6 +28,8 @@ import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnima
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import dagger.hilt.android.AndroidEntryPoint
+import io.grpc.TlsServerCredentials.Feature
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -35,6 +40,7 @@ class AdsFragment : Fragment() {
     private lateinit var viewModel: HomeActivityViewModel
 
     private lateinit var articleAdapter: ArticlesAdapter
+    private lateinit var featuredArticleAdapter: FeaturedArticleAdapter
 
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,19 +73,91 @@ class AdsFragment : Fragment() {
                 val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(it)
                 requireView().findNavController().navigate(action)
             }
+
+            featuredArticleAdapter = FeaturedArticleAdapter {
+                val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(it)
+                requireView().findNavController().navigate(action)
+            }
+
+            btnViewAll.setOnClickListener {
+                val action = AdsFragmentDirections.actionAdsFragmentToAllArticlesFragment()
+                requireView().findNavController().navigate(action)
+            }
+
+
             binding.rvArticles.adapter = articleAdapter
-            binding.rvArticles.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            binding.rvArticles.layoutManager =
+                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+            binding.rvFeaturedArticles.adapter = featuredArticleAdapter
+            binding.rvFeaturedArticles.layoutManager =
+                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
             viewModel.getAllArticles()
+            viewModel.getFeaturedArticles()
 
             getFeaturedAds()
             getAllArticles()
+            getFeaturedArticles()
 
+            viewModel.sharedArticle.observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    is Result.Success -> {
+                        viewModel.sharedArticle.postValue(Result.NotInitialized)
+
+                        it.data?.let { article ->
+                            lifecycleScope.launch {
+                                viewModel.getArticleProcessedFromArticle(article)
+                            }
+                        } ?: Toast.makeText(requireContext(), "No Article Found", Toast.LENGTH_SHORT).show()
+
+                    }
+
+                    is Result.Loading -> {
+
+                    }
+
+                    is Result.Error -> {
+                        Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is Result.NotInitialized -> {}
+                }
+            })
+
+
+            viewModel.processedArticle.observe(viewLifecycleOwner, Observer {
+                when(it) {
+                    is Result.Success -> {
+                        viewModel.processedArticle.postValue(Result.NotInitialized)
+                        it.data?.let { article ->
+
+                            navigateToDetailedArticle(article)
+                        } ?: Toast.makeText(requireContext(), "No Article Found", Toast.LENGTH_SHORT).show()
+
+                    }
+
+                    is Result.Loading -> {
+
+                    }
+
+                    is Result.Error -> {
+                        Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
+                    }
+
+                    is Result.NotInitialized -> {}
+                }
+            })
         }
     }
 
+    private fun navigateToDetailedArticle(article: ArticleProcessed) {
+        val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(article = article)
+        requireView().findNavController().navigate(action)
+    }
+
     private fun getFeaturedArticles() {
-        viewModel.getFeaturedArticles()
+
         viewModel.featuredArticles.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Result.Error -> {
@@ -89,7 +167,8 @@ class AdsFragment : Fragment() {
 
                 is Result.Success -> {
                     response.data?.let {
-                        Log.e("Error", it.toString())
+                        binding.rvFeaturedArticles.smoothScrollToPosition(0)
+                        featuredArticleAdapter.differ.submitList(it)
                     }
                 }
 

@@ -143,5 +143,8 @@ dependencies {
     //bottom bar
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
+//lottie
+    def lottieVersion = "6.0.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 }

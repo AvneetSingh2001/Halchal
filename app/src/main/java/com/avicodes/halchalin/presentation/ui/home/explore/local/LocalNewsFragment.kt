@@ -193,17 +193,14 @@ class LocalNewsFragment : Fragment() {
         viewModel.linkCreated.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Result.Loading -> {
-                    showProgressBar()
                 }
                 is Result.Success -> {
-                    hideProgressBar()
                     it.data?.let { link ->
                         shareLink(link)
                     }
                     viewModel.linkCreated.postValue(Result.NotInitialized)
                 }
                 is Result.Error -> {
-                    hideProgressBar()
                     Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
                         .show()
                 }

@@ -2,27 +2,21 @@ package com.avicodes.halchalin.presentation.ui.home.home
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.format.Time
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.models.LatestNews
 import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsLocal
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.CategoriesAdapter
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -115,10 +109,10 @@ class HomeFragment : Fragment() {
                 }
             })
 
-            categoriesAdapter.setOnItemClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToCategoryNewsFragment(it)
-                requireView().findNavController().navigate(action)
-            }
+//            categoriesAdapter.setOnItemClickListener {
+//                val action = HomeFragmentDirections.actionHomeFragmentToCategoryNewsFragment(it)
+//                requireView().findNavController().navigate(action)
+//            }
 //
 //            Glide.with(ivFooter.context)
 //                .load(R.drawable.tagline)

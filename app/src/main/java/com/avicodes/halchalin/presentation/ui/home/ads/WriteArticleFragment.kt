@@ -16,12 +16,16 @@ import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentWriteArticelBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import kotlinx.coroutines.launch
 
 
@@ -57,13 +61,17 @@ class WriteArticleFragment : Fragment() {
                 val check3 = tvTag.editText?.text?.isNotEmpty() ?: false
                 if (imageUri != null) {
                     if (check1 and check2) {
-                        lifecycleScope.launch {
-                            viewModel.uploadArticle(
-                                title = tvTitle.editText?.text.toString(),
-                                desc = tvDesc.editText?.text.toString(),
-                                tag = if (check3) tvTag.editText?.text.toString() else "null",
-                                imgUri = imageUri!!
-                            )
+                        val userId = viewModel.curUser.value?.userId
+                        userId?.let {
+                            lifecycleScope.launch {
+                                viewModel.uploadArticle(
+                                    title = tvTitle.editText?.text.toString(),
+                                    desc = tvDesc.editText?.text.toString(),
+                                    tag = if (check3) tvTag.editText?.text.toString() else "null",
+                                    imgUri = imageUri!!,
+                                    userId = userId
+                                )
+                            }
                         }
                     } else if (!check1) {
                         Toast.makeText(context, "Please write title", Toast.LENGTH_LONG).show()
@@ -75,9 +83,7 @@ class WriteArticleFragment : Fragment() {
                 }
             }
             uploadImageButton.setOnClickListener {
-                val pickImg =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                changeImage.launch(pickImg)
+                selectImage()
             }
             observeUpload()
         }
@@ -97,17 +103,21 @@ class WriteArticleFragment : Fragment() {
                 when (it) {
                     is Result.Success -> {
                         hideLoader()
+                        viewModel.articleUploaded.postValue(Result.NotInitialized)
                         Toast.makeText(context, "Successfully Uploaded", Toast.LENGTH_LONG).show()
                         findNavController().popBackStack()
                     }
+
                     is Result.Error -> {
                         Log.e("Avneet ", "Not uploaded: ${it.exception}")
                         hideLoader()
                         Toast.makeText(context, "Try Again...", Toast.LENGTH_LONG).show()
                     }
+
                     is Result.Loading -> {
                         showLoader()
                     }
+
                     is Result.NotInitialized -> {}
                 }
             })
@@ -143,8 +153,53 @@ class WriteArticleFragment : Fragment() {
                     ).load(imageUri).into(ivImage)
                     toggleButton()
                 }
-            }else {
+            } else {
                 Log.e("Avneet ", "Not uploaded")
             }
         }
+
+
+    private fun selectImage() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        selectPictureLauncher.launch(intent.type)
+    }
+
+    private val selectPictureLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            cropImage.launch(
+                CropImageContractOptions(
+                    uri = it,
+                    CropImageOptions(
+                        allowRotation = true,
+                        allowFlipping = true,
+                        cropMenuCropButtonTitle = "CROP"
+                    )
+                )
+            )
+        }
+
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // Use the returned uri.
+            val it = result.uriContent
+
+            binding.apply {
+                ivImage.visibility = View.VISIBLE
+                Glide.with(
+                    ivImage.context
+                ).load(imageUri).into(ivImage)
+                toggleButton()
+            }
+            imageUri = it
+        } else {
+            // An error occurred.
+            val exception = result.error
+        }
+    }
+
 }

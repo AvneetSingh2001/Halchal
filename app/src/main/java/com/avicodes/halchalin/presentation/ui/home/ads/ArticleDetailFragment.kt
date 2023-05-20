@@ -1,14 +1,18 @@
 package com.avicodes.halchalin.presentation.ui.home.ads
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentArticleDetailBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -56,6 +60,7 @@ class ArticleDetailFragment : Fragment() {
 
             Glide.with(ivUser.context)
                 .load(article.user.imgUrl)
+                .circleCrop()
                 .into(ivUser)
 
             tvUserName.text = article.user.name
@@ -65,7 +70,57 @@ class ArticleDetailFragment : Fragment() {
             btnBack.setOnClickListener {
                 requireView().findNavController().popBackStack()
             }
+
+
+            btnShare.setOnClickListener {
+                viewModel.createArticleDeepLink(article = article)
+            }
         }
+
+        observeLinkCreated()
     }
+
+
+    private fun observeLinkCreated() {
+        viewModel.articleLinkCreated.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Loading -> {
+                    binding.animationView.visibility = View.VISIBLE
+                    binding.animationView.progress = 0f
+                    binding.icShare.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    it.data?.let { link ->
+                        shareLink(link)
+                    }
+                    binding.animationView.visibility = View.GONE
+                    binding.icShare.visibility = View.VISIBLE
+                    viewModel.articleLinkCreated.postValue(Result.NotInitialized)
+                }
+                is Result.Error -> {
+                    binding.animationView.visibility = View.GONE
+                    binding.icShare.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                else -> {
+                    binding.animationView.visibility = View.GONE
+                    binding.icShare.visibility = View.VISIBLE
+                }
+            }
+        })
+    }
+
+
+    private fun shareLink(link: String?) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "$link")
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Share News")
+        startActivity(shareIntent)
+    }
+
 
 }

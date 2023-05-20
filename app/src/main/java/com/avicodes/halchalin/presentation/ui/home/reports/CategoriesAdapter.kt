@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.home.home
+package com.avicodes.halchalin.presentation.ui.home.reports
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.Categories
-import com.avicodes.halchalin.data.models.LatestNews
 import com.avicodes.halchalin.databinding.ItemCategoriesBinding
-import com.avicodes.halchalin.databinding.ItemLatestNewsBinding
 import com.bumptech.glide.Glide
 
 class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
@@ -30,7 +28,7 @@ class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
                     root.setOnClickListener {
                         onItemClickListener?.let {
-                            it(data)
+                            it(position)
                         }
                     }
                 }
@@ -44,7 +42,6 @@ class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
             ItemCategoriesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
-
 
     override fun getItemCount(): Int {
         return differ.currentList.size
@@ -67,9 +64,9 @@ class CategoriesAdapter : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     val differ = AsyncListDiffer(this, callback)
 
-    private var onItemClickListener: ((Categories) -> Unit)? = null
+    private var onItemClickListener: ((Int) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Categories) -> Unit) {
+    fun setOnItemClickListener(listener: (Int) -> Unit) {
         onItemClickListener = listener
     }
 }

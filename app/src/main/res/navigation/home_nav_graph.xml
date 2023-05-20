@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_adsFragment_to_articleDetailFragment"
             app:destination="@id/articleDetailFragment" />
+        <action
+            android:id="@+id/action_adsFragment_to_allArticlesFragment"
+            app:destination="@id/allArticlesFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -137,7 +140,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryNewsFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.home.CategoryNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.reports.CategoryNewsFragment"
         android:label="fragment_category_news"
         tools:layout="@layout/fragment_category_news" >
         <argument
@@ -160,5 +163,14 @@
         <argument
             android:name="article"
             app:argType="com.avicodes.halchalin.data.models.ArticleProcessed" />
+    </fragment>
+    <fragment
+        android:id="@+id/allArticlesFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.ads.AllArticlesFragment"
+        android:label="fragment_all_articles"
+        tools:layout="@layout/fragment_all_articles" >
+        <action
+            android:id="@+id/action_allArticlesFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment" />
     </fragment>
 </navigation>

@@ -6,6 +6,7 @@ import com.avicodes.halchalin.data.utils.Result
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -121,7 +122,14 @@ class HomeActivity : AppCompatActivity() {
         viewModel.linkNews.observe(this, Observer { response ->
             when (response) {
                 is Result.Success -> {
-                    binding.bottomNavigation.selectedItemId = R.id.localNewsFragment
+                    response.data?.let { screen ->
+                        if (screen == "Article")
+                            binding.bottomNavigation.selectedItemId = R.id.adsFragment
+                        else if (screen == "News")
+                            binding.bottomNavigation.selectedItemId = R.id.localNewsFragment
+
+                        viewModel.linkNews.postValue(Result.NotInitialized)
+                    }
                 }
 
                 else -> {}
@@ -160,11 +168,24 @@ class HomeActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        val newsLink = intent?.getStringExtra("deepLink")
-        Log.e("Avneet New Intent", "HomeActivity $newsLink")
+        val getLink = intent?.getStringExtra("deepLink")
+        Log.e("Avneet New Intent", "HomeActivity $getLink")
 
-        newsLink?.let {
-            viewModel.getNewsByDeepLink(it)
+        getLink?.let { getLink ->
+            var uri = getLink.toUri()
+
+            var newsId = uri.getQueryParameter("news")
+            var articleId = uri.getQueryParameter("article")
+
+            Log.e("Avneet uri", "\n newsId  =  $newsId \n articleId  =  $articleId")
+
+            newsId?.let {
+                viewModel.getNewsByDeepLink(it)
+            }
+
+            articleId?.let {
+                viewModel.getArticleByDeepLink(it)
+            }
         }
     }
 }

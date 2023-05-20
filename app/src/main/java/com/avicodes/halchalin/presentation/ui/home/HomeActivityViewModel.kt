@@ -52,9 +52,11 @@ class HomeActivityViewModel(
     val comments: MutableLiveData<Result<List<CommentProcessed>>> =
         MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
-    val linkCreated: MutableLiveData<Result<String>> = MutableLiveData()
+    val linkCreated: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
+    val articleLinkCreated: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val remoteLinkCreated: MutableLiveData<Result<String>> = MutableLiveData()
-    val sharedNews: MutableLiveData<Result<News>> = MutableLiveData()
+    val sharedNews: MutableLiveData<Result<News>> = MutableLiveData(Result.NotInitialized)
+    val sharedArticle: MutableLiveData<Result<Article>> = MutableLiveData(Result.NotInitialized)
     val categories: MutableLiveData<Result<List<Categories>>> =
         MutableLiveData(Result.NotInitialized)
     val adsData: MutableLiveData<Result<List<ads>>> = MutableLiveData(Result.NotInitialized)
@@ -62,6 +64,9 @@ class HomeActivityViewModel(
     val allArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
         MutableLiveData(Result.NotInitialized)
     val featuredArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
+        MutableLiveData(Result.NotInitialized)
+
+    val processedArticle: MutableLiveData<Result<ArticleProcessed>> =
         MutableLiveData(Result.NotInitialized)
 
     fun getFeaturedArticles() = viewModelScope.launch {
@@ -109,7 +114,7 @@ class HomeActivityViewModel(
             when (it) {
                 is Result.Success -> {
                     it.data?.let { articleList ->
-                        Log.e("Avneet articles vm", articleList.toString() )
+                        Log.e("Avneet articles vm", articleList.toString())
                         var articles: MutableList<ArticleProcessed> = mutableListOf()
                         for (article in articleList) {
                             val user = async { getUserById(article.userId) }.await()
@@ -145,10 +150,39 @@ class HomeActivityViewModel(
         }
     }
 
-    suspend fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri) {
+
+    suspend fun getArticleProcessedFromArticle(article: Article) =
+        viewModelScope.launch(Dispatchers.IO) {
+            processedArticle.postValue(Result.Loading("Loading"))
+           try {
+               val user = async { getUserById(article.userId) }.await()
+               user?.let {
+                   val processed = ArticleProcessed(
+                       article.articleId,
+                       article.articleTitle,
+                       article.articleImage,
+                       article.articleDesc,
+                       article.articleTag,
+                       user,
+                       article.date
+                   )
+                   processedArticle.postValue(Result.Success(processed))
+               }
+           }catch (e: Exception) {
+               processedArticle.postValue(Result.Error(e))
+           }
+        }
+
+    suspend fun uploadArticle(
+        title: String,
+        desc: String,
+        tag: String,
+        imgUri: Uri,
+        userId: String
+    ) {
         viewModelScope.launch {
             articleRepository.uploadArticle(
-                title, desc, tag, imgUri
+                title, desc, tag, imgUri, userId
             ).collectLatest {
                 articleUploaded.postValue(it)
             }
@@ -331,6 +365,12 @@ class HomeActivityViewModel(
         }
     }
 
+    fun createArticleDeepLink(article: ArticleProcessed) = viewModelScope.launch(Dispatchers.IO) {
+        articleRepository.createArticleDynamicLink(article).collectLatest {
+            articleLinkCreated.postValue(it)
+        }
+    }
+
     fun getNewsById(newsId: String) = viewModelScope.launch(Dispatchers.IO) {
         localNewsRepository.getNewsById(newsId).collectLatest {
             sharedNews.postValue(it)
@@ -339,13 +379,21 @@ class HomeActivityViewModel(
 
     fun getNewsByDeepLink(newsLink: String) {
         newsLink.let {
-            Log.e("DeepLink: ", newsLink)
-            var newsUri = newsLink.toUri()
-            var newsId = newsUri.getQueryParameter("news")
-            newsId?.let {
-                getNewsById(newsId)
-                linkNews.postValue(Result.Success("DeepLink"))
-            }
+            getNewsById(newsLink)
+            linkNews.postValue(Result.Success("News"))
+        }
+    }
+
+    fun getArticleByDeepLink(articleLink: String) {
+        articleLink.let { articleId ->
+            getArticleById(articleId)
+            linkNews.postValue(Result.Success("Article"))
+        }
+    }
+
+    fun getArticleById(articleId: String) = viewModelScope.launch(Dispatchers.IO) {
+        articleRepository.getArticleById(articleId).collectLatest {
+            sharedArticle.postValue(it)
         }
     }
 

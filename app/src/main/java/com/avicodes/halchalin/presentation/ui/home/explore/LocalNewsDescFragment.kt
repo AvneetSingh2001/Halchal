@@ -114,7 +114,6 @@ class LocalNewsDescFragment : Fragment() {
     }
 
     private fun getNewsAds() {
-
         binding.apply {
             viewModel.adsData.observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -247,21 +246,28 @@ class LocalNewsDescFragment : Fragment() {
         viewModel.linkCreated.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Result.Loading -> {
-                    showProgressBar()
+                    binding.animationView.progress = 0f
+                    binding.btnShare.visibility = View.INVISIBLE
+                    binding.animationView.visibility = View.VISIBLE
                 }
                 is Result.Success -> {
-                    hideProgressBar()
+                    binding.btnShare.visibility = View.VISIBLE
+                    binding.animationView.visibility = View.GONE
                     it.data?.let { link ->
                         shareLink(link)
                     }
                     viewModel.linkCreated.postValue(Result.NotInitialized)
                 }
                 is Result.Error -> {
-                    hideProgressBar()
+                    binding.btnShare.visibility = View.VISIBLE
+                    binding.animationView.visibility = View.GONE
                     Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
                         .show()
                 }
-                else -> {}
+                else -> {
+                    binding.btnShare.visibility = View.VISIBLE
+                    binding.animationView.visibility = View.GONE
+                }
             }
         })
     }

@@ -9,17 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.presentation.ui.home.home.CategoriesAdapter
 import com.avicodes.halchalin.presentation.ui.home.home.HomeFragmentDirections
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
@@ -37,7 +34,7 @@ class NewsFragment(
     private lateinit var adapter: NewsAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
-    private lateinit var categoriesAdapter: CategoriesAdapter
+    // private lateinit var categoriesAdapter: CategoriesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,6 +57,7 @@ class NewsFragment(
         viewModel.getCategories()
         binding.run {
 
+
             tlNews.addTab(
                 tlNews.newTab().setText("National News")
             )
@@ -68,7 +66,8 @@ class NewsFragment(
                 tlNews.newTab().setText("International News")
             )
 
-            vpNews.adapter = adapter
+
+
 
             tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -93,35 +92,41 @@ class NewsFragment(
                 requireView().findNavController().navigate(action)
             }
 
-            categoriesAdapter = CategoriesAdapter()
-            rvCategories.adapter = categoriesAdapter
-            rvCategories.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            //categoriesAdapter = CategoriesAdapter()
+//            rvCategories.adapter = categoriesAdapter
+//            rvCategories.layoutManager =
+//                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-            viewModel.categories.observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    is Result.Success -> {
-                        it.data?.let { categorieslist ->
-                            if (categorieslist.isNotEmpty()) {
-                                Log.e("Categories", categorieslist.toString())
-                                categoriesAdapter.differ.submitList(categorieslist)
-                            }
-                        }
-                    }
+//            viewModel.categories.observe(viewLifecycleOwner, Observer {
+//                when (it) {
+//                    is Result.Success -> {
+//                        it.data?.let { categorieslist ->
+//                            if (categorieslist.isNotEmpty()) {
+//                                Log.e("Categories", categorieslist.toString())
+//                                categoriesAdapter.differ.submitList(categorieslist)
+//                            }
+//                        }
+//                    }
+//
+//                    is Result.Error -> {
+//                        Log.e("Categories", "Error")
+//                    }
+//
+//                    else -> {
+//                    }
+//                }
+//            })
 
-                    is Result.Error -> {
-                        Log.e("Categories", "Error")
-                    }
+            addTabsVp()
+            vpNews.adapter = adapter
 
-                    else -> {
-                    }
-                }
-            })
+        }
+    }
 
-            categoriesAdapter.setOnItemClickListener {
-                val action = NewsFragmentDirections.actionNewsFragmentToCategoryNewsFragment(it)
-                requireView().findNavController().navigate(action)
-            }
+    override fun onResume() {
+        super.onResume()
+        binding.apply {
+            tlNews.selectTab(tlNews.getTabAt(vpNews.currentItem))
         }
     }
 
@@ -130,7 +135,6 @@ class NewsFragment(
             vpNews.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    tlNews.selectTab(tlNews.getTabAt(position))
 
                     refreshLayout.setOnRefreshListener {
                         lifecycleScope.launch {
@@ -138,7 +142,7 @@ class NewsFragment(
                                 viewModel.nationalHeadlines.postValue(Result.NotInitialized)
                                 delay(200)
                                 viewModel.getNationalNewsHeadlines("national", "in", "hi")
-                            } else {
+                            } else if (position == 1) {
                                 viewModel.worldHeadlines.postValue(Result.NotInitialized)
                                 delay(200)
                                 viewModel.getInternationalNewsHeadlines(

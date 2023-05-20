@@ -1,18 +1,17 @@
-package com.avicodes.halchalin.presentation.ui.home.home
+package com.avicodes.halchalin.presentation.ui.home.reports
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
 
-class CategoryNewsAdapter: PagingDataAdapter<NewsRemote, CategoryNewsAdapter.ViewHolder>(DiffUtilCallBack) {
+class CategoryNewsAdapter(
+): PagingDataAdapter<NewsRemote, CategoryNewsAdapter.ViewHolder>(DiffUtilCallBack) {
 
     inner class ViewHolder(private val binding: ItemRemoteNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
