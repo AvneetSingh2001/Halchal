@@ -143,4 +143,17 @@ class ArticleDataSourceImpl(
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
 
+    override fun getUserArticles(userId: String)= flow<Result<List<Article>>> {
+        emit(Result.Loading("Fetching Comments"))
+        val snapshot = firestore
+            .collection("Articles")
+            .orderBy("date", Query.Direction.DESCENDING)
+            .whereEqualTo("userId", userId)
+            .get()
+            .await()
+        val article = snapshot.toObjects(Article::class.java)
+        emit(Result.Success(article))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
 }

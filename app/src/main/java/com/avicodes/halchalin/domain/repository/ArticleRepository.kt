@@ -19,5 +19,7 @@ interface ArticleRepository {
     ): Flow<Result<String>>
 
     fun getArticleById(articleId: String): Flow<Result<Article>>
+
+    fun getUserArticles(userId: String) : Flow<Result<List<Article>>>
 }
 

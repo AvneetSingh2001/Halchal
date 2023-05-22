@@ -58,6 +58,8 @@ class ArticleDetailFragment : Fragment() {
                 tvTag.text = article.articleTag
             }
 
+            tvUserBio.text = article.user.about
+
             Glide.with(ivUser.context)
                 .load(article.user.imgUrl)
                 .circleCrop()

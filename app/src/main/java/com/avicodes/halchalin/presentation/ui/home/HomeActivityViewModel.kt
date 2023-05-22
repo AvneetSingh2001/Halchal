@@ -69,6 +69,9 @@ class HomeActivityViewModel(
     val processedArticle: MutableLiveData<Result<ArticleProcessed>> =
         MutableLiveData(Result.NotInitialized)
 
+    val userArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
+        MutableLiveData(Result.NotInitialized)
+
     fun getFeaturedArticles() = viewModelScope.launch {
         articleRepository.getFeaturedArticles().collectLatest {
             when (it) {
@@ -151,26 +154,67 @@ class HomeActivityViewModel(
     }
 
 
+    fun getUserArticles(userId: String) = viewModelScope.launch {
+        articleRepository.getUserArticles(userId).collectLatest {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { articleList ->
+                        Log.e("Avneet articles vm", articleList.toString())
+                        var articles: MutableList<ArticleProcessed> = mutableListOf()
+                        for (article in articleList) {
+                            val user = async { getUserById(article.userId) }.await()
+                            user?.let {
+                                articles.add(
+                                    ArticleProcessed(
+                                        article.articleId,
+                                        article.articleTitle,
+                                        article.articleImage,
+                                        article.articleDesc,
+                                        article.articleTag,
+                                        user,
+                                        article.date
+                                    )
+                                )
+                            }
+                        }
+                        userArticles.postValue(Result.Success(articles))
+                    }
+                }
+
+                is Result.Loading -> {
+                    userArticles.postValue(it)
+                }
+
+                is Result.Error -> {
+                    userArticles.postValue(it)
+                }
+
+                else -> {}
+            }
+
+        }
+    }
+
     suspend fun getArticleProcessedFromArticle(article: Article) =
         viewModelScope.launch(Dispatchers.IO) {
             processedArticle.postValue(Result.Loading("Loading"))
-           try {
-               val user = async { getUserById(article.userId) }.await()
-               user?.let {
-                   val processed = ArticleProcessed(
-                       article.articleId,
-                       article.articleTitle,
-                       article.articleImage,
-                       article.articleDesc,
-                       article.articleTag,
-                       user,
-                       article.date
-                   )
-                   processedArticle.postValue(Result.Success(processed))
-               }
-           }catch (e: Exception) {
-               processedArticle.postValue(Result.Error(e))
-           }
+            try {
+                val user = async { getUserById(article.userId) }.await()
+                user?.let {
+                    val processed = ArticleProcessed(
+                        article.articleId,
+                        article.articleTitle,
+                        article.articleImage,
+                        article.articleDesc,
+                        article.articleTag,
+                        user,
+                        article.date
+                    )
+                    processedArticle.postValue(Result.Success(processed))
+                }
+            } catch (e: Exception) {
+                processedArticle.postValue(Result.Error(e))
+            }
         }
 
     suspend fun uploadArticle(

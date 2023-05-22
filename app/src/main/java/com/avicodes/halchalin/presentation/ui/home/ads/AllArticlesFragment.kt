@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
@@ -25,9 +26,7 @@ class AllArticlesFragment : Fragment() {
     private lateinit var featuredArticleAdapter: FeaturedArticleAdapter
     private lateinit var viewModel: HomeActivityViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    val args: AllArticlesFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +42,11 @@ class AllArticlesFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
+        val userId = args.userId
+
         featuredArticleAdapter = FeaturedArticleAdapter {
-            val action = AllArticlesFragmentDirections.actionAllArticlesFragmentToArticleDetailFragment(it)
+            val action =
+                AllArticlesFragmentDirections.actionAllArticlesFragmentToArticleDetailFragment(it)
             requireView().findNavController().navigate(action)
         }
 
@@ -52,7 +54,14 @@ class AllArticlesFragment : Fragment() {
         binding.rvNationalNews.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        getAllArticles()
+        if (userId != null) {
+            userId?.let {
+                getUserArticles(userId)
+            }
+        } else {
+            getAllArticles()
+        }
+
     }
 
 
@@ -66,7 +75,7 @@ class AllArticlesFragment : Fragment() {
 
                 is Result.Success -> {
                     binding.rvNationalNews.smoothScrollToPosition(0)
-                    response.data?.take(8).let {
+                    response.data?.let {
                         featuredArticleAdapter.differ.submitList(it)
                     }
                 }
@@ -77,6 +86,27 @@ class AllArticlesFragment : Fragment() {
         })
     }
 
+    private fun getUserArticles(userId: String) {
+        viewModel.getUserArticles(userId)
+        viewModel.userArticles.observe(viewLifecycleOwner, Observer { response ->
+            when (response) {
+                is Result.Error -> {
+                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
+                    Log.e("Avneet Error", response.exception?.message.toString())
+                }
+
+                is Result.Success -> {
+                    binding.rvNationalNews.smoothScrollToPosition(0)
+                    response.data?.let {
+                        featuredArticleAdapter.differ.submitList(it)
+                    }
+                }
+
+                else -> {
+                }
+            }
+        })
+    }
 
 
 }

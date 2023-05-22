@@ -29,4 +29,8 @@ class ArticleRepositoryImpl(
     override fun getArticleById(articleId: String): Flow<Result<Article>> {
         return articleDataSource.getArticleById(articleId)
     }
+
+    override fun getUserArticles(userId: String): Flow<Result<List<Article>>> {
+        return articleDataSource.getUserArticles(userId = userId)
+    }
 }

@@ -70,6 +70,12 @@
         <action
             android:id="@+id/action_settingsFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_allArticlesFragment"
+            app:destination="@id/allArticlesFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_communityFragment"
+            app:destination="@id/communityFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -172,5 +178,14 @@
         <action
             android:id="@+id/action_allArticlesFragment_to_articleDetailFragment"
             app:destination="@id/articleDetailFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
+    <fragment
+        android:id="@+id/communityFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.settings.CommunityFragment"
+        android:label="fragment_community"
+        tools:layout="@layout/fragment_community" />
 </navigation>

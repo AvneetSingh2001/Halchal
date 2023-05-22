@@ -42,7 +42,7 @@ class SettingsFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
-        val kkhUrl = "https://www.kichhakihalchal.com/contact"
+//        val kkhUrl = "https://www.kichhakihalchal.com/contact"
         binding.run {
             btnSignOut.setOnClickListener {
                 (activity as HomeActivity).logout()
@@ -53,17 +53,17 @@ class SettingsFragment : Fragment() {
             }
 
 
-            btnReport.setOnClickListener {
-                val openURL = Intent(Intent.ACTION_VIEW)
-                openURL.data = Uri.parse(kkhUrl)
-                startActivity(openURL)
-            }
-
-            btnJoinUs.setOnClickListener {
-                val openURL = Intent(Intent.ACTION_VIEW)
-                openURL.data = Uri.parse(kkhUrl)
-                startActivity(openURL)
-            }
+//            btnReport.setOnClickListener {
+////                val openURL = Intent(Intent.ACTION_VIEW)
+////                openURL.data = Uri.parse(kkhUrl)
+////                startActivity(openURL)
+//            }
+//
+//            btnJoinUs.setOnClickListener {
+//                val openURL = Intent(Intent.ACTION_VIEW)
+//                openURL.data = Uri.parse(kkhUrl)
+//                startActivity(openURL)
+//            }
 
             viewModel.curUser.observe(requireActivity(), Observer { user ->
                 user?.let {
@@ -74,13 +74,30 @@ class SettingsFragment : Fragment() {
                         .load(user.imgUrl).circleCrop()
                         .error(R.drawable.baseline_person_24)
                         .into(ivUser)
+
+
+                    btnMyArticles.setOnClickListener {
+                        navigateToArticlesScreen(user.userId)
+                    }
                 }
             })
 
             Glide.with(ivFooter.context)
                 .load(R.drawable.tagline)
                 .into(ivFooter)
+
+
+            btnCommunity.setOnClickListener {
+                val action = SettingsFragmentDirections.actionSettingsFragmentToCommunityFragment()
+                requireView().findNavController().navigate(action)
+            }
         }
+    }
+
+
+    private fun navigateToArticlesScreen(userId: String) {
+        val action = SettingsFragmentDirections.actionSettingsFragmentToAllArticlesFragment(userId)
+        requireView().findNavController().navigate(action)
     }
 
     private fun navigateToEditScreen() {

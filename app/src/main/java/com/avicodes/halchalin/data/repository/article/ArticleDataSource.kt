@@ -20,4 +20,5 @@ interface ArticleDataSource {
 
     fun getArticleById(articleId: String): Flow<Result<Article>>
 
+    fun getUserArticles(userId: String): Flow<Result<List<Article>>>
 }

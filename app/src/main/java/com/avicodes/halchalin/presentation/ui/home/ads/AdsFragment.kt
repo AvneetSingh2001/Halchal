@@ -80,7 +80,7 @@ class AdsFragment : Fragment() {
             }
 
             btnViewAll.setOnClickListener {
-                val action = AdsFragmentDirections.actionAdsFragmentToAllArticlesFragment()
+                val action = AdsFragmentDirections.actionAdsFragmentToAllArticlesFragment(null)
                 requireView().findNavController().navigate(action)
             }
 

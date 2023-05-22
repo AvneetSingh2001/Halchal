@@ -103,15 +103,26 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Hi,"
+            android:text="Hey"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tv0"
             app:layout_constraintBottom_toTopOf="@id/tvName"
             app:layout_constraintHorizontal_bias="1.0"
-
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/tvName"
             app:layout_constraintVertical_bias="1.0" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv0"
+            app:layout_constraintLeft_toRightOf="@id/tv0"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/hey"
+            />
+
 
         <TextView
             android:id="@+id/tvName"
@@ -122,7 +133,7 @@
             android:fontFamily="@font/roboto_bold"
             android:text="Avneet Singh"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="22sp"
             app:layout_constraintTop_toTopOf="@id/cvImage"
             app:layout_constraintLeft_toRightOf="@id/cvImage"
             android:layout_marginLeft="20dp"
@@ -201,7 +212,7 @@
                 app:cardElevation="10dp"
                 app:cardCornerRadius="10dp"
                 android:layout_marginVertical="10dp"
-                android:id="@+id/btnReport"
+                android:id="@+id/btnMyArticles"
                 android:layout_marginHorizontal="20dp"
                 android:layout_height="wrap_content">
 
@@ -217,7 +228,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/bug"
+                        android:background="@drawable/document"
                         android:backgroundTint="@color/mainRed"
                         android:id="@+id/ic2"/>
 
@@ -227,7 +238,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="@id/ic2"
                         app:layout_constraintBottom_toBottomOf="@id/ic2"
-                        android:text="Report Bug"
+                        android:text="My Articles"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/black"
@@ -252,7 +263,7 @@
                 android:layout_width="match_parent"
                 app:cardElevation="10dp"
                 app:cardCornerRadius="10dp"
-                android:id="@+id/btnJoinUs"
+                android:id="@+id/btnCommunity"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_height="wrap_content">
@@ -269,7 +280,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/join"
+                        android:background="@drawable/community"
                         android:backgroundTint="@color/mainRed"
                         android:id="@+id/ic3"/>
 
@@ -279,7 +290,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="@id/ic3"
                         app:layout_constraintBottom_toBottomOf="@id/ic3"
-                        android:text="Join Us"
+                        android:text="Our Community"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/black"
@@ -299,13 +310,14 @@
             </com.google.android.material.card.MaterialCardView>
 
 
+
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 app:cardElevation="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="40dp"
                 app:cardCornerRadius="10dp"
-
                 android:layout_marginHorizontal="20dp"
                 android:layout_height="wrap_content">
 
@@ -321,7 +333,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/info"
+                        android:background="@drawable/setting"
                         android:backgroundTint="@color/mainRed"
                         android:id="@+id/ic4"/>
 
@@ -330,7 +342,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="@id/ic4"
                         app:layout_constraintBottom_toBottomOf="@id/ic4"
-                        android:text="About Us"
+                        android:text="Settings"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/black"
