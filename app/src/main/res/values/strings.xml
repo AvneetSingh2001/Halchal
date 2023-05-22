@@ -16,4 +16,5 @@
     <string name="hour_ago_text">an hour ago</string>
     <string name="hours_ago_text"> hour ago</string>
     <string name="yesterday_text">yesterday</string>
+    <!-- Preference Titles -->
 </resources>

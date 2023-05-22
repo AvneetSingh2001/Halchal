@@ -91,6 +91,7 @@ class AllArticlesFragment : Fragment() {
         viewModel.userArticles.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Result.Error -> {
+                    hideProgressBar()
                     Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
                     Log.e("Avneet Error", response.exception?.message.toString())
                 }
@@ -100,6 +101,11 @@ class AllArticlesFragment : Fragment() {
                     response.data?.let {
                         featuredArticleAdapter.differ.submitList(it)
                     }
+                    hideProgressBar()
+                }
+
+                is Result.Loading -> {
+                    showProgressBar()
                 }
 
                 else -> {
@@ -107,6 +113,18 @@ class AllArticlesFragment : Fragment() {
             }
         })
     }
+
+    private fun showProgressBar() {
+        binding.progCons.visibility = View.VISIBLE
+        binding.mainCons.visibility = View.INVISIBLE
+    }
+
+
+    private fun hideProgressBar() {
+        binding.progCons.visibility = View.GONE
+        binding.mainCons.visibility = View.VISIBLE
+    }
+
 
 
 }

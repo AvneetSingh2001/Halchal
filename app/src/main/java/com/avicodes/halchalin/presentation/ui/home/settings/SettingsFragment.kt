@@ -82,13 +82,13 @@ class SettingsFragment : Fragment() {
                 }
             })
 
-            Glide.with(ivFooter.context)
-                .load(R.drawable.tagline)
-                .into(ivFooter)
-
-
             btnCommunity.setOnClickListener {
                 val action = SettingsFragmentDirections.actionSettingsFragmentToCommunityFragment()
+                requireView().findNavController().navigate(action)
+            }
+
+            btnSettings.setOnClickListener {
+                val action = SettingsFragmentDirections.actionSettingsFragmentToPrefFragment()
                 requireView().findNavController().navigate(action)
             }
         }

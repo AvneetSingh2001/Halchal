@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="Customise settings">
+
+        <SwitchPreferenceCompat
+            app:key="Notificaton"
+            app:title="Notifications" />
+
+        <SwitchPreferenceCompat
+            app:dependency="Notifs"
+            app:key="Notificaton"
+            app:summaryOff="off"
+            app:summaryOn="on"
+            app:title="Notifications" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

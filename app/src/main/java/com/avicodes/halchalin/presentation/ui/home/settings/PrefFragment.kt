@@ -6,33 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.databinding.FragmentCommunityBinding
-import com.bumptech.glide.Glide
+import com.avicodes.halchalin.databinding.FragmentPrefBinding
 
-class CommunityFragment : Fragment() {
+class PrefFragment : Fragment() {
 
-    private var _binding: FragmentCommunityBinding? = null
+    private var _binding: FragmentPrefBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentCommunityBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentPrefBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
 
-            Glide.with(ivFooter.context)
-                .load(R.drawable.tagline)
-                .into(ivFooter)
+
 
         }
     }

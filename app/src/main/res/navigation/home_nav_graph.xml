@@ -76,6 +76,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_communityFragment"
             app:destination="@id/communityFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_prefFragment"
+            app:destination="@id/prefFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -99,7 +102,7 @@
         android:name="com.avicodes.halchalin.presentation.ui.home.settings.EditFragment"
         android:label="fragment_edit"
         tools:layout="@layout/fragment_edit" />
-    <dialog
+    <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.avicodes.halchalin.presentation.ui.profile.UserProfileFragment"
         android:label="fragment_user_profile"
@@ -107,7 +110,10 @@
         <argument
             android:name="user"
             app:argType="com.avicodes.halchalin.data.models.User" />
-    </dialog>
+        <action
+            android:id="@+id/action_userProfileFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailedRemoteFragment"
         android:name="com.avicodes.halchalin.presentation.ui.home.reports.remote.DetailedRemoteFragment"
@@ -169,6 +175,9 @@
         <argument
             android:name="article"
             app:argType="com.avicodes.halchalin.data.models.ArticleProcessed" />
+        <action
+            android:id="@+id/action_articleDetailFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/allArticlesFragment"
@@ -188,4 +197,9 @@
         android:name="com.avicodes.halchalin.presentation.ui.home.settings.CommunityFragment"
         android:label="fragment_community"
         tools:layout="@layout/fragment_community" />
+    <fragment
+        android:id="@+id/prefFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.settings.PrefFragment"
+        android:label="fragment_pref"
+        tools:layout="@layout/fragment_pref" />
 </navigation>

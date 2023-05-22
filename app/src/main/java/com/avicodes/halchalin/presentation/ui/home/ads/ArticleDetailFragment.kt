@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentArticleDetailBinding
@@ -77,9 +78,22 @@ class ArticleDetailFragment : Fragment() {
             btnShare.setOnClickListener {
                 viewModel.createArticleDeepLink(article = article)
             }
+
+            clUser.setOnClickListener {
+                navigateToUserProfile(article.user)
+            }
+
+            ivUser.setOnClickListener {
+                navigateToUserProfile(article.user)
+            }
         }
 
         observeLinkCreated()
+    }
+
+    private fun navigateToUserProfile(user: User) {
+        val action = ArticleDetailFragmentDirections.actionArticleDetailFragmentToUserProfileFragment(user)
+        requireView().findNavController().navigate(action)
     }
 
 
