@@ -73,13 +73,6 @@ class DetailedRemoteFragment : Fragment() {
             date?.let {
                 tvTime.text = it.removeRange(11, it.length)
             }
-
-
-            btnBack.setOnClickListener {
-                navigateBack()
-            }
-
-
         }
 
         observeLinkCreated()

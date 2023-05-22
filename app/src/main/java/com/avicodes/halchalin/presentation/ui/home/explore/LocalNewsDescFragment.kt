@@ -103,9 +103,6 @@ class LocalNewsDescFragment : Fragment() {
             }
 
 
-            btnBack.setOnClickListener {
-                requireView().findNavController().popBackStack()
-            }
 
             observeLinkCreated()
 

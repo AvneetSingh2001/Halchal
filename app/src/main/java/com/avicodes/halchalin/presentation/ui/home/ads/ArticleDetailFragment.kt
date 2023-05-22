@@ -70,9 +70,6 @@ class ArticleDetailFragment : Fragment() {
 
             tvDate.text = TimeCalc.getTimeAgo(article.date.toLong())
 
-            btnBack.setOnClickListener {
-                requireView().findNavController().popBackStack()
-            }
 
 
             btnShare.setOnClickListener {
