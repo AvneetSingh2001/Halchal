@@ -1,11 +1,10 @@
 package com.avicodes.halchalin.presentation.di
 
-import android.net.Uri
 import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.API.NewsApiService
 import com.avicodes.halchalin.data.prefs.UserPrefs
-import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSouceImpl
-import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSource
+import com.avicodes.halchalin.data.repository.ads.AdsDataSouceImpl
+import com.avicodes.halchalin.data.repository.ads.AdsDataSource
 import com.avicodes.halchalin.data.repository.article.ArticleDataSource
 import com.avicodes.halchalin.data.repository.article.ArticleDataSourceImpl
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSource

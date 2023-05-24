@@ -2,10 +2,8 @@ package com.avicodes.halchalin.presentation.ui.home.explore
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,23 +13,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.News
+import com.avicodes.halchalin.data.models.TopAds
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.FragmentLocalNewsDescBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment
-import com.bumptech.glide.util.Util
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -82,7 +71,7 @@ class LocalNewsDescFragment : Fragment() {
             binding.rvAds.layoutManager = LinearLayoutManager(activity)
 
             data.videoUrl?.let {
-                data.resUrls?.let {res ->
+                data.resUrls?.let { res ->
                     setUpBottomImages(res)
                 }
                 setUpVideoView(it)
@@ -91,6 +80,8 @@ class LocalNewsDescFragment : Fragment() {
             }
 
             getNewsAds()
+
+            observeTopAds()
 
             tvHeadline.text = data.newsHeadline
 
@@ -110,18 +101,53 @@ class LocalNewsDescFragment : Fragment() {
 
     }
 
+
+    private fun setUpTopAdImages(data: List<String>) {
+        binding.apply {
+            cvTopAds.visibility = View.VISIBLE
+            val resourceAdapter = NewsResAdapter(data)
+            resourceAdapter.let {
+                ivTopAds.setSliderAdapter(it)
+                ivTopAds.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                ivTopAds.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+                ivTopAds.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
+                ivTopAds.indicatorSelectedColor = Color.WHITE
+                ivTopAds.indicatorUnselectedColor = Color.GRAY
+                ivTopAds.scrollTimeInSec = 2 //set scroll delay in seconds :
+                ivTopAds.startAutoCycle()
+            }
+        }
+    }
+
+    private fun observeTopAds() {
+        viewModel.topAds.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { topAds ->
+                        if (topAds.isNotEmpty()) {
+                            setUpTopAdImages(topAds)
+                        }
+                    }
+                }
+
+                else -> {}
+            }
+        })
+    }
+
     private fun getNewsAds() {
         binding.apply {
             viewModel.adsData.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     is Result.Success -> {
                         it.data?.let { list ->
-                            if(list.isNotEmpty()) {
+                            if (list.isNotEmpty()) {
                                 cvAds.visibility = View.VISIBLE
                                 adAdapter.differ.submitList(list)
                             }
                         }
                     }
+
                     else -> {
                         cvAds.visibility = View.INVISIBLE
                     }
@@ -198,6 +224,7 @@ class LocalNewsDescFragment : Fragment() {
     }
 
 
+
     private fun setUpHeaderImages(data: List<String>) {
         binding.apply {
             ivNews.visibility = View.VISIBLE
@@ -247,6 +274,7 @@ class LocalNewsDescFragment : Fragment() {
                     binding.btnShare.visibility = View.INVISIBLE
                     binding.animationView.visibility = View.VISIBLE
                 }
+
                 is Result.Success -> {
                     binding.btnShare.visibility = View.VISIBLE
                     binding.animationView.visibility = View.GONE
@@ -255,12 +283,14 @@ class LocalNewsDescFragment : Fragment() {
                     }
                     viewModel.linkCreated.postValue(Result.NotInitialized)
                 }
+
                 is Result.Error -> {
                     binding.btnShare.visibility = View.VISIBLE
                     binding.animationView.visibility = View.GONE
                     Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
                         .show()
                 }
+
                 else -> {
                     binding.btnShare.visibility = View.VISIBLE
                     binding.animationView.visibility = View.GONE

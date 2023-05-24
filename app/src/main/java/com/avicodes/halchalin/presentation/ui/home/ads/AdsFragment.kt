@@ -96,6 +96,7 @@ class AdsFragment : Fragment() {
             viewModel.getAllArticles()
             viewModel.getFeaturedArticles()
 
+
             getFeaturedAds()
             getAllArticles()
             getFeaturedArticles()

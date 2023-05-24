@@ -1,11 +1,13 @@
-package com.avicodes.halchalin.data.repository.ads.featured
+package com.avicodes.halchalin.data.repository.ads
 
 import com.avicodes.halchalin.data.models.Featured
+import com.avicodes.halchalin.data.models.TopAds
 import com.avicodes.halchalin.data.models.ads
 import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -37,6 +39,19 @@ class AdsDataSouceImpl(
             .get().await()
 
         val featuredAds = snapshot.toObjects(ads::class.java)
+        emit(Result.Success(featuredAds))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
+
+    override fun getAllTopAds()= flow<Result<List<TopAds>>> {
+        emit(Result.Loading("Fetching Ads"))
+        val snapshot = firestore
+            .collection("TopAds")
+            .orderBy("priority", Query.Direction.DESCENDING)
+            .get().await()
+
+        val featuredAds = snapshot.toObjects(TopAds::class.java)
         emit(Result.Success(featuredAds))
     }.catch {
         emit(Result.Error(it))

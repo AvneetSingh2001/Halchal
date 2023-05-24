@@ -45,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
         callNetworkConnection()
 
         getCurUser()
+        observeTopAds()
         fetchDataAds()
         fetchLocalNewss()
         fetchRemoteNationalNews()
@@ -71,6 +72,10 @@ class HomeActivity : AppCompatActivity() {
         }
         observeTabs()
 
+    }
+
+    private fun observeTopAds() {
+        viewModel.getAllTopAds()
     }
 
     private fun callNetworkConnection() {

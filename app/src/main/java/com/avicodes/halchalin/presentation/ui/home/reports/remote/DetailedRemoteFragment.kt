@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +18,11 @@ import com.avicodes.halchalin.databinding.FragmentDetailedRemoteBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.explore.AdsAdapter
+import com.avicodes.halchalin.presentation.ui.home.explore.NewsResAdapter
 import com.bumptech.glide.Glide
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
+import com.smarteist.autoimageslider.SliderAnimations
+import com.smarteist.autoimageslider.SliderView
 
 
 class DetailedRemoteFragment : Fragment() {
@@ -61,6 +66,8 @@ class DetailedRemoteFragment : Fragment() {
             binding.rvAds.layoutManager = LinearLayoutManager(activity)
             getNewsAds()
 
+            observeTopAds()
+
             Glide.with(ivNews.context)
                 .load(news.image_url)
                 .error(R.drawable.halchal_logo_2)
@@ -80,6 +87,40 @@ class DetailedRemoteFragment : Fragment() {
 
     private fun navigateBack() {
         requireView().findNavController().popBackStack()
+    }
+
+
+    private fun setUpTopAdImages(data: List<String>) {
+        binding.apply {
+            cvTopAds.visibility = View.VISIBLE
+            val resourceAdapter = NewsResAdapter(data)
+            resourceAdapter.let {
+                ivTopAds.setSliderAdapter(it)
+                ivTopAds.setIndicatorAnimation(IndicatorAnimationType.WORM) //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+                ivTopAds.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+                ivTopAds.autoCycleDirection = SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH
+                ivTopAds.indicatorSelectedColor = Color.WHITE
+                ivTopAds.indicatorUnselectedColor = Color.GRAY
+                ivTopAds.scrollTimeInSec = 2 //set scroll delay in seconds :
+                ivTopAds.startAutoCycle()
+            }
+        }
+    }
+
+    private fun observeTopAds() {
+        viewModel.topAds.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { topAds ->
+                        if (topAds.isNotEmpty()) {
+                            setUpTopAdImages(topAds)
+                        }
+                    }
+                }
+
+                else -> {}
+            }
+        })
     }
 
     private fun observeLinkCreated() {

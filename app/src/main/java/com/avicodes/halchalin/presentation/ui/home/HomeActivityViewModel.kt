@@ -72,6 +72,31 @@ class HomeActivityViewModel(
     val userArticles: MutableLiveData<Result<List<ArticleProcessed>>> =
         MutableLiveData(Result.NotInitialized)
 
+    val topAds: MutableLiveData<Result<List<String>>> = MutableLiveData(Result.NotInitialized)
+
+    fun getAllTopAds() = viewModelScope.launch {
+        adsRepository.getAllTopAds().collectLatest {
+            when (it) {
+                is Result.Success -> {
+                    it.data?.let { topAdsList ->
+                        val topAdsProcessed = topAdsList.map { it.imgUrl }
+                        topAds.postValue(Result.Success(topAdsProcessed))
+                    }
+                }
+
+                is Result.Loading -> {
+                    topAds.postValue(it)
+                }
+
+                is Result.Error -> {
+                    topAds.postValue(it)
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     fun getFeaturedArticles() = viewModelScope.launch {
         articleRepository.getFeaturedArticles().collectLatest {
             when (it) {

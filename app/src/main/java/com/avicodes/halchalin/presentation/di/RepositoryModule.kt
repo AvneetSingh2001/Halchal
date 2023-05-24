@@ -1,7 +1,7 @@
 package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.data.repository.*
-import com.avicodes.halchalin.data.repository.ads.featured.AdsDataSource
+import com.avicodes.halchalin.data.repository.ads.AdsDataSource
 import com.avicodes.halchalin.data.repository.ads.AdsRepositoryImpl
 import com.avicodes.halchalin.data.repository.article.ArticleDataSource
 import com.avicodes.halchalin.data.repository.article.ArticleRepositoryImpl
