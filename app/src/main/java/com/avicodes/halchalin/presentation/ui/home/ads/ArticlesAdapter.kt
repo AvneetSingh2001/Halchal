@@ -19,7 +19,7 @@ import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
 import com.bumptech.glide.Glide
 
 class ArticlesAdapter(
-    private val onItemClickListener:(ArticleProcessed) -> Unit
+    private val onItemClickListener: (ArticleProcessed) -> Unit
 ) : RecyclerView.Adapter<ArticlesAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemArticleBinding) :
@@ -58,11 +58,17 @@ class ArticlesAdapter(
 
 
     private var callback = object : DiffUtil.ItemCallback<ArticleProcessed>() {
-        override fun areItemsTheSame(oldItem: ArticleProcessed, newItem: ArticleProcessed): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ArticleProcessed,
+            newItem: ArticleProcessed
+        ): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: ArticleProcessed, newItem: ArticleProcessed): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ArticleProcessed,
+            newItem: ArticleProcessed
+        ): Boolean {
             return oldItem == newItem
         }
     }

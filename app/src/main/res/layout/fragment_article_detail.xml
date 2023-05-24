@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.ui.home.ads.ArticleDetailFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,13 +15,12 @@
             android:id="@+id/cvTopAds"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/ivTopAds"
@@ -43,172 +43,162 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginLeft="20dp"
-            app:layout_constraintTop_toBottomOf="@id/cvTopAds"
             android:layout_marginHorizontal="50dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:background="#d9d9d9"/>
+            android:background="#d9d9d9"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvTopAds" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cvTopAds"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_gravity="right"
             android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:layout_margin="20dp"
             android:background="@drawable/btn_light_grey"
-            >
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvTopAds">
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationView"
-                android:visibility="gone"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:lottie_rawRes="@raw/share_animation"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
-                app:lottie_loop="true"/>
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/share_animation" />
 
             <ImageView
+                android:id="@+id/icShare"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="10dp"
-                android:id="@+id/icShare"
+                android:src="@drawable/share"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/share"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cvDate"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:padding="4dp"
-            android:id="@+id/cvDate"
-            android:background="@drawable/red_light"
-            app:layout_constraintTop_toBottomOf="@id/cvTopAds"
-            app:layout_constraintLeft_toRightOf="@id/cvTag"
             android:layout_margin="20dp"
-            >
+            android:background="@drawable/red_light"
+            android:padding="4dp"
+            app:layout_constraintLeft_toRightOf="@id/cvTag"
+            app:layout_constraintTop_toBottomOf="@id/cvTopAds">
 
             <ImageView
                 android:id="@+id/like"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:src="@drawable/clock_blue"
-                />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/like"
-                app:layout_constraintBottom_toBottomOf="@id/like"
-                app:layout_constraintRight_toRightOf="parent"
-                android:text="4 hrs ago"
-                android:layout_marginRight="5dp"
-                android:textColor="@color/black"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:fontFamily="@font/roboto_bold"
+                android:text="4 hrs ago"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/like"
                 app:layout_constraintLeft_toRightOf="@id/like"
-                android:id="@+id/tvDate"/>
-
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/like" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <ImageView
             android:id="@+id/ivUser"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:layout_constraintTop_toBottomOf="@id/cvTag"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/circle_shape"
             android:layout_margin="20dp"
-            />
+            android:src="@drawable/circle_shape"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvDate" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
             android:id="@+id/clUser"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toTopOf="@id/ivUser"
-            app:layout_constraintBottom_toBottomOf="@id/ivUser"
-            app:layout_constraintLeft_toRightOf="@id/ivUser">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvUserName"
-            android:layout_marginHorizontal="10dp"
-            android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Avneet Singh"
-            android:textColor="@color/black"
-            android:fontFamily="@font/roboto_bold"/>
-
-        <TextView
-            android:id="@+id/tvUserBio"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:fontFamily="@font/roboto_light"
-            android:text="Avneet Singh"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName"
-            android:textSize="10sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginHorizontal="10dp"
-            android:maxLines="2"
-            />
+            app:layout_constraintBottom_toBottomOf="@id/ivUser"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@id/ivUser"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivUser">
+
+
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Avneet Singh"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvUserBio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_light"
+                android:maxLines="2"
+                android:text="Avneet Singh"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/tvArticleTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:id="@+id/tvArticleTitle"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/ivUser"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="@font/roboto_bold"
             android:text="title"
             android:textColor="@color/black"
-            android:fontFamily="@font/roboto_bold"
-            />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:id="@+id/cvArticle"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="10dp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvArticleTitle"
-            >
+            app:layout_constraintTop_toBottomOf="@id/ivUser" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvArticle"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvArticleTitle">
 
             <ImageView
                 android:id="@+id/ivArticle"
@@ -221,71 +211,57 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-
-
-
-
-
         </com.google.android.material.card.MaterialCardView>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cvTag"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:padding="4dp"
-            android:id="@+id/cvTag"
-            app:layout_constraintTop_toBottomOf="@id/cvTopAds"
             android:layout_gravity="bottom"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@drawable/outline"
             android:layout_margin="20dp"
-            >
+            android:background="@drawable/outline"
+            android:padding="4dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvTopAds">
 
 
             <TextView
+                android:id="@+id/tvTag"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                app:layout_constraintRight_toRightOf="parent"
-                android:text="Tag"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:textColor="@color/black"
                 android:layout_marginVertical="2dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Tag"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:fontFamily="@font/roboto_bold"
-                android:id="@+id/tvTag"/>
-
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <TextView
+            android:id="@+id/tvArticleDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="40dp"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:id="@+id/tvArticleDesc"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/cvArticle"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="40dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="Description"
             android:textColor="@color/black"
-            android:fontFamily="@font/roboto_medium"
-            />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvArticle"
+            app:layout_constraintVertical_bias="0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
 
 </ScrollView>

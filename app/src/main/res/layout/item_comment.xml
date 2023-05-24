@@ -43,6 +43,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tvDelete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:layout_marginRight="20dp"
+        android:text="Delete"
+        android:textSize="10sp"
+        android:textColor="#0000FF"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/tvComment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

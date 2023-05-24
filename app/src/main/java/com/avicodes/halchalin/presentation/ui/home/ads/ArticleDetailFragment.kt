@@ -94,7 +94,8 @@ class ArticleDetailFragment : Fragment() {
     }
 
     private fun navigateToUserProfile(user: User) {
-        val action = ArticleDetailFragmentDirections.actionArticleDetailFragmentToUserProfileFragment(user)
+        val action =
+            ArticleDetailFragmentDirections.actionArticleDetailFragmentToUserProfileFragment(user)
         requireView().findNavController().navigate(action)
     }
 
@@ -140,6 +141,7 @@ class ArticleDetailFragment : Fragment() {
                     binding.animationView.progress = 0f
                     binding.icShare.visibility = View.GONE
                 }
+
                 is Result.Success -> {
                     it.data?.let { link ->
                         shareLink(link)
@@ -148,12 +150,14 @@ class ArticleDetailFragment : Fragment() {
                     binding.icShare.visibility = View.VISIBLE
                     viewModel.articleLinkCreated.postValue(Result.NotInitialized)
                 }
+
                 is Result.Error -> {
                     binding.animationView.visibility = View.GONE
                     binding.icShare.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), "Error sharing news", Toast.LENGTH_SHORT)
                         .show()
                 }
+
                 else -> {
                     binding.animationView.visibility = View.GONE
                     binding.icShare.visibility = View.VISIBLE

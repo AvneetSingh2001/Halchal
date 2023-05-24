@@ -53,10 +53,10 @@ class DetailedRemoteFragment : Fragment() {
         binding.apply {
             tvHeadline.text = news.title
 
-            if (news.description != null) {
-                tvDesc.text = news.description
-            } else if (news.content != null) {
+            if (news.content != null) {
                 tvDesc.text = news.content
+            } else if (news.description != null) {
+                tvDesc.text = news.description
             } else {
                 tvDesc.text = news.title
             }

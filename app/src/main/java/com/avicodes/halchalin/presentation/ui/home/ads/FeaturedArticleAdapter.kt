@@ -11,7 +11,7 @@ import com.avicodes.halchalin.databinding.ItemFeaturedArticleBinding
 import com.bumptech.glide.Glide
 
 class FeaturedArticleAdapter(
-    private val onItemClickListener:(ArticleProcessed) -> Unit
+    private val onItemClickListener: (ArticleProcessed) -> Unit
 ) : RecyclerView.Adapter<FeaturedArticleAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemFeaturedArticleBinding) :
@@ -58,11 +58,17 @@ class FeaturedArticleAdapter(
 
 
     private var callback = object : DiffUtil.ItemCallback<ArticleProcessed>() {
-        override fun areItemsTheSame(oldItem: ArticleProcessed, newItem: ArticleProcessed): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ArticleProcessed,
+            newItem: ArticleProcessed
+        ): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: ArticleProcessed, newItem: ArticleProcessed): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ArticleProcessed,
+            newItem: ArticleProcessed
+        ): Boolean {
             return oldItem == newItem
         }
     }

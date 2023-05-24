@@ -83,7 +83,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btnMyArticles"
+                android:id="@+id/btnReportBug"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -185,7 +185,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginTop="10dp"
-
+android:id="@+id/btnJoinUs"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -236,6 +236,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="10dp"
+                android:id="@+id/btnAboutUs"
                 app:cardElevation="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

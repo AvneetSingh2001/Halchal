@@ -74,10 +74,20 @@ class CommentFragment : BottomSheetDialogFragment() {
         viewModel.comments.observe(requireActivity(), Observer {
             when(it) {
                 is Result.Success -> {
+                    binding.mainCons.visibility = View.VISIBLE
+                    binding.progBar.visibility = View.GONE
                     adapter.differ.submitList(it.data)
+                    viewModel.comments.postValue(Result.NotInitialized)
                 }
 
-                else -> {}
+                is Result.Loading -> {
+                    binding.mainCons.visibility = View.INVISIBLE
+                    binding.progBar.visibility = View.VISIBLE
+                }
+
+                else -> {
+
+                }
             }
         })
 
@@ -85,6 +95,13 @@ class CommentFragment : BottomSheetDialogFragment() {
             navigateToUserProfile(it)
         }
 
+        adapter.checkCurUser {
+            viewModel.curUser.value?.userId == it
+        }
+
+        adapter.deleteClicked {
+
+        }
     }
 
     private fun getComments(newsId: String) {

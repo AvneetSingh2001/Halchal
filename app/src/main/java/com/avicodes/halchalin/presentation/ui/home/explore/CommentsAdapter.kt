@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.ui.home.explore
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -47,6 +48,22 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
                         it(user)
                     }
                 }
+
+                val isCurUserComment = checkCurUser?.let {
+                    it(user.userId)
+                }
+
+                isCurUserComment?.let {
+                    if(isCurUserComment) {
+                        tvDelete.visibility = View.VISIBLE
+                    }
+                }
+
+                tvDelete.setOnClickListener {
+                    deleteClicked?.let {
+
+                    }
+                }
             }
         }
     }
@@ -80,6 +97,20 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
 
     fun getUserByIdFun(listener: (String) -> User?) {
         getUserById = listener
+    }
+
+
+    private var checkCurUser: ((String) -> Boolean)? = null
+
+    fun checkCurUser(listener: (String) -> Boolean) {
+        checkCurUser = listener
+    }
+
+
+    private var deleteClicked: ((String) -> Unit)?= null
+
+    fun deleteClicked(listener: (String) -> Unit) {
+        deleteClicked = listener
     }
 
 
