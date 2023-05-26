@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AdsFragment : Fragment() {
+class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
     private var _binding: FragmentAdsBinding? = null
     private lateinit var featuredAdapter: SliderAdapter
@@ -74,10 +74,7 @@ class AdsFragment : Fragment() {
                 requireView().findNavController().navigate(action)
             }
 
-            featuredArticleAdapter = FeaturedArticleAdapter {
-                val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(it)
-                requireView().findNavController().navigate(action)
-            }
+            featuredArticleAdapter = FeaturedArticleAdapter(false, this@AdsFragment)
 
             btnViewAll.setOnClickListener {
                 val action = AdsFragmentDirections.actionAdsFragmentToAllArticlesFragment(null)
@@ -234,5 +231,13 @@ class AdsFragment : Fragment() {
             imageSlider.startAutoCycle();
         }
     }
+
+    override fun onItemClickListener(article: ArticleProcessed) {
+        val action = AdsFragmentDirections.actionAdsFragmentToArticleDetailFragment(article)
+        requireView().findNavController().navigate(action)
+    }
+
+
+    override fun onDeleteClickListener(article: ArticleProcessed) {}
 
 }

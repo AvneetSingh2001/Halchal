@@ -329,9 +329,11 @@ class HomeActivityViewModel(
                                 user?.let {
                                     commentProcessed.add(
                                         CommentProcessed(
+                                            comment.commentId,
                                             comment.time,
                                             comment.comment,
-                                            user
+                                            user,
+                                            comment.newsId
                                         )
                                     )
                                 }
@@ -366,15 +368,12 @@ class HomeActivityViewModel(
         }
     }
 
-    fun postComment(newsId: String, comment: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            localNewsRepository.postComment(
-                newsId = newsId,
-                comment = comment,
-            ).collectLatest {
-                commentUpdated.postValue(it)
-            }
-        }
+    fun postComment(newsId: String, comment: String, userId: String): Flow<Result<String>> {
+        return localNewsRepository.postComment(
+            newsId = newsId,
+            comment = comment,
+            userId = userId
+        )
     }
 
     suspend fun getUserById(userId: String): User? {
@@ -472,5 +471,13 @@ class HomeActivityViewModel(
                 categories.postValue(it)
             }
         }
+    }
+
+    fun deleteComment(commentId: String): Flow<Result<String>> {
+        return localNewsRepository.deleteComment(commentId)
+    }
+
+    fun deleteArticle(articleId: String) : Flow<Result<String>> {
+        return articleRepository.deleteArticle(articleId = articleId)
     }
 }

@@ -156,4 +156,17 @@ class ArticleDataSourceImpl(
     }.catch {
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
+
+    override fun deleteArticle(articleId: String)= flow<Result<String>> {
+        emit(Result.Loading("Deleting Article"))
+
+        firestore.collection("Articles")
+            .document(articleId)
+            .delete()
+            .await()
+
+        emit(Result.Success("Deleted"))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
 }

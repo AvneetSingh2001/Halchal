@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentUserProfileBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -23,7 +24,7 @@ import com.avicodes.halchalin.presentation.ui.home.ads.FeaturedArticleAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
@@ -61,11 +62,8 @@ class UserProfileFragment : Fragment() {
             tvBio.text = user.about
         }
 
-        articleAdapter = FeaturedArticleAdapter {
-            val action =
-                UserProfileFragmentDirections.actionUserProfileFragmentToArticleDetailFragment(it)
-            requireView().findNavController().navigate(action)
-        }
+        articleAdapter = FeaturedArticleAdapter(false, this)
+
         binding.rvArticles.adapter = articleAdapter
         binding.rvArticles.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -110,6 +108,14 @@ class UserProfileFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onItemClickListener(article: ArticleProcessed) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeleteClickListener(article: ArticleProcessed) {
+        TODO("Not yet implemented")
     }
 
 }

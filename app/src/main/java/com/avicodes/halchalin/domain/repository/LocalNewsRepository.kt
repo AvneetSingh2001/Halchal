@@ -18,6 +18,7 @@ interface LocalNewsRepository {
     fun postComment(
         newsId: String,
         comment: String,
+        userId: String,
     ): Flow<Result<String>>
 
     fun getComment(
@@ -29,4 +30,8 @@ interface LocalNewsRepository {
     ): Flow<Result<String>>
 
     fun getNewsById(newsId: String): Flow<Result<News>>
+
+    fun deleteComment(
+        commentId: String,
+    ): Flow<Result<String>>
 }

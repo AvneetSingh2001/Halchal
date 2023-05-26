@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.ads
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +12,8 @@ import com.avicodes.halchalin.databinding.ItemFeaturedArticleBinding
 import com.bumptech.glide.Glide
 
 class FeaturedArticleAdapter(
-    private val onItemClickListener: (ArticleProcessed) -> Unit
+    private val isUserArticles: Boolean,
+    private val featuredOnClickListener: FeaturedOnClickListener
 ) : RecyclerView.Adapter<FeaturedArticleAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemFeaturedArticleBinding) :
@@ -33,10 +35,17 @@ class FeaturedArticleAdapter(
                     .into(ivUser)
 
                 root.setOnClickListener {
-                    onItemClickListener(article)
+                    featuredOnClickListener.onItemClickListener(article)
                 }
 
+                if(isUserArticles) {
+                    clDelete.visibility = View.VISIBLE
+                    clUserDetails.visibility = View.GONE
+                }
 
+                ivDelete.setOnClickListener {
+                    featuredOnClickListener.onDeleteClickListener(article)
+                }
             }
         }
     }
@@ -74,4 +83,10 @@ class FeaturedArticleAdapter(
     }
 
     val differ = AsyncListDiffer(this, callback)
+
+
+    interface FeaturedOnClickListener {
+        fun onItemClickListener(article: ArticleProcessed)
+        fun onDeleteClickListener(article: ArticleProcessed)
+    }
 }

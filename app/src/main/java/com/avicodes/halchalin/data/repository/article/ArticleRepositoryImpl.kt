@@ -33,4 +33,8 @@ class ArticleRepositoryImpl(
     override fun getUserArticles(userId: String): Flow<Result<List<Article>>> {
         return articleDataSource.getUserArticles(userId = userId)
     }
+
+    override fun deleteArticle(articleId: String): Flow<Result<String>> {
+        return articleDataSource.deleteArticle(articleId = articleId)
+    }
 }

@@ -1,27 +1,26 @@
 package com.avicodes.halchalin.presentation.ui.home.explore
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.withCreated
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.databinding.FragmentCommentBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.*
 import com.avicodes.halchalin.data.utils.Result
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class CommentFragment : BottomSheetDialogFragment() {
 
@@ -46,43 +45,67 @@ class CommentFragment : BottomSheetDialogFragment() {
 
         val news = args.news
         viewModel = (activity as HomeActivity).viewModel
-
         setUpCommentsRecyclerView()
         getComments(news.newsId.toString())
 
         binding.apply {
             sendButton.setOnClickListener {
                 val comment = etComment.editText?.text.toString()
-                viewModel.postComment(
-                    news.newsId.toString(),
-                    comment,
-                )
+
+                viewModel.curUser.observe(viewLifecycleOwner, Observer { user ->
+                    user?.let {
+                        lifecycleScope.launch {
+                            viewModel.postComment(
+                                news.newsId.toString(),
+                                comment,
+                                user.userId
+                            ).collectLatest {
+                                when (it) {
+                                    is Result.Success -> {
+                                        news.newsId?.let { it1 -> getComments(it1) }
+                                    }
+
+                                    is Result.Loading -> {
+                                        showProg()
+                                    }
+
+                                    is Result.Error -> {
+                                        hideProg()
+                                        Toast.makeText(
+                                            context,
+                                            "Something went wrong",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    else -> {}
+                                }
+                            }
+                        }
+                    }
+                })
+
                 etComment.editText?.text?.clear()
             }
         }
 
-        viewModel.commentUpdated.observe(requireActivity(), Observer {
-            when(it) {
-                is Result.Success -> {
-                    viewModel.getComments(news.newsId.toString())
-                }
-                else -> {}
-            }
-        })
 
 
-        viewModel.comments.observe(requireActivity(), Observer {
-            when(it) {
+        viewModel.comments.observe(viewLifecycleOwner, Observer {
+            when (it) {
                 is Result.Success -> {
-                    binding.mainCons.visibility = View.VISIBLE
-                    binding.progBar.visibility = View.GONE
+                    hideProg()
                     adapter.differ.submitList(it.data)
                     viewModel.comments.postValue(Result.NotInitialized)
                 }
 
                 is Result.Loading -> {
-                    binding.mainCons.visibility = View.INVISIBLE
-                    binding.progBar.visibility = View.VISIBLE
+                    showProg()
+                }
+
+                is Result.Error -> {
+                    hideProg()
+                    Log.e("Comment Error", it.exception.toString())
                 }
 
                 else -> {
@@ -99,8 +122,61 @@ class CommentFragment : BottomSheetDialogFragment() {
             viewModel.curUser.value?.userId == it
         }
 
-        adapter.deleteClicked {
+        adapter.deleteClicked { commendId ->
+            popDeleteDialog(commendId)
+        }
+    }
 
+
+    private fun popDeleteDialog(commentId: String) {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle("Delete Comment")
+                .setMessage("Are you sure you want to delete this comment")
+                .setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Yes") { dialog, which ->
+                    deleteComment(commentId, dialog)
+                }
+                .show()
+        }
+    }
+
+    fun showProg() {
+        binding.mainCons.visibility = View.INVISIBLE
+        binding.progBar.visibility = View.VISIBLE
+    }
+
+    fun hideProg() {
+        binding.mainCons.visibility = View.VISIBLE
+        binding.progBar.visibility = View.GONE
+    }
+
+    private fun deleteComment(commentId: String, dialog: DialogInterface) {
+        lifecycleScope.launch {
+            viewModel.deleteComment(commentId).collectLatest {
+                when (it) {
+                    is Result.Success -> {
+                        args.news.newsId?.let { it1 -> getComments(it1) }
+                        dialog.dismiss()
+                    }
+
+                    is Result.Loading -> {
+                        showProg()
+                    }
+
+                    is Result.Error -> {
+                        hideProg()
+                        dialog.dismiss()
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    else -> {}
+
+                }
+            }
         }
     }
 

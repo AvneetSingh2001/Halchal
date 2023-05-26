@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.home.ads
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,22 +9,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAllArticlesBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
-class AllArticlesFragment : Fragment() {
+class AllArticlesFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
     private var _binding: FragmentAllArticlesBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var featuredArticleAdapter: FeaturedArticleAdapter
+
     private lateinit var viewModel: HomeActivityViewModel
 
     val args: AllArticlesFragmentArgs by navArgs()
@@ -44,18 +50,16 @@ class AllArticlesFragment : Fragment() {
 
         val userId = args.userId
 
-        featuredArticleAdapter = FeaturedArticleAdapter {
-            val action =
-                AllArticlesFragmentDirections.actionAllArticlesFragmentToArticleDetailFragment(it)
-            requireView().findNavController().navigate(action)
-        }
+        val isUserArticles = userId != null
+
+        featuredArticleAdapter = FeaturedArticleAdapter( isUserArticles, this)
 
         binding.rvNationalNews.adapter = featuredArticleAdapter
         binding.rvNationalNews.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
         if (userId != null) {
-            userId?.let {
+            userId.let {
                 getUserArticles(userId)
             }
         } else {
@@ -74,7 +78,6 @@ class AllArticlesFragment : Fragment() {
                 }
 
                 is Result.Success -> {
-                    binding.rvNationalNews.smoothScrollToPosition(0)
                     response.data?.let {
                         featuredArticleAdapter.differ.submitList(it)
                     }
@@ -125,6 +128,57 @@ class AllArticlesFragment : Fragment() {
         binding.mainCons.visibility = View.VISIBLE
     }
 
+    override fun onItemClickListener(article: ArticleProcessed) {
+        val action =
+            AllArticlesFragmentDirections.actionAllArticlesFragmentToArticleDetailFragment(article)
+        requireView().findNavController().navigate(action)
+    }
 
+    private fun popDeleteDialog(article: ArticleProcessed) {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle("Delete Article")
+                .setMessage("Are you sure you want to delete this article")
+                .setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Yes") { dialog, which ->
+                    deleteArticle(article, dialog)
+                }
+                .show()
+        }
+    }
+
+    private fun deleteArticle(article: ArticleProcessed, dialog: DialogInterface, ) {
+        viewModel.curUser.observe(viewLifecycleOwner, Observer {user ->
+            if(user?.userId == article.user.userId) {
+                lifecycleScope.launch {
+                    viewModel.deleteArticle(articleId = article.articleId).collectLatest {
+                        when(it) {
+                            is Result.Success -> {
+                                hideProgressBar()
+                                getUserArticles(user.userId)
+                            }
+
+                            is Result.Loading -> {
+                                showProgressBar()
+                            }
+
+                            is Result.Error ->  {
+                                hideProgressBar()
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                            }
+
+                            else -> {}
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    override fun onDeleteClickListener(article: ArticleProcessed) {
+        popDeleteDialog(article)
+    }
 
 }

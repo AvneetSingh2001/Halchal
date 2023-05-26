@@ -13,7 +13,8 @@ class LocalNewsRepositoryImpl(
     private val remoteLocalNewsDataSource: RemoteLocalNewsDataSource,
 ) : LocalNewsRepository {
 
-    private var _news : MutableStateFlow<Result<List<News>>> = MutableStateFlow(Result.NotInitialized)
+    private var _news: MutableStateFlow<Result<List<News>>> =
+        MutableStateFlow(Result.NotInitialized)
 
     override val news: MutableStateFlow<Result<List<News>>>
         get() = _news
@@ -32,6 +33,7 @@ class LocalNewsRepositoryImpl(
                         cacheLocalNewsDataSource.saveNewsInCache(news)
                     }
                 }
+
                 else -> {}
             }
         }
@@ -55,16 +57,18 @@ class LocalNewsRepositoryImpl(
                             cacheLocalNewsDataSource.saveNewsInCache(news)
                         }
                     }
+
                     else -> {}
                 }
             }
         }
     }
 
-    override fun postComment(newsId: String, comment: String): Flow<Result<String>> {
+    override fun postComment(newsId: String, comment: String, userId: String): Flow<Result<String>> {
         return remoteLocalNewsDataSource.postComment(
             newsId = newsId,
             comment = comment,
+            userId = userId
         )
     }
 
@@ -78,5 +82,9 @@ class LocalNewsRepositoryImpl(
 
     override fun getNewsById(newsId: String): Flow<Result<News>> {
         return remoteLocalNewsDataSource.getNewsById(newsId)
+    }
+
+    override fun deleteComment(commentId: String): Flow<Result<String>> {
+        return remoteLocalNewsDataSource.deleteComment(commentId)
     }
 }

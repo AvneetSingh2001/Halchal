@@ -16,10 +16,15 @@ interface RemoteLocalNewsDataSource {
     fun postComment(
         newsId: String,
         comment: String,
+        userId: String,
     ): Flow<Result<String>>
 
     suspend fun createDynamicLink(
         news: News
     ) : Flow<Result<String>>
+
+    fun deleteComment(
+        commentId: String,
+    ): Flow<Result<String>>
 
 }

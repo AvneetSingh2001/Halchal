@@ -3,6 +3,7 @@ package com.avicodes.halchalin.data.repository.news.local.dataSourceImpl
 import android.net.Uri
 import android.util.Log
 import androidx.core.net.toUri
+import androidx.room.util.UUIDUtil
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.prefs.UserPrefs
@@ -16,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 
 class RemoteLocalNewsDataSourceImpl(
     val auth: FirebaseAuth,
@@ -46,8 +48,7 @@ class RemoteLocalNewsDataSourceImpl(
         emit(Result.Loading("Fetching Comments"))
         val snapshot = firestore
             .collection("Comments")
-            .document(newsId)
-            .collection(newsId)
+            .whereEqualTo("newsId", newsId)
             .orderBy("time", Query.Direction.DESCENDING)
             .get().await()
         val comment = snapshot.toObjects(Comment::class.java)
@@ -73,25 +74,29 @@ class RemoteLocalNewsDataSourceImpl(
     override fun postComment(
         newsId: String,
         comment: String,
+        userId: String,
     ) = flow<Result<String>> {
         emit(Result.Loading("Uploading Comment"))
-        userPrefs.getUserId().collectLatest {
-            val userComment = Comment(
-                System.currentTimeMillis(),
-                comment,
-                it
-            )
-            firestore
-                .collection("Comments")
-                .document(newsId)
-                .collection(newsId)
-                .document().set(userComment)
-                .await()
-        }
+        val commentId = UUID.randomUUID().toString()
+
+        val userComment = Comment(
+            commentId,
+            System.currentTimeMillis(),
+            comment,
+            userId,
+            newsId
+        )
+        firestore
+            .collection("Comments")
+            .document(commentId)
+            .set(userComment)
+            .await()
+
         emit(Result.Success("Uploaded"))
     }.catch {
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
+
 
     override suspend fun createDynamicLink(news: News): Flow<Result<String>> = flow {
         emit(Result.Loading("Creating Dynamic Link"))
@@ -121,4 +126,20 @@ class RemoteLocalNewsDataSourceImpl(
             emit(Result.Error(e))
         }
     }
+
+    override fun deleteComment(
+        commentId: String,
+    ) = flow<Result<String>> {
+        emit(Result.Loading("Deleting Comment"))
+
+        firestore.collection("Comments")
+            .document(commentId)
+            .delete()
+            .await()
+
+        emit(Result.Success("Deleted"))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
+
 }

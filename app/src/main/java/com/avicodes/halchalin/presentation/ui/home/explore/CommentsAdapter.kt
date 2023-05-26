@@ -61,7 +61,7 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
 
                 tvDelete.setOnClickListener {
                     deleteClicked?.let {
-
+                        it(commentData.commentId)
                     }
                 }
             }
@@ -76,6 +76,12 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int) = position
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(differ.currentList[position])
