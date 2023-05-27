@@ -63,7 +63,7 @@ class NewsVpFragment : Fragment() {
 
 
         adapter.setOnCommentClickListener {
-           showCommentDialog(it)
+           showCommentDialog(it.newsId)
         }
 
         adapter.setOnShareClickListener {
@@ -120,8 +120,8 @@ class NewsVpFragment : Fragment() {
     }
 
 
-    private fun showCommentDialog(news: News) {
-        val action = NewsVpFragmentDirections.actionNewsVpFragmentToCommentFragment(news)
+    private fun showCommentDialog(newsId: String) {
+        val action = NewsVpFragmentDirections.actionNewsVpFragmentToCommentFragment(newsId)
         requireView().findNavController().navigate(action)
     }
 

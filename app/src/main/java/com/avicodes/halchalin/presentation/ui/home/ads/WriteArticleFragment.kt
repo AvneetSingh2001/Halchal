@@ -194,8 +194,8 @@ class WriteArticleFragment : Fragment() {
                 Glide.with(
                     ivImage.context
                 ).load(imageUri).into(ivImage)
-                toggleButton()
             }
+            toggleButton()
             imageUri = it
         } else {
             // An error occurred.

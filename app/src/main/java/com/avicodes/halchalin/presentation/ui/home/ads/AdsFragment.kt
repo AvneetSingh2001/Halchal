@@ -131,7 +131,6 @@ class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
                     is Result.Success -> {
                         viewModel.processedArticle.postValue(Result.NotInitialized)
                         it.data?.let { article ->
-
                             navigateToDetailedArticle(article)
                         } ?: Toast.makeText(requireContext(), "No Article Found", Toast.LENGTH_SHORT).show()
 

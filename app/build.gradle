@@ -113,6 +113,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     //Image slider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'

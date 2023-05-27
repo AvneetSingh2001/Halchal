@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.repository.article
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import com.avicodes.halchalin.data.models.Article
 import com.avicodes.halchalin.data.models.ArticleProcessed
@@ -40,7 +41,7 @@ class ArticleDataSourceImpl(
         tag: String,
         imgUri: Uri,
         userId: String,
-        enableComment: Boolean
+        isCommentEnabled: Boolean
     ) =
         flow<Result<String>> {
             emit(Result.Loading("Loading"))
@@ -64,7 +65,7 @@ class ArticleDataSourceImpl(
                 articleTitle = title,
                 date = date,
                 userId = userId,
-                isCommentEnabled = enableComment
+                commentEnabled = isCommentEnabled
             )
 
             firestore.collection("Articles").document(article.articleId)
@@ -83,6 +84,7 @@ class ArticleDataSourceImpl(
             .get()
             .await()
         val article = snapshot.toObjects(Article::class.java)
+        Log.e("AllArticles", article.toString())
         emit(Result.Success(article))
     }.catch {
         emit(Result.Error(it))

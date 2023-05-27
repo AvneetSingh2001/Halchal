@@ -114,7 +114,7 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.isCommentEnabled
+                                        article.commentEnabled
                                     )
                                 )
                             }
@@ -156,7 +156,7 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.isCommentEnabled
+                                        article.commentEnabled
                                     )
                                 )
                             }
@@ -199,7 +199,7 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.isCommentEnabled
+                                        article.commentEnabled
                                     )
                                 )
                             }
@@ -235,7 +235,8 @@ class HomeActivityViewModel(
                         article.articleDesc,
                         article.articleTag,
                         user,
-                        article.date
+                        article.date,
+                        article.commentEnabled
                     )
                     processedArticle.postValue(Result.Success(processed))
                 }
@@ -254,7 +255,7 @@ class HomeActivityViewModel(
     ) {
         viewModelScope.launch {
             articleRepository.uploadArticle(
-                title, desc, tag, imgUri, userId
+                title, desc, tag, imgUri, userId, enableComment
             ).collectLatest {
                 articleUploaded.postValue(it)
             }

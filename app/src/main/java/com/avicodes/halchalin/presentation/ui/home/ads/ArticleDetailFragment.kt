@@ -3,6 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home.ads
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -90,7 +91,9 @@ class ArticleDetailFragment : Fragment() {
                 navigateToUserProfile(article.user)
             }
 
-            if(article.isCommentEnabled) {
+            Log.e("Commentbtn", article.commentEnabled.toString())
+
+            if(article.commentEnabled) {
                 btnComment.visibility = View.VISIBLE
             } else {
                 btnComment.visibility = View.GONE
