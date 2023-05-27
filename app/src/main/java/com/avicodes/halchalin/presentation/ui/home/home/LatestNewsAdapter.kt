@@ -6,13 +6,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.avicodes.halchalin.R
-import com.avicodes.halchalin.data.models.LatestNews
 import com.avicodes.halchalin.data.models.News
-import com.avicodes.halchalin.data.models.NewsRemote
 import com.avicodes.halchalin.data.utils.TimeCalc
 import com.avicodes.halchalin.databinding.ItemLatestNewsBinding
-import com.avicodes.halchalin.databinding.ItemRemoteNewsBinding
-import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
 import com.bumptech.glide.Glide
 
 class LatestNewsAdapter : RecyclerView.Adapter<LatestNewsAdapter.ViewHolder>() {

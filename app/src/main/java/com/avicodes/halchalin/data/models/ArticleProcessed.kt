@@ -11,5 +11,6 @@ data class ArticleProcessed(
     val articleDesc: String = "",
     val articleTag: String = "",
     val user: User = User(),
-    val date: String = ""
+    val date: String = "",
+    val isCommentEnabled: Boolean = false
 ): Parcelable

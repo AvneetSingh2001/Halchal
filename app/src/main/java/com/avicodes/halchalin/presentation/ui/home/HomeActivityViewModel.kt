@@ -48,7 +48,6 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
     val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
-    val commentUpdated: MutableLiveData<Result<String>> = MutableLiveData()
     val comments: MutableLiveData<Result<List<CommentProcessed>>> =
         MutableLiveData(Result.NotInitialized)
     val curUser: MutableLiveData<User?> = MutableLiveData()
@@ -114,7 +113,8 @@ class HomeActivityViewModel(
                                         article.articleDesc,
                                         article.articleTag,
                                         user,
-                                        article.date
+                                        article.date,
+                                        article.isCommentEnabled
                                     )
                                 )
                             }
@@ -155,7 +155,8 @@ class HomeActivityViewModel(
                                         article.articleDesc,
                                         article.articleTag,
                                         user,
-                                        article.date
+                                        article.date,
+                                        article.isCommentEnabled
                                     )
                                 )
                             }
@@ -197,7 +198,8 @@ class HomeActivityViewModel(
                                         article.articleDesc,
                                         article.articleTag,
                                         user,
-                                        article.date
+                                        article.date,
+                                        article.isCommentEnabled
                                     )
                                 )
                             }
@@ -247,7 +249,8 @@ class HomeActivityViewModel(
         desc: String,
         tag: String,
         imgUri: Uri,
-        userId: String
+        userId: String,
+        enableComment: Boolean
     ) {
         viewModelScope.launch {
             articleRepository.uploadArticle(
@@ -333,7 +336,7 @@ class HomeActivityViewModel(
                                             comment.time,
                                             comment.comment,
                                             user,
-                                            comment.newsId
+                                            comment.itemId
                                         )
                                     )
                                 }

@@ -261,7 +261,7 @@ class LocalNewsDescFragment : Fragment() {
 
     private fun showCommentDialog(news: News) {
         val action =
-            LocalNewsDescFragmentDirections.actionLocalNewsDescFragmentToCommentFragment(news)
+            LocalNewsDescFragmentDirections.actionLocalNewsDescFragmentToCommentFragment(news.newsId)
         requireView().findNavController().navigate(action)
     }
 

@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.models.Article
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
@@ -87,6 +88,17 @@ class ArticleDetailFragment : Fragment() {
 
             ivUser.setOnClickListener {
                 navigateToUserProfile(article.user)
+            }
+
+            if(article.isCommentEnabled) {
+                btnComment.visibility = View.VISIBLE
+            } else {
+                btnComment.visibility = View.GONE
+            }
+
+            btnComment.setOnClickListener {
+                val action = ArticleDetailFragmentDirections.actionArticleDetailFragmentToCommentFragment(article.articleId)
+                requireView().findNavController().navigate(action)
             }
         }
 

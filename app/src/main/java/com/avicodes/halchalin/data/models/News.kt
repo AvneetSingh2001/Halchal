@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class News(
-    var newsId: String? = null,
+    var newsId: String = "",
     var newsHeadline: String? = null,
     var newsDesc: String? = null,
     var location: String? = null,

@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.0.1'
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     def lifecycle_version = "2.5.1"
@@ -123,8 +123,6 @@ dependencies {
     //Exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
 
-
-
     //timecalc
     implementation 'com.blankj:utilcodex:1.30.6'
 
@@ -147,7 +145,7 @@ dependencies {
     //bottom bar
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
-//lottie
+    //lottie
     def lottieVersion = "6.0.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 

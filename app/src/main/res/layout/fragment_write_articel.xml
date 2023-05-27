@@ -111,11 +111,22 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:id="@+id/cbEnableComment"
+            app:layout_constraintTop_toBottomOf="@id/tvTag"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="20dp"
+            android:text="Enable Comments"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/uploadImageButton"
-            app:layout_constraintTop_toBottomOf="@id/tvTag"
+            app:layout_constraintTop_toBottomOf="@id/cbEnableComment"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="20dp"

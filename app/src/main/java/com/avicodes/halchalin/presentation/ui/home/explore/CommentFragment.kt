@@ -43,10 +43,10 @@ class CommentFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val news = args.news
+        val itemId = args.itemId
         viewModel = (activity as HomeActivity).viewModel
         setUpCommentsRecyclerView()
-        getComments(news.newsId.toString())
+        getComments(itemId)
 
         binding.apply {
             sendButton.setOnClickListener {
@@ -56,13 +56,13 @@ class CommentFragment : BottomSheetDialogFragment() {
                     user?.let {
                         lifecycleScope.launch {
                             viewModel.postComment(
-                                news.newsId.toString(),
+                                itemId,
                                 comment,
                                 user.userId
                             ).collectLatest {
                                 when (it) {
                                     is Result.Success -> {
-                                        news.newsId?.let { it1 -> getComments(it1) }
+                                        getComments(itemId)
                                     }
 
                                     is Result.Loading -> {
@@ -158,7 +158,7 @@ class CommentFragment : BottomSheetDialogFragment() {
             viewModel.deleteComment(commentId).collectLatest {
                 when (it) {
                     is Result.Success -> {
-                        args.news.newsId?.let { it1 -> getComments(it1) }
+                        args.itemId
                         dialog.dismiss()
                     }
 

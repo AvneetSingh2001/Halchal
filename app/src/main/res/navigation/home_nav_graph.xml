@@ -91,8 +91,8 @@
         android:label="fragment_comment"
         tools:layout="@layout/fragment_comment" >
         <argument
-            android:name="news"
-            app:argType="com.avicodes.halchalin.data.models.News" />
+            android:name="itemId"
+            app:argType="string" />
         <action
             android:id="@+id/action_commentFragment_to_userProfileFragment2"
             app:destination="@id/userProfileFragment" />
@@ -178,6 +178,9 @@
         <action
             android:id="@+id/action_articleDetailFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_articleDetailFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/allArticlesFragment"

@@ -8,7 +8,7 @@ import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
 
 interface ArticleRepository {
-    fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri, userId: String): Flow<Result<String>>
+    fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri, userId: String, enableComment: Boolean): Flow<Result<String>>
 
     fun getAllArticles() : Flow<Result<List<Article>>>
 

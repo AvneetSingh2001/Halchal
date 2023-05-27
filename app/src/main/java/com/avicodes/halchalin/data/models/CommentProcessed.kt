@@ -9,6 +9,6 @@ data class CommentProcessed(
     val time: Long = 0,
     val comment: String = "",
     val user: User = User(),
-    val newsId: String
+    val itemId: String
 ): Parcelable {
 }

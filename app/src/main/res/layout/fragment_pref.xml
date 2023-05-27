@@ -59,49 +59,49 @@
             android:background="@color/mainGrey"/>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/v0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_margin="20dp"
-            android:text="App's Language"
-            android:id="@+id/tv3"
-            android:fontFamily="@font/roboto_bold"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/v0"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:text="App's Language"-->
+<!--            android:id="@+id/tv3"-->
+<!--            android:fontFamily="@font/roboto_bold"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="22sp"-->
+<!--            />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv3"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/tv4"
-            android:text="Choose the app's language"
-            android:textSize="12sp"
-            />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv3"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:id="@+id/tv4"-->
+<!--            android:text="Choose the app's language"-->
+<!--            android:textSize="12sp"-->
+<!--            />-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/tv3"
-            app:layout_constraintBottom_toBottomOf="@id/tv4"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="30dp"
-            android:src="@drawable/language_trans"
-            />
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="@id/tv3"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/tv4"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:layout_marginHorizontal="30dp"-->
+<!--            android:src="@drawable/language_trans"-->
+<!--            />-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:id="@+id/v1"
-            app:layout_constraintTop_toBottomOf="@id/tv4"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_margin="20dp"
-            android:background="@color/mainGrey"/>
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:id="@+id/v1"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tv4"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:layout_margin="20dp"-->
+<!--            android:background="@color/mainGrey"/>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

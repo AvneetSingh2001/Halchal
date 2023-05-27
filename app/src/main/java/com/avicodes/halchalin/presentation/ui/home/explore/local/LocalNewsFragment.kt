@@ -220,7 +220,7 @@ class LocalNewsFragment : Fragment() {
     }
 
     private fun showCommentDialog(news: News) {
-        val action = LocalNewsFragmentDirections.actionLocalNewsFragmentToCommentFragment(news)
+        val action = LocalNewsFragmentDirections.actionLocalNewsFragmentToCommentFragment(news.newsId)
         requireView().findNavController().navigate(action)
     }
 

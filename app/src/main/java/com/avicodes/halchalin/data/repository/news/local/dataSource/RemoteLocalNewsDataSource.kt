@@ -11,10 +11,10 @@ interface RemoteLocalNewsDataSource {
     fun getNews(location: String): Flow<Result<List<News>>>
 
     fun getNewsById(id: String): Flow<Result<News>>
-    fun getAllComments(newsId: String): Flow<Result<List<Comment>>>
+    fun getAllComments(itemId: String): Flow<Result<List<Comment>>>
 
     fun postComment(
-        newsId: String,
+        itemId: String,
         comment: String,
         userId: String,
     ): Flow<Result<String>>

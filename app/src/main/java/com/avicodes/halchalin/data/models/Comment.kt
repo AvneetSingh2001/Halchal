@@ -9,5 +9,5 @@ data class Comment(
     val time: Long = 0,
     val comment: String = "",
     val userId: String = "",
-    val newsId: String = ""
+    val itemId: String = ""
 ) : Parcelable

@@ -111,11 +111,10 @@ class UserProfileFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickLi
     }
 
     override fun onItemClickListener(article: ArticleProcessed) {
-        TODO("Not yet implemented")
+        val action = UserProfileFragmentDirections.actionUserProfileFragmentToArticleDetailFragment(article)
+        requireView().findNavController().navigate(action)
     }
 
-    override fun onDeleteClickListener(article: ArticleProcessed) {
-        TODO("Not yet implemented")
-    }
+    override fun onDeleteClickListener(article: ArticleProcessed) {}
 
 }

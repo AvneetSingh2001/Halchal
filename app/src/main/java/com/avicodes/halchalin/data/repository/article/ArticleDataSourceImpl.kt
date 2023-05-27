@@ -39,7 +39,8 @@ class ArticleDataSourceImpl(
         desc: String,
         tag: String,
         imgUri: Uri,
-        userId: String
+        userId: String,
+        enableComment: Boolean
     ) =
         flow<Result<String>> {
             emit(Result.Loading("Loading"))
@@ -62,7 +63,8 @@ class ArticleDataSourceImpl(
                 articleTag = tag,
                 articleTitle = title,
                 date = date,
-                userId = userId
+                userId = userId,
+                isCommentEnabled = enableComment
             )
 
             firestore.collection("Articles").document(article.articleId)

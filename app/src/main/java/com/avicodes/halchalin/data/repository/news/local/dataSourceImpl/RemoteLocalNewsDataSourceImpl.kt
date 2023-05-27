@@ -44,11 +44,11 @@ class RemoteLocalNewsDataSourceImpl(
     }.flowOn(Dispatchers.IO)
 
 
-    override fun getAllComments(newsId: String) = flow<Result<List<Comment>>> {
+    override fun getAllComments(itemId: String) = flow<Result<List<Comment>>> {
         emit(Result.Loading("Fetching Comments"))
         val snapshot = firestore
             .collection("Comments")
-            .whereEqualTo("newsId", newsId)
+            .whereEqualTo("itemId", itemId)
             .orderBy("time", Query.Direction.DESCENDING)
             .get().await()
         val comment = snapshot.toObjects(Comment::class.java)
@@ -72,7 +72,7 @@ class RemoteLocalNewsDataSourceImpl(
     }.flowOn(Dispatchers.IO)
 
     override fun postComment(
-        newsId: String,
+        itemId: String,
         comment: String,
         userId: String,
     ) = flow<Result<String>> {
@@ -84,7 +84,7 @@ class RemoteLocalNewsDataSourceImpl(
             System.currentTimeMillis(),
             comment,
             userId,
-            newsId
+            itemId
         )
         firestore
             .collection("Comments")

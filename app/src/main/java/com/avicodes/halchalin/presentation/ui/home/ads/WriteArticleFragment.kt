@@ -69,7 +69,8 @@ class WriteArticleFragment : Fragment() {
                                     desc = tvDesc.editText?.text.toString(),
                                     tag = if (check3) tvTag.editText?.text.toString() else "null",
                                     imgUri = imageUri!!,
-                                    userId = userId
+                                    userId = userId,
+                                    enableComment = cbEnableComment.isChecked
                                 )
                             }
                         }

@@ -64,16 +64,16 @@ class LocalNewsRepositoryImpl(
         }
     }
 
-    override fun postComment(newsId: String, comment: String, userId: String): Flow<Result<String>> {
+    override fun postComment(itemId: String, comment: String, userId: String): Flow<Result<String>> {
         return remoteLocalNewsDataSource.postComment(
-            newsId = newsId,
+            itemId = itemId,
             comment = comment,
             userId = userId
         )
     }
 
-    override fun getComment(newsId: String): Flow<Result<List<Comment>>> {
-        return remoteLocalNewsDataSource.getAllComments(newsId)
+    override fun getComment(itemId: String): Flow<Result<List<Comment>>> {
+        return remoteLocalNewsDataSource.getAllComments(itemId)
     }
 
     override suspend fun createDynamicLink(news: News): Flow<Result<String>> {

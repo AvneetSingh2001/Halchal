@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 class ArticleRepositoryImpl(
     private val articleDataSource: ArticleDataSource
 ) : ArticleRepository {
-    override fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri, userId: String): Flow<Result<String>> {
-        return articleDataSource.uploadArticle(title, desc, tag, imgUri, userId)
+    override fun uploadArticle(title: String, desc: String, tag: String, imgUri: Uri, userId: String, enableComment: Boolean): Flow<Result<String>> {
+        return articleDataSource.uploadArticle(title, desc, tag, imgUri, userId, enableComment)
     }
 
     override fun getAllArticles(): Flow<Result<List<Article>>> {
