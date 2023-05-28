@@ -37,9 +37,8 @@ class DataModule {
     @Singleton
     fun providePhoneAuthDataSource(
         auth: FirebaseAuth,
-        activity: MainActivity
     ): PhoneAuthDataSource {
-        return PhoneAuthDataSourceImpl(auth, activity)
+        return PhoneAuthDataSourceImpl(auth)
     }
 
     @Provides

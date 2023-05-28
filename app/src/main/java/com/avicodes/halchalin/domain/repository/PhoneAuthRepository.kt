@@ -1,14 +1,17 @@
 package com.avicodes.halchalin.domain.repository
 
+import android.app.Activity
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 
 interface PhoneAuthRepository {
-    val signUpState: MutableStateFlow<Result<String>>
 
-    suspend fun authenticate(phone: String)
+    val phoneState: MutableStateFlow<Result<String>>
+    val codeState: MutableStateFlow<Result<String>>
 
-    suspend fun onVerifyOtp(code: String)
+    suspend fun authenticate(phone: String,activity: Activity)
 
-    fun getUserPhone() : String
+    suspend fun onVerifyOtp(code: String, activity: Activity)
+
+    fun getUserPhone(): String
 }

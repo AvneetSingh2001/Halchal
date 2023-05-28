@@ -7,19 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.avicodes.halchalin.MainActivity
-import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.avicodes.halchalin.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -27,18 +23,7 @@ class AuthFragment : Fragment() {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: AuthFragmentViewModel
-
-    @Inject
-    lateinit var viewModelFactory: AuthFragmentViewModelFactory
-
-    @Inject
-    lateinit var auth: FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private val viewModel by activityViewModels<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,23 +32,7 @@ class AuthFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
 
-        binding.progCons.visibility = View.VISIBLE
-        binding.mainCons.visibility = View.INVISIBLE
 
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            viewModelFactory
-        )[AuthFragmentViewModel::class.java]
-
-        viewModel.isLoggedIn().observe(viewLifecycleOwner, Observer {
-            Log.e("AuthFragment", "Is Logged in: ${it.toString()}")
-            if (it == true) {
-                navigateToHomeScreen()
-            } else {
-                binding.progCons.visibility = View.INVISIBLE
-                binding.mainCons.visibility = View.VISIBLE
-            }
-        })
 
         return binding.root
     }
@@ -72,64 +41,75 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.apply {
             btnContinue.setOnClickListener {
-                if (etPhoneNumber.editText?.text.isNullOrEmpty()) {
-                    etPhoneNumber.error = "Required"
-                } else if (etPhoneNumber.editText?.text?.length != 10) {
-                    etPhoneNumber.error = "Invalid"
-                } else {
-                    val phone = etPhoneNumber.editText!!.text.toString()
-                    viewModel.authenticatePhone(phone)
-                    lifecycleScope.launch {
-                        viewModel.signUpState.collectLatest { uiState ->
-                            when (uiState) {
-                                is Result.Success -> {
-                                    progCons.visibility = View.INVISIBLE
-                                    mainCons.visibility = View.VISIBLE
-                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                                }
-
-                                is Result.Loading -> {
-                                    val text = (uiState as Result.Loading).message
-                                    progCons.visibility = View.VISIBLE
-                                    mainCons.visibility = View.INVISIBLE
-                                    if (text == context?.getString(R.string.code_sent)) {
-                                        navigateToCodeAuth(phone)
-                                    }
-                                    Log.e("MYTAG", "AuthFragment")
-                                }
-
-                                is Result.Error -> {
-                                    progCons.visibility = View.INVISIBLE
-                                    mainCons.visibility = View.VISIBLE
-                                    Log.e("AuthFragment", uiState.exception?.message.toString())
-                                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                                }
-
-                                is Result.NotInitialized -> {
-                                }
-                            }
-                        }
+                val number = etPhoneNumber.editText?.text.toString()
+                val countryCode = etCountryCode.selectedCountryCode
+                if (validNumber(number) and validCode(countryCode)) {
+                    activity?.let { activity ->
+                        Log.e("Avi", countryCode)
+                        viewModel.authenticatePhone("+$countryCode$number", activity)
+                        observeResults(number)
                     }
 
                 }
             }
 
-
-
         }
     }
 
 
+    fun observeResults(number: String) {
+        binding.apply {
+            lifecycleScope.launch {
 
-    override fun onStart() {
-        super.onStart()
+                viewModel.phoneState.collectLatest { uiState ->
+
+                    when (uiState) {
+                        is Result.Success -> {
+                            viewModel.phoneState.value = Result.NotInitialized
+                            navigateToCodeAuth("$number")
+                            progCons.visibility = View.INVISIBLE
+                            mainCons.visibility = View.VISIBLE
+                        }
+
+                        is Result.Loading -> {
+                            progCons.visibility = View.VISIBLE
+                            mainCons.visibility = View.INVISIBLE
+                        }
+
+                        is Result.Error -> {
+                            progCons.visibility = View.INVISIBLE
+                            mainCons.visibility = View.VISIBLE
+                            Log.e("AVi", uiState.exception.toString())
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                        }
+
+                        is Result.NotInitialized -> {}
+                    }
+                }
+
+            }
+        }
     }
 
-    fun navigateToHomeScreen() {
-        (activity as MainActivity).moveToHomeActivity()
+    fun validCode(number: String): Boolean {
+        if (number.isNullOrBlank() || number.isEmpty()) {
+            binding.etPhoneNumber.error = "Required"
+            return false
+        }
+        return true
+    }
+
+    fun validNumber(number: String?): Boolean {
+        if (number.isNullOrBlank() || number.isEmpty()) {
+            binding.etPhoneNumber.error = "Required"
+            return false
+        } else if (number.length != 10) {
+            binding.etPhoneNumber.error = "Invalid"
+            return false
+        }
+        return true
     }
 
     fun navigateToCodeAuth(phone: String) {

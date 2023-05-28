@@ -8,8 +8,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.ActivityMainBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -18,17 +21,14 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        var mainActivity: MainActivity? = null
-
-        fun getInstance(): MainActivity? = mainActivity
-    }
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -42,16 +42,22 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainActivityViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainActivity = this
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
 
         callNetworkConnection()
 
-        viewModel = ViewModelProvider(this, viewModelFactory)[MainActivityViewModel::class.java]
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        lifecycleScope.launch {
+            viewModel.isLoggedIn().collectLatest {
+                Log.e("login", it.toString())
+                if(it){
+                    moveToHomeActivity()
+                }
+            }
+        }
+
+        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
     }
 
 
@@ -77,20 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity = this
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        mainActivity = this
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mainActivity = null
-    }
 
     fun moveToHomeActivity() {
         getDynamicLink()

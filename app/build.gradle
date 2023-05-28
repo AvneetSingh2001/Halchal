@@ -150,4 +150,8 @@ dependencies {
     def lottieVersion = "6.0.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
+    //country code
+    implementation "com.hbb20:ccp:2.6.0"
+
+
 }

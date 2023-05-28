@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.data.repository.auth
 
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.avicodes.halchalin.MainActivity
@@ -12,18 +13,26 @@ import java.util.concurrent.TimeUnit
 
 class PhoneAuthDataSourceImpl(
     private val auth: FirebaseAuth,
-    private val activity: MainActivity
-): PhoneAuthDataSource {
+) : PhoneAuthDataSource {
 
     var verificationOtp: String = ""
+
     var resentToken: PhoneAuthProvider.ForceResendingToken? = null
 
-    private var _signUpState : MutableStateFlow<Result<String>> = MutableStateFlow(Result.NotInitialized)
-    override val signUpState: MutableStateFlow<Result<String>>
-        get() = _signUpState
+    private var _phoneState: MutableStateFlow<Result<String>> =
+        MutableStateFlow(Result.NotInitialized)
+    override val phoneState: MutableStateFlow<Result<String>>
+        get() = _phoneState
 
-    override suspend fun authenticate(phone: String) {
-        _signUpState.value = Result.Loading(activity.getString(com.avicodes.halchalin.R.string.code_will_be_send))
+
+    private var _codeState: MutableStateFlow<Result<String>> =
+        MutableStateFlow(Result.NotInitialized)
+    override val codeState: MutableStateFlow<Result<String>>
+        get() = _codeState
+
+    override suspend fun authenticate(phone: String, activity: Activity) {
+        _phoneState.value =
+            Result.Loading(activity.getString(com.avicodes.halchalin.R.string.code_will_be_send))
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)       // Phone number to verify
             .setActivity(activity)
@@ -37,9 +46,9 @@ class PhoneAuthDataSourceImpl(
         callbacks.onCodeSent(verificationId, token)
     }
 
-    override suspend fun onVerifyOtp(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationOtp,code)
-        signInWithPhoneAuthCredential(credential)
+    override suspend fun onVerifyOtp(code: String, activity: Activity) {
+        val credential = PhoneAuthProvider.getCredential(verificationOtp, code)
+        signInWithPhoneAuthCredential(credential, activity = activity)
     }
 
     override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -59,8 +68,7 @@ class PhoneAuthDataSourceImpl(
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             Log.d(TAG, "onVerificationCompleted:$credential")
-            _signUpState.value = Result.Loading("Verification completed")
-            signInWithPhoneAuthCredential(credential)
+            _phoneState.value = Result.Loading("Verified")
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
@@ -72,38 +80,39 @@ class PhoneAuthDataSourceImpl(
                 Log.w(TAG, "onVerificationFailed", e)
             }
 
-            _signUpState.value = Result.Error(java.lang.Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
-
+            _phoneState.value = Result.Error(e)
         }
 
         override fun onCodeSent(
             verificationId: String,
             token: PhoneAuthProvider.ForceResendingToken
         ) {
-            Log.d(TAG, "onCodeSent:$verificationId")
             verificationOtp = verificationId
             resentToken = token
-            _signUpState.value = Result.Loading(activity.getString(com.avicodes.halchalin.R.string.code_sent))
+            _phoneState.value = Result.Success("Code Sent")
         }
     }
 
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential, activity: Activity) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
-                    _signUpState.value = Result.Success<String>(task.result.user!!.uid)
+                    task.result.user?.let { user ->
+                        _codeState.value = Result.Success(user.uid)
+                    }
+
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        _signUpState.value = Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.invalid_code)))
+                        _codeState.value =
+                            Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.invalid_code)))
                         return@addOnCompleteListener
                     }
-                    _signUpState.value = Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
-
-
+                    _codeState.value =
+                        Result.Error(Exception(activity.getString(com.avicodes.halchalin.R.string.verification_failed)))
                 }
             }
     }

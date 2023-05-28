@@ -3,7 +3,6 @@ package com.avicodes.halchalin.presentation.di
 import com.avicodes.halchalin.MainActivityViewModelFactory
 import com.avicodes.halchalin.domain.repository.*
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
-import com.avicodes.halchalin.presentation.ui.auth.AuthFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -18,23 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class FactoryModule {
 
-    @Singleton
-    @Provides
-    fun provideAuthFragmentViewModelFactory(
-        authenticateUseCase: authenticateUseCase,
-        onVerifyOtpUseCase: onVerifyOtpUseCase,
-        signUpStateUseCase: signUpStateUseCase,
-        getUserUseCase: GetUserUseCase,
-        userRespository: UserRespository
-    ): AuthFragmentViewModelFactory {
-        return AuthFragmentViewModelFactory(
-            authenticateUseCase,
-            onVerifyOtpUseCase,
-            signUpStateUseCase,
-            getUserUseCase,
-            userRespository
-        )
-    }
 
     @Singleton
     @Provides
@@ -80,10 +62,12 @@ class FactoryModule {
     @Singleton
     @Provides
     fun provideMainActivityViewModelFactory(
-        cityRepository: CityRepository
+        phoneAuthRepository: PhoneAuthRepository,
+        userRespository: UserRespository
     ) : MainActivityViewModelFactory {
         return MainActivityViewModelFactory(
-            cityRepository = cityRepository
+            phoneAuthRepository = phoneAuthRepository,
+            userRespository = userRespository
         )
     }
 }

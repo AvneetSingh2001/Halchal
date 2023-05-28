@@ -15,7 +15,6 @@ class UserPrefs(
     private val dataStore: DataStore<Preferences>
 ){
 
-
     companion object {
         var LOGGEDIN = booleanPreferencesKey("LOGGEDIN")
         var USERID = stringPreferencesKey("USER_ID")

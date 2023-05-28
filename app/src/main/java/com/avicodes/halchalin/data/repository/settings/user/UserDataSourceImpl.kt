@@ -10,6 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
@@ -61,7 +62,7 @@ class UserDataSourceImpl(
         emit(Result.Success(imgUrl))
     }.catch { emit(Result.Error(it)) }.flowOn(Dispatchers.IO)
 
-    override fun isLoggedIn(): Flow<Boolean> {
+    override fun isLoggedIn() :  Flow<Boolean> {
         return userPrefs.isLoggedIn()
     }
 

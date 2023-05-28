@@ -14,21 +14,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class UsecaseModule {
 
-    @Provides
-    @Singleton
-    fun provideAuthenticateUsecase(phoneAuthRepository: PhoneAuthRepository): authenticateUseCase =
-        authenticateUseCase(phoneAuthRepository)
 
 
-    @Provides
-    @Singleton
-    fun provideOnVerifyOtpUsecase(phoneAuthRepository: PhoneAuthRepository): onVerifyOtpUseCase =
-        onVerifyOtpUseCase(phoneAuthRepository)
-
-    @Provides
-    @Singleton
-    fun provideSignupStateUsecase(phoneAuthRepository: PhoneAuthRepository): signUpStateUseCase =
-        signUpStateUseCase(phoneAuthRepository)
 
 
     @Provides

@@ -15,16 +15,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment
-import com.avicodes.halchalin.presentation.ui.home.reports.remote.RemoteNewsAdapter
-import com.avicodes.halchalin.presentation.ui.home.settings.EditFragment
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
