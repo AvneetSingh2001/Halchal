@@ -52,7 +52,13 @@ class MainActivity : AppCompatActivity() {
             viewModel.isLoggedIn().collectLatest {
                 Log.e("login", it.toString())
                 if(it){
+                    binding.progBar.visibility = View.VISIBLE
+                    binding.navHostFragment.visibility = View.INVISIBLE
                     moveToHomeActivity()
+                }else {
+
+                    binding.progBar.visibility = View.GONE
+                    binding.navHostFragment.visibility = View.VISIBLE
                 }
             }
         }

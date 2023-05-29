@@ -31,9 +31,6 @@ class AuthFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentAuthBinding.inflate(inflater, container, false)
-
-
-
         return binding.root
     }
 
