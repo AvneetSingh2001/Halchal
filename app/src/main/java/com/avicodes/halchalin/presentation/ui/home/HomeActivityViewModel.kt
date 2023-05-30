@@ -114,7 +114,8 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.commentEnabled
+                                        article.commentEnabled,
+                                        featured = article.featured
                                     )
                                 )
                             }
@@ -156,7 +157,8 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.commentEnabled
+                                        article.commentEnabled,
+                                        article.featured
                                     )
                                 )
                             }
@@ -199,7 +201,8 @@ class HomeActivityViewModel(
                                         article.articleTag,
                                         user,
                                         article.date,
-                                        article.commentEnabled
+                                        article.commentEnabled,
+                                        article.featured
                                     )
                                 )
                             }
@@ -236,7 +239,8 @@ class HomeActivityViewModel(
                         article.articleTag,
                         user,
                         article.date,
-                        article.commentEnabled
+                        article.commentEnabled,
+                        article.featured
                     )
                     processedArticle.postValue(Result.Success(processed))
                 }

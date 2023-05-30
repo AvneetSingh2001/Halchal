@@ -7,4 +7,5 @@ import com.avicodes.halchalin.data.utils.Result
 
 interface CityDataSource{
     fun getAllLocations(): Flow<Result<List<City>>>
+
 }

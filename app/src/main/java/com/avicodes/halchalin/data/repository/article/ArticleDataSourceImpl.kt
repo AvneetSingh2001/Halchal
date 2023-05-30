@@ -65,7 +65,8 @@ class ArticleDataSourceImpl(
                 articleTitle = title,
                 date = date,
                 userId = userId,
-                commentEnabled = isCommentEnabled
+                commentEnabled = isCommentEnabled,
+                featured = false
             )
 
             firestore.collection("Articles").document(article.articleId)
@@ -93,8 +94,9 @@ class ArticleDataSourceImpl(
     override fun getFeaturedArticles() = flow<Result<List<Article>>> {
         emit(Result.Loading("Fetching Comments"))
         val snapshot = firestore
-            .collection("FeaturedArticles")
-            .orderBy("time", Query.Direction.DESCENDING)
+            .collection("Articles")
+            .orderBy("date", Query.Direction.DESCENDING)
+            .whereEqualTo("featured", true)
             .get()
             .await()
         val article = snapshot.toObjects(Article::class.java)

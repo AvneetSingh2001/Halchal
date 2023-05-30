@@ -12,6 +12,4 @@ interface NationalNewsDao {
     @Query("SELECT * FROM remote_news_table")
     suspend fun getAllArticles(): PagingSource<String, NewsRemote>
 
-    @Query("DELETE FROM remote_news_table")
-    suspend fun deleteAll()
 }

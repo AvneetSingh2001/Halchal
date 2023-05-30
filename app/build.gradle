@@ -29,41 +29,6 @@ android {
     }
 
 
-    flavorDimensions "main"
-
-    productFlavors {
-        user {
-            applicationId "com.avicodes.halchalin"
-            dimension "main"
-            resValue "string", "app_name", "Halchal"
-        }
-        admin {
-            dimension "main"
-            applicationId "com.avicodes.halchalinadmin"
-            resValue "string", "app_name", "Halchal Admin"
-        }
-    }
-
-    sourceSets {
-        admin {
-            res {
-                srcDirs 'src/admin/res'
-            }
-            java {
-                srcDirs 'src/admin/java'
-            }
-        }
-
-        admin {
-            res {
-                srcDirs 'src/user/res'
-            }
-            java {
-                srcDirs 'src/user/java'
-            }
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false

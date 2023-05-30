@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.domain.repository
 
+import com.avicodes.halchalin.data.models.Admin
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow

@@ -10,7 +10,7 @@ import com.avicodes.halchalin.data.utils.RoomTypeConverters
 
 @TypeConverters(value = [RoomTypeConverters::class])
 @Database(
-    entities = [NewsRemote::class, NewsLocal::class, Featured::class],
+    entities = [NewsRemote::class, NewsLocal::class],
     version = 1,
     exportSchema = false
 )

@@ -18,7 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Halchalin"
         tools:targetApi="31">
-
+        <activity
+            android:name=".admin.AdminHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="false"

@@ -85,10 +85,10 @@ class DataModule {
     fun provideRemoteLocalNewsDataSource(
         auth: FirebaseAuth,
         firestoreDb: FirebaseFirestore,
-        userPrefs: UserPrefs
+        storage: FirebaseStorage
     ): RemoteLocalNewsDataSource {
         return RemoteLocalNewsDataSourceImpl(
-            auth, firestoreDb, userPrefs
+            auth, firestoreDb, storage
         )
     }
 
@@ -100,9 +100,10 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideAdsDataSource(firestoreDb: FirebaseFirestore): AdsDataSource {
+    fun provideAdsDataSource(firestoreDb: FirebaseFirestore, storage: FirebaseStorage): AdsDataSource {
         return AdsDataSouceImpl(
-            firestoreDb
+            firestoreDb,
+            storage
         )
     }
 

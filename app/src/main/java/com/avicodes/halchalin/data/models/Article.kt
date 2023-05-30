@@ -12,5 +12,6 @@ data class Article(
     val articleTag: String = "",
     val userId: String = "",
     val date: String = "",
-    val commentEnabled: Boolean = false
+    val commentEnabled: Boolean = false,
+    val featured: Boolean = false
 ): Parcelable

@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.data.repository.news.local.dataSource
 
+import android.net.Uri
 import com.avicodes.halchalin.data.models.Comment
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsResponse
@@ -27,4 +28,7 @@ interface RemoteLocalNewsDataSource {
         commentId: String,
     ): Flow<Result<String>>
 
+    fun deleteNews(
+        newsId: String
+    ): Flow<Result<String>>
 }

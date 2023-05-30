@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.data.repository.settings.user
 
+import com.avicodes.halchalin.data.models.Admin
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.UserRespository

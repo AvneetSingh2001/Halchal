@@ -166,6 +166,8 @@ class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
                 is Result.Success -> {
                     response.data?.let {
+                        Log.e("Featured", it.toString())
+
                         binding.rvFeaturedArticles.smoothScrollToPosition(0)
                         featuredArticleAdapter.differ.submitList(it)
                     }

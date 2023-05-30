@@ -14,7 +14,10 @@ import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
@@ -22,7 +25,7 @@ import java.util.UUID
 class RemoteLocalNewsDataSourceImpl(
     val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val userPrefs: UserPrefs
+    private val storage: FirebaseStorage
 ) : RemoteLocalNewsDataSource {
 
     override fun getNews(location: String) = flow<Result<List<News>>> {
@@ -141,5 +144,19 @@ class RemoteLocalNewsDataSourceImpl(
     }.catch {
         emit(Result.Error(it))
     }.flowOn(Dispatchers.IO)
+
+    override fun deleteNews(newsId: String) = flow<Result<String>> {
+        emit(Result.Loading("Deleting Comment"))
+
+        firestore.collection("News")
+            .document(newsId)
+            .delete()
+            .await()
+
+        emit(Result.Success("Deleted"))
+    }.catch {
+        emit(Result.Error(it))
+    }.flowOn(Dispatchers.IO)
+
 
 }
