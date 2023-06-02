@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.ui.home.ads
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -23,6 +24,7 @@ import com.avicodes.halchalin.databinding.FragmentWriteArticelBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageActivity
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -166,8 +168,33 @@ class WriteArticleFragment : Fragment() {
         val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = null,
+                CropImageOptions(
+                    allowRotation = true,
+                    allowFlipping = true,
+                    cropMenuCropButtonTitle = "CROP",
+                    imageSourceIncludeGallery = true,
+                )
+            )
+        )
+        //selectPictureLauncher.launch(intent.type)
+    }
 
-        selectPictureLauncher.launch(intent.type)
+
+
+    open fun showImageSourceDialog(openSource: (CropImageActivity.Source) -> Unit) {
+        AlertDialog.Builder(context)
+            .setCancelable(false)
+            .setTitle("Pick Image")
+            .setItems(
+                arrayOf(
+                    "Camera",
+                    "Gallery"
+                )
+            ) { _, position -> openSource(if (position == 0) CropImageActivity.Source.CAMERA else CropImageActivity.Source.GALLERY) }
+            .show()
     }
 
     private val selectPictureLauncher =
@@ -178,7 +205,8 @@ class WriteArticleFragment : Fragment() {
                     CropImageOptions(
                         allowRotation = true,
                         allowFlipping = true,
-                        cropMenuCropButtonTitle = "CROP"
+                        cropMenuCropButtonTitle = "CROP",
+                        imageSourceIncludeGallery = true,
                     )
                 )
             )

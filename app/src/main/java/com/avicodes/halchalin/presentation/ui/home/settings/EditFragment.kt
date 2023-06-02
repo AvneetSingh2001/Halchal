@@ -119,7 +119,17 @@ class EditFragment(
         val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        selectPictureLauncher.launch(intent.type)
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = null,
+                CropImageOptions(
+                    allowRotation = true,
+                    allowFlipping = true,
+                    cropMenuCropButtonTitle = "CROP",
+                    imageSourceIncludeGallery = true,
+                )
+            )
+        )
     }
 
     private val selectPictureLauncher =
