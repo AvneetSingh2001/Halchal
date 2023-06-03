@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.navigation.findNavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.City
+import com.avicodes.halchalin.data.utils.Constants
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentEditBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -30,12 +32,14 @@ import com.bumptech.glide.Priority
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.reflect.TypeVariable
 import java.util.*
 
 
 class EditFragment(
-) : Fragment() {
+) : Fragment(),  EasyPermissions.PermissionCallbacks {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
@@ -70,12 +74,17 @@ class EditFragment(
         viewModel = (activity as HomeActivity).viewModel
 
 
+
+
         binding.apply {
 
             getCities()
 
             btnImage.setOnClickListener {
-                selectImage()
+                if(hasStoragePermission())
+                    selectImage()
+                else
+                    requestStoragePermission()
             }
 
             viewModel.curUser.observe(requireActivity(), Observer { u ->
@@ -114,11 +123,6 @@ class EditFragment(
     }
 
     private fun selectImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         cropImage.launch(
             CropImageContractOptions(
                 uri = null,
@@ -224,6 +228,49 @@ class EditFragment(
                 else -> {}
             }
         })
+    }
+
+
+
+    private fun hasStoragePermission() =
+        EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+    private fun requestStoragePermission() {
+        EasyPermissions.requestPermissions(
+            this,
+            "Please provide access to gallery",
+            Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            SettingsDialog.Builder(requireActivity()).build().show()
+        } else {
+            requestStoragePermission()
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        Toast.makeText(
+            requireContext(),
+            "Permission Granted!",
+            Toast.LENGTH_SHORT
+        ).show()
+        selectImage()
     }
 
 }

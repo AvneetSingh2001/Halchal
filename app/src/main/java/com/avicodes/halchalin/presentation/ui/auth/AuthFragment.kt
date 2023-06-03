@@ -39,6 +39,9 @@ class AuthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+
+            etCountryCode.resetToDefaultCountry()
+
             btnContinue.setOnClickListener {
                 val number = etPhoneNumber.editText?.text.toString()
                 val countryCode = etCountryCode.selectedCountryCode
@@ -101,9 +104,6 @@ class AuthFragment : Fragment() {
     fun validNumber(number: String?): Boolean {
         if (number.isNullOrBlank() || number.isEmpty()) {
             binding.etPhoneNumber.error = "Required"
-            return false
-        } else if (number.length != 10) {
-            binding.etPhoneNumber.error = "Invalid"
             return false
         }
         return true

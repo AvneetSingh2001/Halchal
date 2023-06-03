@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.profile
 
+import android.Manifest
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.ArticleProcessed
+import com.avicodes.halchalin.data.utils.Constants.PERMISSION_READ_STORAGE_REQUEST_CODE
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentUserProfileBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -23,6 +25,8 @@ import com.avicodes.halchalin.presentation.ui.home.ads.ArticlesAdapter
 import com.avicodes.halchalin.presentation.ui.home.ads.FeaturedArticleAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 
 class UserProfileFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 

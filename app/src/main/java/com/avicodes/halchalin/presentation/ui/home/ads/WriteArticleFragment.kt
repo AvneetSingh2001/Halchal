@@ -1,5 +1,6 @@
 package com.avicodes.halchalin.presentation.ui.home.ads
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -19,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Constants
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentWriteArticelBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
@@ -28,10 +30,13 @@ import com.canhub.cropper.CropImageActivity
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
+import com.vmadalin.easypermissions.EasyPermissions
+import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
-class WriteArticleFragment : Fragment() {
+class WriteArticleFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private var _binding: FragmentWriteArticelBinding? = null
     private val binding get() = _binding!!
@@ -86,7 +91,10 @@ class WriteArticleFragment : Fragment() {
                 }
             }
             uploadImageButton.setOnClickListener {
-                selectImage()
+                if (hasStoragePermission())
+                    selectImage()
+                else
+                    requestStoragePermission()
             }
             observeUpload()
         }
@@ -163,11 +171,6 @@ class WriteArticleFragment : Fragment() {
 
 
     private fun selectImage() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         cropImage.launch(
             CropImageContractOptions(
                 uri = null,
@@ -181,7 +184,6 @@ class WriteArticleFragment : Fragment() {
         )
         //selectPictureLauncher.launch(intent.type)
     }
-
 
 
     open fun showImageSourceDialog(openSource: (CropImageActivity.Source) -> Unit) {
@@ -221,8 +223,9 @@ class WriteArticleFragment : Fragment() {
             binding.apply {
                 ivImage.visibility = View.VISIBLE
                 Glide.with(
-                    ivImage.context
-                ).load(imageUri).into(ivImage)
+                    this@WriteArticleFragment
+                ).asBitmap().centerInside().placeholder(R.drawable.image_placeholder)
+                    .skipMemoryCache(true).load(it).into(ivImage)
             }
             toggleButton()
             imageUri = it
@@ -230,7 +233,49 @@ class WriteArticleFragment : Fragment() {
             // An error occurred.
             val exception = result.error
         }
+
     }
 
+
+    private fun hasStoragePermission() =
+        EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+    private fun requestStoragePermission() {
+        EasyPermissions.requestPermissions(
+            this,
+            "Please provide access to gallery",
+            Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            SettingsDialog.Builder(requireActivity()).build().show()
+        } else {
+            requestStoragePermission()
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+        Toast.makeText(
+            requireContext(),
+            "Permission Granted!",
+            Toast.LENGTH_SHORT
+        ).show()
+        selectImage()
+    }
 
 }

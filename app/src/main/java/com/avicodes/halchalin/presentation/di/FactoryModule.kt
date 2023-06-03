@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.MainActivityViewModelFactory
+import com.avicodes.halchalin.SplashViewModelFactory
 import com.avicodes.halchalin.domain.repository.*
 import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
 import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
@@ -67,6 +68,16 @@ class FactoryModule {
     ) : MainActivityViewModelFactory {
         return MainActivityViewModelFactory(
             phoneAuthRepository = phoneAuthRepository,
+            userRespository = userRespository
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideSplashViewModelFactory(
+        userRespository: UserRespository
+    ) : SplashViewModelFactory {
+        return SplashViewModelFactory(
             userRespository = userRespository
         )
     }

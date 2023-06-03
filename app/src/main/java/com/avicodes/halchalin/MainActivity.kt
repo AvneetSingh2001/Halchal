@@ -1,7 +1,9 @@
 package com.avicodes.halchalin
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +17,8 @@ import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.ActivityMainBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
+import com.avicodes.halchalin.presentation.openDialog
+import com.avicodes.halchalin.presentation.ui.NoInternetDialogFragment
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
@@ -40,6 +44,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModelFactory: MainActivityViewModelFactory
 
     lateinit var viewModel: MainActivityViewModel
+
+    private var isNoInternetShown = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -68,20 +75,23 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun callNetworkConnection() {
-        checkNetworkConnection = CheckNetworkConnection(application)
-        checkNetworkConnection.observe(this) { isConnected ->
-            if (!isConnected) {
-                binding.lConnection.root.visibility = View.VISIBLE
-                Glide.with(applicationContext)
-                    .asGif()
-                    .load(R.drawable.connection)
-                    .into(
-                        binding.lConnection.ivConnection
-                    )
-            } else {
-                binding.lConnection.root.visibility = View.GONE
+        if (!isNetworkAvailable()) {
+            if (!isNoInternetShown) {
+                isNoInternetShown = true
+                val dialogNoInternet = NoInternetDialogFragment {
+                    isNoInternetShown = false
+                    callNetworkConnection()
+                }
+                openDialog(dialogNoInternet, NoInternetDialogFragment.TAG)
             }
         }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     override fun onSupportNavigateUp(): Boolean {

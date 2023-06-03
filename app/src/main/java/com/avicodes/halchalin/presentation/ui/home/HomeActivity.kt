@@ -1,6 +1,8 @@
 package com.avicodes.halchalin.presentation.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import com.avicodes.halchalin.data.utils.Result
 import android.os.Bundle
@@ -16,6 +18,8 @@ import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
+import com.avicodes.halchalin.presentation.openDialog
+import com.avicodes.halchalin.presentation.ui.NoInternetDialogFragment
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +31,8 @@ class HomeActivity : AppCompatActivity() {
 
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
+
+    private var isNoInternetShown = false
 
     @Inject
     lateinit var viewModelFactory: HomeActivityViewModelFactory
@@ -42,8 +48,27 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory)[HomeActivityViewModel::class.java]
 
-        callNetworkConnection()
+        val getLink = intent?.getStringExtra("deepLink")
 
+        getLink?.let { getLink ->
+            var uri = getLink.toUri()
+
+            var newsId = uri.getQueryParameter("news")
+            var articleId = uri.getQueryParameter("article")
+
+            Log.e("Avneet uri", "\n newsId  =  $newsId \n articleId  =  $articleId")
+
+            newsId?.let {
+                viewModel.getNewsByDeepLink(it)
+            }
+
+            articleId?.let {
+                viewModel.getArticleByDeepLink(it)
+            }
+        }
+
+        callNetworkConnection()
+        checkConnection()
         getCurUser()
         observeTopAds()
         fetchDataAds()
@@ -74,26 +99,38 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    private fun checkConnection() {
+        checkNetworkConnection = CheckNetworkConnection(application)
+        checkNetworkConnection.observe(this) { isConnected ->
+            if (!isConnected) {
+                callNetworkConnection()
+            }
+        }
+    }
+
     private fun observeTopAds() {
         viewModel.getAllTopAds()
     }
 
     private fun callNetworkConnection() {
-        checkNetworkConnection = CheckNetworkConnection(application)
-        checkNetworkConnection.observe(this) { isConnected ->
-            if (!isConnected) {
-                binding.lConnection.root.visibility = View.VISIBLE
-                Glide.with(applicationContext)
-                    .asGif()
-                    .load(R.drawable.connection)
-                    .into(
-                        binding.lConnection.ivConnection
-                    )
-            } else {
-                binding.lConnection.root.visibility = View.GONE
+        if (!isNetworkAvailable()) {
+            if (!isNoInternetShown) {
+                isNoInternetShown = true
+                val dialogNoInternet = NoInternetDialogFragment {
+                    isNoInternetShown = false
+                }
+                openDialog(dialogNoInternet, NoInternetDialogFragment.TAG)
             }
         }
     }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
 
     private fun fetchRemoteNationalNews() {
         lifecycleScope.launch {
@@ -170,27 +207,4 @@ class HomeActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        val getLink = intent?.getStringExtra("deepLink")
-        Log.e("Avneet New Intent", "HomeActivity $getLink")
-
-        getLink?.let { getLink ->
-            var uri = getLink.toUri()
-
-            var newsId = uri.getQueryParameter("news")
-            var articleId = uri.getQueryParameter("article")
-
-            Log.e("Avneet uri", "\n newsId  =  $newsId \n articleId  =  $articleId")
-
-            newsId?.let {
-                viewModel.getNewsByDeepLink(it)
-            }
-
-            articleId?.let {
-                viewModel.getArticleByDeepLink(it)
-            }
-        }
-    }
 }

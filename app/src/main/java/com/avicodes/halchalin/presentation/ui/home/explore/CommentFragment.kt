@@ -158,8 +158,8 @@ class CommentFragment : BottomSheetDialogFragment() {
             viewModel.deleteComment(commentId).collectLatest {
                 when (it) {
                     is Result.Success -> {
-                        args.itemId
-                        dialog.dismiss()
+                        hideProg()
+                        getComments(args.itemId)
                     }
 
                     is Result.Loading -> {
@@ -168,7 +168,6 @@ class CommentFragment : BottomSheetDialogFragment() {
 
                     is Result.Error -> {
                         hideProg()
-                        dialog.dismiss()
                         Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT)
                             .show()
                     }
