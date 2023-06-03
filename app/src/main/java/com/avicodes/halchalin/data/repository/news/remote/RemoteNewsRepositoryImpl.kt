@@ -3,7 +3,6 @@ package com.avicodes.halchalin.data.repository.news.remote
 import androidx.paging.PagingData
 import com.avicodes.halchalin.data.models.Categories
 import com.avicodes.halchalin.data.models.NewsRemote
-import com.avicodes.halchalin.data.repository.news.remote.dataSource.RemoteNewsDataSource
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.RemoteNewsRepository
 import kotlinx.coroutines.flow.Flow

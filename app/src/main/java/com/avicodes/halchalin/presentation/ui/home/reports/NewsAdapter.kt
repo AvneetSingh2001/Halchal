@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.avicodes.halchalin.presentation.ui.home.explore.local.LocalNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.GlobeNewsFragment
 import com.avicodes.halchalin.presentation.ui.home.reports.remote.IndiaNewsFragment
 

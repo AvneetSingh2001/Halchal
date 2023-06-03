@@ -2,13 +2,8 @@ package com.avicodes.halchalin.presentation.ui.home
 
 import android.net.Uri
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -17,13 +12,9 @@ import com.avicodes.halchalin.data.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.*
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserByIdUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.GetUserUseCase
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.updateUserPicUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.lang.Exception
-import kotlin.math.exp
 
 
 class HomeActivityViewModel(
@@ -31,7 +22,6 @@ class HomeActivityViewModel(
     private val remoteNewsRepository: RemoteNewsRepository,
     private val localNewsRepository: LocalNewsRepository,
     private val adsRepository: AdsRepository,
-    private val updateUserPicUseCase: updateUserPicUseCase,
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository,
     private val articleRepository: ArticleRepository
@@ -315,7 +305,7 @@ class HomeActivityViewModel(
         }
     }
 
-    fun updateLocalNews() = viewModelScope.launch(Dispatchers.IO) {
+    fun updateLocalNews() = viewModelScope.launch {
         val loc = curUser.value?.location
         localNewsRepository.updateNews(loc.toString())
         localNewsRepository.news.collectLatest {
@@ -389,7 +379,7 @@ class HomeActivityViewModel(
     }
 
     fun saveUserImage(image: String) = viewModelScope.launch {
-        updateUserPicUseCase.execute(image, curUser.value?.userId!!).collectLatest {
+        userRespository.updateUserPic(image, curUser.value?.userId!!).collectLatest {
             updateUserPic.postValue(it)
         }
     }

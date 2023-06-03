@@ -22,7 +22,7 @@
         android:theme="@style/Theme.Halchalin"
         tools:targetApi="31">
         <activity
-            android:name=".SplashActivity"
+            android:name=".presentation.ui.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
@@ -43,7 +43,7 @@
 
             />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.ui.auth.phone.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">

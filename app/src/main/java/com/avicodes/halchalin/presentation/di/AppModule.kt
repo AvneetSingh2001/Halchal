@@ -1,7 +1,6 @@
 package com.avicodes.halchalin.presentation.di
 
 
-import com.avicodes.halchalin.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides

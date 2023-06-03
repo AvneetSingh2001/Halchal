@@ -8,10 +8,9 @@ import com.avicodes.halchalin.data.repository.article.ArticleRepositoryImpl
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthDataSource
 import com.avicodes.halchalin.data.repository.auth.PhoneAuthRepositoryImpl
 import com.avicodes.halchalin.data.repository.news.local.LocalNewsRepositoryImpl
-import com.avicodes.halchalin.data.repository.news.local.dataSource.CacheLocalNewsDataSource
-import com.avicodes.halchalin.data.repository.news.local.dataSource.RemoteLocalNewsDataSource
+import com.avicodes.halchalin.data.repository.news.local.RemoteLocalNewsDataSource
 import com.avicodes.halchalin.data.repository.news.remote.RemoteNewsRepositoryImpl
-import com.avicodes.halchalin.data.repository.news.remote.dataSource.RemoteNewsDataSource
+import com.avicodes.halchalin.data.repository.news.remote.RemoteNewsDataSource
 import com.avicodes.halchalin.data.repository.settings.city.CityDataSource
 import com.avicodes.halchalin.data.repository.settings.city.CityRespositoryImpl
 import com.avicodes.halchalin.data.repository.settings.user.UserDataSource
@@ -44,11 +43,9 @@ class RepositoryModule {
     @Singleton
     fun provideLocalNewsRepository(
         remoteLocalNewsDataSource: RemoteLocalNewsDataSource,
-        cacheLocalNewsDataSource: CacheLocalNewsDataSource
     ): LocalNewsRepository {
         return LocalNewsRepositoryImpl(
             remoteLocalNewsDataSource = remoteLocalNewsDataSource,
-            cacheLocalNewsDataSource = cacheLocalNewsDataSource
         )
     }
 

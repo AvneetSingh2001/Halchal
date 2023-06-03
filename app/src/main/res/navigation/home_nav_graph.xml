@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/localNewsFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.local.LocalNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.localnews.LocalNewsFragment"
         android:label="fragment_local_news"
         tools:layout="@layout/fragment_local_news" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/adsFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.ads.AdsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.articles.AdsFragment"
         android:label="fragment_ads"
         tools:layout="@layout/fragment_ads" >
         <action
@@ -82,12 +82,12 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.avicodes.halchalin.MainActivity"
+        android:name="com.avicodes.halchalin.presentation.ui.auth.phone.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <dialog
         android:id="@+id/commentFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.CommentFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.comments.CommentFragment"
         android:label="fragment_comment"
         tools:layout="@layout/fragment_comment" >
         <argument
@@ -104,7 +104,7 @@
         tools:layout="@layout/fragment_edit" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.profile.UserProfileFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.profile.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" >
         <argument
@@ -125,7 +125,7 @@
     </fragment>
     <fragment
         android:id="@+id/localNewsDescFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.LocalNewsDescFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.localnews.LocalNewsDescFragment"
         android:label="LocalNewsDescFragment" >
         <action
             android:id="@+id/action_localNewsDescFragment_to_commentFragment"
@@ -139,7 +139,7 @@
     </fragment>
     <fragment
         android:id="@+id/newsVpFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.explore.localvp.NewsVpFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.localnews.localvp.NewsVpFragment"
         android:label="fragment_news_vp"
         tools:layout="@layout/fragment_news_vp" >
         <action
@@ -152,7 +152,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryNewsFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.reports.CategoryNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.reports.categories.CategoryNewsFragment"
         android:label="fragment_category_news"
         tools:layout="@layout/fragment_category_news" >
         <argument
@@ -164,12 +164,12 @@
     </fragment>
     <fragment
         android:id="@+id/writeArticleFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.ads.WriteArticleFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.articles.WriteArticleFragment"
         android:label="fragment_write_articel"
         tools:layout="@layout/fragment_write_articel" />
     <fragment
         android:id="@+id/articleDetailFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.ads.ArticleDetailFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.articles.ArticleDetailFragment"
         android:label="fragment_article_detail"
         tools:layout="@layout/fragment_article_detail" >
         <argument
@@ -184,7 +184,7 @@
     </fragment>
     <fragment
         android:id="@+id/allArticlesFragment"
-        android:name="com.avicodes.halchalin.presentation.ui.home.ads.AllArticlesFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.articles.AllArticlesFragment"
         android:label="fragment_all_articles"
         tools:layout="@layout/fragment_all_articles" >
         <action

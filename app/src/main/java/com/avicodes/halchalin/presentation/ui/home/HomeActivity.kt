@@ -14,13 +14,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.avicodes.halchalin.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
 import com.avicodes.halchalin.presentation.openDialog
 import com.avicodes.halchalin.presentation.ui.NoInternetDialogFragment
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,13 +69,6 @@ class HomeActivity : AppCompatActivity() {
         callNetworkConnection()
         checkConnection()
         getCurUser()
-        observeTopAds()
-        fetchDataAds()
-        fetchLocalNewss()
-        fetchRemoteNationalNews()
-        fetchRemoteNews()
-        fetchCategories()
-        observeFeatured()
 
 
         val navController = findNavController(R.id.fragmentContainerView)
@@ -108,9 +100,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeTopAds() {
-        viewModel.getAllTopAds()
-    }
 
     private fun callNetworkConnection() {
         if (!isNetworkAvailable()) {
@@ -129,31 +118,6 @@ class HomeActivity : AppCompatActivity() {
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
-    }
-
-
-    private fun fetchRemoteNationalNews() {
-        lifecycleScope.launch {
-            viewModel.getNationalNewsHeadlines(
-                "national",
-                "in",
-                "hi"
-            )
-        }
-    }
-
-    private fun fetchRemoteNews() {
-        lifecycleScope.launch {
-            viewModel.getInternationalNewsHeadlines(
-                topic = "world",
-                country = "in",
-                lang = "hi"
-            )
-        }
-    }
-
-    private fun observeFeatured() {
-
     }
 
     private fun getCurUser() {
@@ -179,18 +143,6 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
-    private fun fetchDataAds() = lifecycleScope.launch(Dispatchers.IO) {
-        viewModel.getFeaturedAds()
-    }
-
-    fun fetchLocalNewss() = lifecycleScope.launch(Dispatchers.IO) {
-        viewModel.getLocalNews()
-    }
-
-
-    private fun fetchCategories() = lifecycleScope.launch(Dispatchers.IO) {
-        viewModel.getCategories()
-    }
 
     private fun showBottomNav() {
         binding.bottomNavigation.visibility = View.VISIBLE

@@ -3,7 +3,6 @@ package com.avicodes.halchalin.data.repository.auth
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.avicodes.halchalin.MainActivity
 import com.avicodes.halchalin.data.utils.Result
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException

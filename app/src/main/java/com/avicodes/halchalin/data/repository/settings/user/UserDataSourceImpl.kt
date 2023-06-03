@@ -47,7 +47,6 @@ class UserDataSourceImpl(
     }
 
 
-
     override suspend fun getUserById(userId: String): User? {
         val task = firestoreDb.collection("Users").document(userId).get().await()
         val user = task.toObject(User::class.java)
@@ -64,7 +63,7 @@ class UserDataSourceImpl(
         emit(Result.Success(imgUrl))
     }.catch { emit(Result.Error(it)) }.flowOn(Dispatchers.IO)
 
-    override fun isLoggedIn() :  Flow<Boolean> {
+    override fun isLoggedIn(): Flow<Boolean> {
         return userPrefs.isLoggedIn()
     }
 
@@ -81,19 +80,6 @@ class UserDataSourceImpl(
             userPrefs.saveUser(user)
         }
     }
-
-    override fun updateUserDataRemotely() {
-        TODO("Not yet implemented")
-    }
-
-    override fun updateUserDataLocally(user: User) {
-        TODO("Not yet implemented")
-    }
-
-    override fun DeleteUserData() {
-        TODO("Not yet implemented")
-    }
-
 
 
 }

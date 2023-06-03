@@ -16,7 +16,9 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentIndiaNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.LoaderStateAdapter
 import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
+import com.avicodes.halchalin.presentation.ui.home.reports.RemoteNewsAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

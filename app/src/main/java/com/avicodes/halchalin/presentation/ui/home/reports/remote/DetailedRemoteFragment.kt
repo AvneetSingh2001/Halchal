@@ -17,8 +17,8 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentDetailedRemoteBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.explore.AdsAdapter
-import com.avicodes.halchalin.presentation.ui.home.explore.NewsResAdapter
+import com.avicodes.halchalin.presentation.ui.home.ads.AdsAdapter
+import com.avicodes.halchalin.presentation.ui.home.localnews.NewsResAdapter
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations

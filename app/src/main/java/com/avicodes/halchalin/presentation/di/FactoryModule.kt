@@ -1,10 +1,9 @@
 package com.avicodes.halchalin.presentation.di
 
-import com.avicodes.halchalin.MainActivityViewModelFactory
-import com.avicodes.halchalin.SplashViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivityViewModelFactory
+import com.avicodes.halchalin.presentation.ui.SplashViewModelFactory
 import com.avicodes.halchalin.domain.repository.*
-import com.avicodes.halchalin.domain.usecase.authenticationUseCase.*
-import com.avicodes.halchalin.presentation.ui.auth.DetailsFragmentViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.details.DetailsFragmentViewModelFactory
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -22,14 +21,10 @@ class FactoryModule {
     @Singleton
     @Provides
     fun provideDetailsFragmentViewModelFactory(
-        auth: FirebaseAuth,
-        userUploadRemotelyUseCase: UserUploadRemotelyUseCase,
         userRespository: UserRespository,
         cityRepository: CityRepository
     ): DetailsFragmentViewModelFactory {
         return DetailsFragmentViewModelFactory(
-            auth = auth,
-            userUploadRemotelyUseCase = userUploadRemotelyUseCase,
             userRespository = userRespository,
             cityRepository = cityRepository
             )
@@ -43,7 +38,6 @@ class FactoryModule {
         adsRepository: AdsRepository,
         remoteNewsRepository: RemoteNewsRepository,
         localNewsRepository: LocalNewsRepository,
-        updateUserPicUseCase: updateUserPicUseCase,
         userRespository: UserRespository,
         cityRepository: CityRepository,
         articleRepository: ArticleRepository
@@ -53,7 +47,6 @@ class FactoryModule {
             remoteNewsRepository = remoteNewsRepository,
             localNewsRepository = localNewsRepository,
             adsRepository = adsRepository,
-            updateUserPicUseCase = updateUserPicUseCase,
             userRespository = userRespository,
             cityRepository = cityRepository,
             articleRepository = articleRepository

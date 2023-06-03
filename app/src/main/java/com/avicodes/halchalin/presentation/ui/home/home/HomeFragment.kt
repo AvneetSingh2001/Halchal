@@ -16,7 +16,7 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentHomeBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
-import com.avicodes.halchalin.presentation.ui.home.reports.CategoriesAdapter
+import com.avicodes.halchalin.presentation.ui.home.reports.categories.CategoriesAdapter
 import com.bumptech.glide.Glide
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -56,12 +56,8 @@ class HomeFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
-        viewModel.getLocalNews()
-        viewModel.getCategories()
 
-        getFeaturedAds()
-        getAds()
-        getLatestNews()
+
         Log.e("Initialise Home", "HOme Fragment")
 
         binding.apply {

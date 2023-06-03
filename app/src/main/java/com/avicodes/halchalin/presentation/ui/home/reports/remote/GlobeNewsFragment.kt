@@ -1,12 +1,10 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,11 +16,11 @@ import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentGlobeNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.LoaderStateAdapter
 import com.avicodes.halchalin.presentation.ui.home.reports.NewsFragment
+import com.avicodes.halchalin.presentation.ui.home.reports.RemoteNewsAdapter
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class GlobeNewsFragment : Fragment() {

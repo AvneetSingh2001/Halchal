@@ -8,22 +8,19 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.avicodes.halchalin.data.models.User
+import com.avicodes.halchalin.data.utils.Constants.ABOUT
+import com.avicodes.halchalin.data.utils.Constants.IMAGE
+import com.avicodes.halchalin.data.utils.Constants.LOCATION
+import com.avicodes.halchalin.data.utils.Constants.LOGGEDIN
+import com.avicodes.halchalin.data.utils.Constants.NAME
+import com.avicodes.halchalin.data.utils.Constants.PHONE
+import com.avicodes.halchalin.data.utils.Constants.USERID
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserPrefs(
     private val dataStore: DataStore<Preferences>
 ){
-
-    companion object {
-        var LOGGEDIN = booleanPreferencesKey("LOGGEDIN")
-        var USERID = stringPreferencesKey("USER_ID")
-        val NAME = stringPreferencesKey("USER_NAME")
-        val LOCATION = stringPreferencesKey("LOCATION")
-        val PHONE = stringPreferencesKey("PHONE")
-        val IMAGE = stringPreferencesKey("IMAGE")
-        val ABOUT = stringPreferencesKey("ABOUT")
-    }
 
     suspend fun saveUser(user: User) {
         dataStore.edit {

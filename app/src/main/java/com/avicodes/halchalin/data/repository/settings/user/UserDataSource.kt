@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserDataSource {
 
-    fun getUserLocally() : Flow<User>
+    fun getUserLocally(): Flow<User>
 
     fun getUserRemotely(uid: String): Flow<Result<User>>
 
@@ -17,17 +17,11 @@ interface UserDataSource {
 
     fun saveUserDataLocally(user: User)
 
-    fun updateUserDataRemotely()
-
-    fun updateUserDataLocally(user: User)
-
-    fun DeleteUserData()
-
     suspend fun getUserById(userId: String): User?
 
     fun updateUserPic(image: String, uid: String): Flow<Result<String>>
 
-    fun isLoggedIn() : Flow<Boolean>
+    fun isLoggedIn(): Flow<Boolean>
 
     suspend fun login()
 
