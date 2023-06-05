@@ -2,6 +2,7 @@ package com.avicodes.halchalin.presentation.ui.home
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -12,6 +13,7 @@ import com.avicodes.halchalin.data.models.*
 import com.google.firebase.auth.FirebaseAuth
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.domain.repository.*
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.lang.Exception
@@ -27,13 +29,19 @@ class HomeActivityViewModel(
     private val articleRepository: ArticleRepository
 ) : ViewModel() {
 
+    init {
+        getLocalNews()
+    }
+
     val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
 
     val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
 
-    val localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
+    private val _localHeadlines: MutableStateFlow<Result<List<News>>> = MutableStateFlow(Result.NotInitialized)
+    val localHeadlines : StateFlow<Result<List<News>>> = _localHeadlines
+
     val featuredAds: MutableLiveData<Result<List<Featured>>> =
         MutableLiveData(Result.NotInitialized)
     val linkNews: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
@@ -296,22 +304,13 @@ class HomeActivityViewModel(
         ).cachedIn(viewModelScope)
     }
 
-    fun getLocalNews(
-    ) = viewModelScope.launch {
+    fun getLocalNews()  = viewModelScope.launch {
         val loc = curUser.value?.location
-        localNewsRepository.getNews(loc.toString())
-        localNewsRepository.news.collectLatest {
-            localHeadlines.postValue(it)
+        localNewsRepository.getNews(loc.toString()).stateIn(viewModelScope).collectLatest {
+            _localHeadlines.emit(it)
         }
     }
 
-    fun updateLocalNews() = viewModelScope.launch {
-        val loc = curUser.value?.location
-        localNewsRepository.updateNews(loc.toString())
-        localNewsRepository.news.collectLatest {
-            localHeadlines.postValue(it)
-        }
-    }
 
     fun getComments(
         newsId: String

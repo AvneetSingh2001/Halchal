@@ -10,6 +10,7 @@ import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -21,6 +22,7 @@ import com.avicodes.halchalin.databinding.FragmentLocalNewsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LocalNewsFragment : Fragment() {
@@ -28,7 +30,8 @@ class LocalNewsFragment : Fragment() {
     private var _binding: FragmentLocalNewsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HomeActivityViewModel
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
+
     private lateinit var localNewsAdapter: LocalNewsAdapter
 
     override fun onCreateView(
@@ -43,11 +46,11 @@ class LocalNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = (activity as HomeActivity).viewModel
+
+        viewModel.getAllTopAds()
+        getNewsList()
 
         setUpLocalNewsRecyclerView()
-        viewModel.getLocalNews()
-        getNewsList()
 
         observeLinkCreated()
 
@@ -65,12 +68,9 @@ class LocalNewsFragment : Fragment() {
 
         binding.apply {
             refreshLayout.setOnRefreshListener {
-                viewModel.localHeadlines.postValue(Result.Loading(""))
+                viewModel.getLocalNews()
                 refreshLayout.isRefreshing = false
-                viewModel.updateLocalNews()
             }
-
-
 
             viewModel.curUser.observe(requireActivity(), Observer {
                 it?.let {
@@ -87,8 +87,6 @@ class LocalNewsFragment : Fragment() {
             infoCons.setOnClickListener {
                 rvNationalNews.smoothScrollToPosition(0)
             }
-
-
 
             binding.apply {
 
@@ -227,8 +225,8 @@ class LocalNewsFragment : Fragment() {
         }
     }
 
-    private fun getNewsList() {
-        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
+    private fun getNewsList() = lifecycleScope.launch {
+        viewModel.localHeadlines.collectLatest {  response ->
             when (response) {
                 is Result.Error -> {
                     hideProgressBar()
@@ -239,9 +237,7 @@ class LocalNewsFragment : Fragment() {
                 is Result.Success -> {
                     hideProgressBar()
                     response.data?.let {
-                        Log.e("Avneet Home Local", it.toString())
-                        val news = it
-                        localNewsAdapter.differ.submitList(news)
+                        localNewsAdapter.differ.submitList(it)
                     }
                 }
 
@@ -249,7 +245,7 @@ class LocalNewsFragment : Fragment() {
                     showProgressBar()
                 }
             }
-        })
+        }
     }
 
     private fun showProgressBar() {

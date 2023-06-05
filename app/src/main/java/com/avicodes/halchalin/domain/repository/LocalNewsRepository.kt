@@ -9,11 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 interface LocalNewsRepository {
 
-    val news: MutableStateFlow<Result<List<News>>>
-
-    suspend fun getNews(location: String)
-
-    suspend fun updateNews(location: String)
+    fun getNews(location: String): Flow<Result<List<News>>>
 
     fun postComment(
         newsId: String,

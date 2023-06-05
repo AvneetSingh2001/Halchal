@@ -197,29 +197,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getLatestNews() {
-        binding.apply {
-            latestNewsAdapter = LatestNewsAdapter()
-            rvLatestLocal.adapter = latestNewsAdapter
-            rvLatestLocal.layoutManager = LinearLayoutManager(activity)
-            val latestNews = mutableListOf<News>()
-            viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
-                when (response) {
-                    is Result.Success -> {
-                        response.data?.let { newslist ->
-                            if (newslist.isNotEmpty()) {
-                                val news = newslist[0]
-                                latestNews.clear()
-                                latestNews.add(0, news)
-                                latestNewsAdapter.differ.submitList(latestNews)
-                            }
-                        }
-                    }
-                    else -> {}
-                }
-            })
-        }
-    }
 
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE

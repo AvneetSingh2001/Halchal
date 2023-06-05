@@ -67,9 +67,6 @@ class LocalNewsDescFragment : Fragment() {
             tvDesc.text = data.newsDesc
 
             adAdapter = AdsAdapter()
-            binding.rvAds.adapter = adAdapter
-            binding.rvAds.layoutManager = LinearLayoutManager(activity)
-
             data.videoUrl?.let {
                 data.resUrls?.let { res ->
                     setUpBottomImages(res)
@@ -78,9 +75,6 @@ class LocalNewsDescFragment : Fragment() {
             } ?: data.resUrls?.let {
                 setUpHeaderImages(it)
             }
-
-            getNewsAds()
-
             observeTopAds()
 
             tvHeadline.text = data.newsHeadline
@@ -133,27 +127,6 @@ class LocalNewsDescFragment : Fragment() {
                 else -> {}
             }
         })
-    }
-
-    private fun getNewsAds() {
-        binding.apply {
-            viewModel.adsData.observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    is Result.Success -> {
-                        it.data?.let { list ->
-                            if (list.isNotEmpty()) {
-                                cvAds.visibility = View.VISIBLE
-                                adAdapter.differ.submitList(list)
-                            }
-                        }
-                    }
-
-                    else -> {
-                        cvAds.visibility = View.INVISIBLE
-                    }
-                }
-            })
-        }
     }
 
     private fun setUpVideoView(videoUrl: String) {

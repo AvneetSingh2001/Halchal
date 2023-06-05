@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -29,16 +30,13 @@ import kotlinx.coroutines.launch
 class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
     private var _binding: FragmentAdsBinding? = null
-    private lateinit var featuredAdapter: SliderAdapter
-    private lateinit var viewModel: HomeActivityViewModel
+    private val binding get() = _binding!!
 
+    private lateinit var featuredAdapter: SliderAdapter
     private lateinit var articleAdapter: ArticlesAdapter
     private lateinit var featuredArticleAdapter: FeaturedArticleAdapter
 
-    private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +52,13 @@ class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
 
         binding.apply {
 
-            viewModel = (activity as HomeActivity).viewModel
+            viewModel.getFeaturedAds()
+            viewModel.getAllArticles()
+            viewModel.getFeaturedArticles()
+
+            getFeaturedAds()
+            getAllArticles()
+            getFeaturedArticles()
 
             btnQues.setOnClickListener {
                 val action = AdsFragmentDirections.actionAdsFragmentToWriteArticleFragment()
@@ -82,14 +86,6 @@ class AdsFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickListener {
             binding.rvFeaturedArticles.adapter = featuredArticleAdapter
             binding.rvFeaturedArticles.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-
-            viewModel.getAllArticles()
-            viewModel.getFeaturedArticles()
-
-
-            getFeaturedAds()
-            getAllArticles()
-            getFeaturedArticles()
 
             viewModel.sharedArticle.observe(viewLifecycleOwner, Observer {
                 when(it) {

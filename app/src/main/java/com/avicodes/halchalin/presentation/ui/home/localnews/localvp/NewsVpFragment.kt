@@ -56,7 +56,6 @@ class NewsVpFragment : Fragment() {
 
 
         setUpLocalNewsRecyclerView()
-        getNewsList()
 
 
         binding.videoViewPager.setPageTransformer(DepthPageTransformer())
@@ -123,30 +122,6 @@ class NewsVpFragment : Fragment() {
     private fun showCommentDialog(newsId: String) {
         val action = NewsVpFragmentDirections.actionNewsVpFragmentToCommentFragment(newsId)
         requireView().findNavController().navigate(action)
-    }
-
-    private fun getNewsList() {
-        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer { response ->
-            when (response) {
-                is Result.Error -> {
-                    hideProgressBar()
-                    Toast.makeText(context, "An Error Occurred", Toast.LENGTH_LONG).show()
-                    Log.e("Error", response.exception?.message.toString())
-                }
-
-                is Result.Success -> {
-                    hideProgressBar()
-                    response.data?.let {
-                        newsList = it
-                        adapter.differ.submitList(it)
-                    }
-                }
-
-                else -> {
-                    showProgressBar()
-                }
-            }
-        })
     }
 
     private fun showProgressBar() {

@@ -10,24 +10,11 @@ class LocalNewsRepositoryImpl(
     private val remoteLocalNewsDataSource: RemoteLocalNewsDataSource,
 ) : LocalNewsRepository {
 
-    private var _news: MutableStateFlow<Result<List<News>>> =
-        MutableStateFlow(Result.NotInitialized)
 
-    override val news: MutableStateFlow<Result<List<News>>>
-        get() = _news
-
-    override suspend fun getNews(location: String) {
-        _news.value = Result.Loading("Fetching")
-        getNewsFromRemote(location).collectLatest {
-            _news.value = it
-        }
+    override fun getNews(location: String): Flow<Result<List<News>>> {
+        return getNewsFromRemote(location)
     }
 
-    override suspend fun updateNews(location: String) {
-        getNewsFromRemote(location).collectLatest {
-            _news.value = it
-        }
-    }
 
     fun getNewsFromRemote(location: String): Flow<Result<List<News>>> {
         return remoteLocalNewsDataSource.getNews(location)

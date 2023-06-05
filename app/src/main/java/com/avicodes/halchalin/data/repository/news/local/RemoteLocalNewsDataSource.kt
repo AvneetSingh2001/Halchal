@@ -6,12 +6,14 @@ import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.models.NewsResponse
 import com.avicodes.halchalin.data.utils.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Response
 
 interface RemoteLocalNewsDataSource {
     fun getNews(location: String): Flow<Result<List<News>>>
 
     fun getNewsById(id: String): Flow<Result<News>>
+
     fun getAllComments(itemId: String): Flow<Result<List<Comment>>>
 
     fun postComment(
