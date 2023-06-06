@@ -29,9 +29,6 @@ class HomeActivityViewModel(
     private val articleRepository: ArticleRepository
 ) : ViewModel() {
 
-    init {
-        getLocalNews()
-    }
 
     val nationalHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
@@ -48,7 +45,9 @@ class HomeActivityViewModel(
     val updateUserPic: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val comments: MutableLiveData<Result<List<CommentProcessed>>> =
         MutableLiveData(Result.NotInitialized)
-    val curUser: MutableLiveData<User?> = MutableLiveData()
+
+    val curUser: MutableLiveData<User> = MutableLiveData()
+
     val linkCreated: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val articleLinkCreated: MutableLiveData<Result<String>> = MutableLiveData(Result.NotInitialized)
     val remoteLinkCreated: MutableLiveData<Result<String>> = MutableLiveData()
@@ -304,9 +303,8 @@ class HomeActivityViewModel(
         ).cachedIn(viewModelScope)
     }
 
-    fun getLocalNews()  = viewModelScope.launch {
-        val loc = curUser.value?.location
-        localNewsRepository.getNews(loc.toString()).stateIn(viewModelScope).collectLatest {
+    fun getLocalNews(loc: String)  = viewModelScope.launch {
+        localNewsRepository.getNews(loc).stateIn(viewModelScope).collectLatest {
             _localHeadlines.emit(it)
         }
     }

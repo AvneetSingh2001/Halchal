@@ -69,6 +69,9 @@ class HomeActivity : AppCompatActivity() {
         callNetworkConnection()
         checkConnection()
         getCurUser()
+        viewModel.curUser.observe(this, Observer {
+            viewModel.getLocalNews(it.location.toString())
+        })
 
 
         val navController = findNavController(R.id.fragmentContainerView)

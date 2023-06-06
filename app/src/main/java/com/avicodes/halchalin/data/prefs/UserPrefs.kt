@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.data.prefs
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -57,7 +58,8 @@ class UserPrefs(
         }
 
     fun isLoggedIn() = dataStore.data.map {
-        it[LOGGEDIN] ?: false
+        Log.e("User Prefs", "Logged In: ${it[LOGGEDIN]}, User Id: ${it[USERID]}, LOCATION: ${it[LOCATION]}")
+        (it[LOGGEDIN] ?: false) && it[USERID] != null && it[NAME] != null && it[LOCATION] != null && it[PHONE] != null
     }
 
     fun getUserId() = dataStore.data.map {

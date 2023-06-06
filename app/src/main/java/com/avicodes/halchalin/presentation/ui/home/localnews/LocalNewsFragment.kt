@@ -46,11 +46,11 @@ class LocalNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpLocalNewsRecyclerView()
 
         viewModel.getAllTopAds()
-        getNewsList()
 
-        setUpLocalNewsRecyclerView()
+        getNewsList()
 
         observeLinkCreated()
 
@@ -68,7 +68,7 @@ class LocalNewsFragment : Fragment() {
 
         binding.apply {
             refreshLayout.setOnRefreshListener {
-                viewModel.getLocalNews()
+                viewModel.curUser.value?.location?.let { viewModel.getLocalNews(it) }
                 refreshLayout.isRefreshing = false
             }
 
@@ -170,7 +170,9 @@ class LocalNewsFragment : Fragment() {
                     Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
                 }
 
-                is Result.NotInitialized -> {}
+                is Result.NotInitialized -> {
+                    showProgressBar()
+                }
             }
         })
 
@@ -235,14 +237,21 @@ class LocalNewsFragment : Fragment() {
                 }
 
                 is Result.Success -> {
+                    Log.e("Avneet", "Success")
                     hideProgressBar()
                     response.data?.let {
+                        Log.e("Avneet", it.toString())
                         localNewsAdapter.differ.submitList(it)
                     }
                 }
 
-                else -> {
+                is Result.Loading -> {
+                    Log.e("Avneet", "Loading")
                     showProgressBar()
+                }
+                else -> {
+                    Log.e("Avneet", "Not Initialised")
+                    hideProgressBar()
                 }
             }
         }
