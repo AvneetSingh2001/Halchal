@@ -55,11 +55,7 @@ class CommunityFragment : Fragment() {
                 startActivity(urlIntent)
             }
 
-            btnRateUs.setOnClickListener {
-                val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URL)
-                startActivity(urlIntent)
-            }
+
 
             btnReportBug.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)

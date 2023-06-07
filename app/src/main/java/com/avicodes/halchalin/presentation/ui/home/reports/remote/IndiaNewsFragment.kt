@@ -1,12 +1,14 @@
 package com.avicodes.halchalin.presentation.ui.home.reports.remote
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +30,8 @@ class IndiaNewsFragment() : Fragment() {
     private var _binding: FragmentIndiaNewsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HomeActivityViewModel
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
+
     private lateinit var remoteNewsAdapter: RemoteNewsAdapter
     private lateinit var loaderStateAdapter: LoaderStateAdapter
 
@@ -48,8 +51,12 @@ class IndiaNewsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = (activity as HomeActivity).viewModel
+        lifecycleScope.launch {
+            viewModel.getNationalNewsHeadlines("national", "in", "hi")
+        }
+
         setUpNationalRecyclerView()
+        showProgressBar()
 
         getNews()
 
@@ -169,6 +176,7 @@ class IndiaNewsFragment() : Fragment() {
 
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE
+        binding.animationView.progress = 0f
         binding.mainCons.visibility = View.INVISIBLE
     }
 

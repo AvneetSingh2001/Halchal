@@ -87,10 +87,7 @@ class SettingsFragment : Fragment() {
                 requireView().findNavController().navigate(action)
             }
 
-            btnSettings.setOnClickListener {
-                val action = SettingsFragmentDirections.actionSettingsFragmentToPrefFragment()
-                requireView().findNavController().navigate(action)
-            }
+
         }
     }
 

@@ -182,34 +182,6 @@ class WriteArticleFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
 
-    open fun showImageSourceDialog(openSource: (CropImageActivity.Source) -> Unit) {
-        AlertDialog.Builder(context)
-            .setCancelable(false)
-            .setTitle("Pick Image")
-            .setItems(
-                arrayOf(
-                    "Camera",
-                    "Gallery"
-                )
-            ) { _, position -> openSource(if (position == 0) CropImageActivity.Source.CAMERA else CropImageActivity.Source.GALLERY) }
-            .show()
-    }
-
-    private val selectPictureLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) {
-            cropImage.launch(
-                CropImageContractOptions(
-                    uri = it,
-                    CropImageOptions(
-                        allowRotation = true,
-                        allowFlipping = true,
-                        cropMenuCropButtonTitle = "CROP",
-                        imageSourceIncludeGallery = true,
-                    )
-                )
-            )
-        }
-
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {

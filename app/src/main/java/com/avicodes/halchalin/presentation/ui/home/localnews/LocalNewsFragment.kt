@@ -170,9 +170,7 @@ class LocalNewsFragment : Fragment() {
                     Toast.makeText(requireContext(), "No News Found", Toast.LENGTH_SHORT).show()
                 }
 
-                is Result.NotInitialized -> {
-                    showProgressBar()
-                }
+                is Result.NotInitialized -> {}
             }
         })
 
@@ -228,7 +226,7 @@ class LocalNewsFragment : Fragment() {
     }
 
     private fun getNewsList() = lifecycleScope.launch {
-        viewModel.localHeadlines.collectLatest {  response ->
+        viewModel.localHeadlines.observe(viewLifecycleOwner, Observer {  response ->
             when (response) {
                 is Result.Error -> {
                     hideProgressBar()
@@ -249,12 +247,13 @@ class LocalNewsFragment : Fragment() {
                     Log.e("Avneet", "Loading")
                     showProgressBar()
                 }
+
                 else -> {
                     Log.e("Avneet", "Not Initialised")
                     hideProgressBar()
                 }
             }
-        }
+        })
     }
 
     private fun showProgressBar() {

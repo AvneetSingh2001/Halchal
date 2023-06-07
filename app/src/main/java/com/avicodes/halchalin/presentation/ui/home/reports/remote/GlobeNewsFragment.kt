@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,8 @@ class GlobeNewsFragment : Fragment() {
     private var _binding: FragmentGlobeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HomeActivityViewModel
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
+
     private lateinit var remoteNewsAdapter: RemoteNewsAdapter
     private lateinit var loaderStateAdapter: LoaderStateAdapter
 
@@ -44,9 +46,18 @@ class GlobeNewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = (activity as HomeActivity).viewModel
-        showProgressBar()
+
+        lifecycleScope.launch {
+            viewModel.getInternationalNewsHeadlines(
+                topic = "world",
+                country = "in",
+                lang = "hi"
+            )
+        }
+
         setUpNationalRecyclerView()
+        showProgressBar()
+
         getNews()
 
         NewsFragment.setOnInternationalTabClickListener {
@@ -161,6 +172,7 @@ class GlobeNewsFragment : Fragment() {
 
     private fun showProgressBar() {
         binding.progCons.visibility = View.VISIBLE
+        binding.animationView.progress = 0f
         binding.mainCons.visibility = View.INVISIBLE
     }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -30,7 +31,8 @@ class DetailedRemoteFragment : Fragment() {
     private val binding get() = _binding!!
 
     val args: DetailedRemoteFragmentArgs by navArgs()
-    private lateinit var viewModel: HomeActivityViewModel
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
+
 
     private lateinit var adAdapter: AdsAdapter
 
@@ -47,7 +49,6 @@ class DetailedRemoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = (activity as HomeActivity).viewModel
         val news = args.news
 
         binding.apply {
@@ -62,10 +63,6 @@ class DetailedRemoteFragment : Fragment() {
             }
 
             adAdapter = AdsAdapter()
-            binding.rvAds.adapter = adAdapter
-            binding.rvAds.layoutManager = LinearLayoutManager(activity)
-            getNewsAds()
-
             observeTopAds()
 
             Glide.with(ivNews.context)
@@ -170,26 +167,5 @@ class DetailedRemoteFragment : Fragment() {
         binding.mainCons.visibility = View.VISIBLE
     }
 
-
-    private fun getNewsAds() {
-
-        binding.apply {
-            viewModel.adsData.observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    is Result.Success -> {
-                        it.data?.let { list ->
-                            if(list.isNotEmpty()) {
-                                cvAds.visibility = View.VISIBLE
-                                adAdapter.differ.submitList(list)
-                            }
-                        }
-                    }
-                    else -> {
-                        cvAds.visibility = View.INVISIBLE
-                    }
-                }
-            })
-        }
-    }
 
 }

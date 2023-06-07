@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -32,13 +33,7 @@ class NewsFragment(
     private val binding get() = _binding!!
 
     private lateinit var adapter: NewsAdapter
-    private lateinit var viewModel: HomeActivityViewModel
-
-    // private lateinit var categoriesAdapter: CategoriesAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private val viewModel by activityViewModels<HomeActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +48,7 @@ class NewsFragment(
         super.onViewCreated(view, savedInstanceState)
 
         adapter = NewsAdapter(childFragmentManager, lifecycle)
-        viewModel = (activity as HomeActivity).viewModel
-        viewModel.getCategories()
+
         binding.run {
 
 
@@ -66,13 +60,11 @@ class NewsFragment(
                 tlNews.newTab().setText("International News")
             )
 
-
-
-
             tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let { tab ->
                         vpNews.currentItem = tab.position
+
                     }
                 }
 
@@ -92,31 +84,6 @@ class NewsFragment(
                 requireView().findNavController().navigate(action)
             }
 
-            //categoriesAdapter = CategoriesAdapter()
-//            rvCategories.adapter = categoriesAdapter
-//            rvCategories.layoutManager =
-//                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-//            viewModel.categories.observe(viewLifecycleOwner, Observer {
-//                when (it) {
-//                    is Result.Success -> {
-//                        it.data?.let { categorieslist ->
-//                            if (categorieslist.isNotEmpty()) {
-//                                Log.e("Categories", categorieslist.toString())
-//                                categoriesAdapter.differ.submitList(categorieslist)
-//                            }
-//                        }
-//                    }
-//
-//                    is Result.Error -> {
-//                        Log.e("Categories", "Error")
-//                    }
-//
-//                    else -> {
-//                    }
-//                }
-//            })
-
             addTabsVp()
             vpNews.adapter = adapter
 
@@ -135,6 +102,8 @@ class NewsFragment(
             vpNews.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+
+                    tlNews.selectTab(tlNews.getTabAt(position))
 
                     refreshLayout.setOnRefreshListener {
                         lifecycleScope.launch {

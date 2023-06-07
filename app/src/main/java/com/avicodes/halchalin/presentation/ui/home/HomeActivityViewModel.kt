@@ -36,8 +36,8 @@ class HomeActivityViewModel(
     val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
 
-    private val _localHeadlines: MutableStateFlow<Result<List<News>>> = MutableStateFlow(Result.NotInitialized)
-    val localHeadlines : StateFlow<Result<List<News>>> = _localHeadlines
+    private val _localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
+    val localHeadlines : LiveData<Result<List<News>>> = _localHeadlines
 
     val featuredAds: MutableLiveData<Result<List<Featured>>> =
         MutableLiveData(Result.NotInitialized)
@@ -69,6 +69,9 @@ class HomeActivityViewModel(
         MutableLiveData(Result.NotInitialized)
 
     val topAds: MutableLiveData<Result<List<String>>> = MutableLiveData(Result.NotInitialized)
+
+    var remoteIndiaNewsFetched = false
+    var remoteWorldNewsFetched = false
 
     fun getAllTopAds() = viewModelScope.launch {
         adsRepository.getAllTopAds().collectLatest {
@@ -305,7 +308,7 @@ class HomeActivityViewModel(
 
     fun getLocalNews(loc: String)  = viewModelScope.launch {
         localNewsRepository.getNews(loc).stateIn(viewModelScope).collectLatest {
-            _localHeadlines.emit(it)
+            _localHeadlines.postValue(it)
         }
     }
 
