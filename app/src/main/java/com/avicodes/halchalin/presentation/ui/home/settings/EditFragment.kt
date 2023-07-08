@@ -39,7 +39,7 @@ import java.util.*
 
 
 class EditFragment(
-) : Fragment(),  EasyPermissions.PermissionCallbacks {
+) : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
@@ -54,10 +54,6 @@ class EditFragment(
     lateinit var userPicUri: Uri
 
     private var citiesList: List<String> = mutableListOf()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,15 +69,12 @@ class EditFragment(
 
         viewModel = (activity as HomeActivity).viewModel
 
-
-
-
         binding.apply {
 
             getCities()
 
             btnImage.setOnClickListener {
-                if(hasStoragePermission())
+                if (hasStoragePermission())
                     selectImage()
                 else
                     requestStoragePermission()
@@ -100,7 +93,6 @@ class EditFragment(
 
                     etLoc.editText?.setText(u.location)
                     imageUrl = u.imgUrl
-                    etPhone.editText?.setText(u.mobile)
                 }
             })
 
@@ -108,7 +100,6 @@ class EditFragment(
                 var city = etLoc.editText?.text.toString()
                 viewModel.saveUser(
                     name = etName.editText?.text.toString(),
-                    phone = etPhone.editText?.text.toString(),
                     about = etAbout.editText?.text.toString(),
                     image = imageUrl,
                     location = city
@@ -172,14 +163,17 @@ class EditFragment(
 
                         hideProg()
                     }
+
                     is Result.Loading -> {
                         showProg()
                     }
+
                     is Result.Error -> {
                         Toast.makeText(requireContext(), "Error, Try Again", Toast.LENGTH_SHORT)
                             .show()
                         hideProg()
                     }
+
                     else -> {
                         hideProg()
                     }
@@ -220,16 +214,17 @@ class EditFragment(
                     (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
                 }
+
                 is Result.Loading -> {
                     val items = listOf("Loading...")
                     val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
                     (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
                 }
+
                 else -> {}
             }
         })
     }
-
 
 
     private fun hasStoragePermission() =

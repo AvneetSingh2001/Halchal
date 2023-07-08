@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "815975591098-dtf21qlhnjesvu6fvvras7gbp1pg4khd.apps.googleusercontent.com",
+          "client_id": "815975591098-la39td2oomq6r3bq0osr6riibqovr3m1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.avicodes.halchalin",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "815975591098-osrp0og0vbs3j9udqib1ku8fjmhs82ig.apps.googleusercontent.com",
+          "client_id": "815975591098-oagv6lt017cq7dk7g6um2hf4llr22b2r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "815975591098-osrp0og0vbs3j9udqib1ku8fjmhs82ig.apps.googleusercontent.com",
+              "client_id": "815975591098-oagv6lt017cq7dk7g6um2hf4llr22b2r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -28,7 +28,6 @@ class UserPrefs(
             it[USERID] = user.userId
             it[NAME] = user.name
             it[LOCATION] = user.location
-            it[PHONE] = user.mobile
             it[IMAGE] = user.imgUrl
             it[ABOUT] = user.about
         }
@@ -51,15 +50,13 @@ class UserPrefs(
                 it[USERID]?:"",
                 it[NAME]?:"",
                 it[LOCATION]?:"",
-                it[PHONE]?:"" ,
                 it[IMAGE]?:"",
                 it[ABOUT]?:""
             )
         }
 
     fun isLoggedIn() = dataStore.data.map {
-        Log.e("User Prefs", "Logged In: ${it[LOGGEDIN]}, User Id: ${it[USERID]}, LOCATION: ${it[LOCATION]}")
-        (it[LOGGEDIN] ?: false) && it[USERID] != null && it[NAME] != null && it[LOCATION] != null && it[PHONE] != null
+        (it[LOGGEDIN] ?: false) && it[USERID] != null && it[NAME] != null && it[LOCATION] != null
     }
 
     fun getUserId() = dataStore.data.map {
@@ -72,10 +69,6 @@ class UserPrefs(
 
     fun getUserLocation() = dataStore.data.map {
         it[LOCATION]?:""
-    }
-
-    fun getUserPhone() = dataStore.data.map {
-        it[PHONE]?:""
     }
 
     fun getUserImage() = dataStore.data.map {

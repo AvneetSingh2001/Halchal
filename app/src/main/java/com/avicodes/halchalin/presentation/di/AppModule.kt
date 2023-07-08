@@ -16,5 +16,4 @@ object AppModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
-
 }

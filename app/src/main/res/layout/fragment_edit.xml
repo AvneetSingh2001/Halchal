@@ -86,26 +86,6 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etPhone"
-            android:layout_width="0dp"
-            app:startIconDrawable="@drawable/baseline_local_phone_24"
-            app:layout_constraintTop_toBottomOf="@id/etName"
-            android:layout_margin="14dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone Number"
-            android:layout_marginRight="15dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:lines="1"
-                android:background="@color/white"
-                android:maxLines="1"
-                android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etLoc"
@@ -114,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="14dp"
             android:background="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/etPhone"
+            app:layout_constraintTop_toBottomOf="@id/etName"
             app:startIconDrawable="@drawable/baseline_location_on_24"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -37,13 +37,16 @@ class UserDataSourceImpl(
             } else {
                 emit(Result.Success(null))
             }
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             emit(Result.Error(e))
         }
     }
 
     override fun saveUserDataRemotely(user: User) {
-        firestoreDb.collection("Users").document(user.userId).set(user)
+        auth.uid?.let { uid ->
+            user.userId = uid
+            firestoreDb.collection("Users").document(user.userId).set(user)
+        }
     }
 
 
@@ -77,7 +80,10 @@ class UserDataSourceImpl(
 
     override fun saveUserDataLocally(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
-            userPrefs.saveUser(user)
+            auth.uid?.let { uid ->
+                user.userId = uid
+                userPrefs.saveUser(user)
+            }
         }
     }
 

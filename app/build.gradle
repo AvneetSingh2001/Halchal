@@ -50,15 +50,18 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
-    implementation 'androidx.preference:preference:1.2.0'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+
     def lifecycle_version = "2.5.1"
     def arch_version = "2.1.0"
     def nav_version = "2.5.3"
     def room_version = "2.4.3"
     def media3_version = "1.0.0"
     def paging_version = "3.0.0"
+
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
 
 
     //ROOM

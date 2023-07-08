@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.auth.phone
+package com.avicodes.halchalin.presentation.ui.auth
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                     binding.navHostFragment.visibility = View.INVISIBLE
                     moveToHomeActivity()
                 }else {
-
                     binding.progBar.visibility = View.GONE
                     binding.navHostFragment.visibility = View.VISIBLE
                 }

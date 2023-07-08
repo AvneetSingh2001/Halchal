@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.auth.phone
+package com.avicodes.halchalin.presentation.ui.auth.providers.phone
 
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +15,8 @@ import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentCodeAuthBinding
+import com.avicodes.halchalin.presentation.ui.auth.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,7 +32,6 @@ class CodeAuthFragment : Fragment() {
     private val viewModel by activityViewModels<MainActivityViewModel>()
 
 
-    val args: CodeAuthFragmentArgs by navArgs()
     var otpTry: Int = 3
 
     override fun onCreateView(
@@ -60,18 +61,18 @@ class CodeAuthFragment : Fragment() {
 
 
             btnReqestAgain.setOnClickListener {
-                Log.e("Requested Again", args.phone)
+                //Log.e("Requested Again", args.phone)
                 navigateBack()
             }
 
             viewModel.curUser.observe(viewLifecycleOwner, Observer {
-                if (it.userId != args.phone) {
-                    checkRemote()
-                } else {
-                    Log.e("CodeAuth", "Navigate To Home")
-                    viewModel.login()
-                    navigateToHomeScreen()
-                }
+//                if (it.userId != args.phone) {
+//                    checkRemote()
+//                } else {
+//                    Log.e("CodeAuth", "Navigate To Home")
+//                    viewModel.login()
+//                    navigateToHomeScreen()
+//                }
             })
 
         }
@@ -120,8 +121,8 @@ class CodeAuthFragment : Fragment() {
     }
 
     fun navigateBack() {
-        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToAuthFragment()
-        requireView().findNavController().navigate(action)
+//        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToAuthFragment()
+//        requireView().findNavController().navigate(action)
     }
 
     fun navigateToNextScreen() {
@@ -130,17 +131,16 @@ class CodeAuthFragment : Fragment() {
 
 
     private fun checkRemote() {
-        viewModel.getUser(args.phone).observe(viewLifecycleOwner, Observer { result ->
+        viewModel.getUser("io").observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is Result.Success -> {
                     if (result.data == null) {
                         navigateToDetailsScreen()
-                    } else if (result.data.userId == args.phone) {
+                    } else if (result.data.userId == "fd") {
                         viewModel.saveUser(
                             result.data.userId,
                             result.data.name,
                             result.data.location,
-                            result.data.mobile,
                             result.data.imgUrl,
                             result.data.about
                         )
@@ -178,8 +178,8 @@ class CodeAuthFragment : Fragment() {
     }
 
     fun navigateToDetailsScreen() {
-        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToDetailsFragment(args.phone)
-        requireView().findNavController().navigate(action)
+//        val action = CodeAuthFragmentDirections.actionCodeAuthFragmentToDetailsFragment(args.phone)
+//        requireView().findNavController().navigate(action)
     }
 
     fun navigateToHomeScreen() {

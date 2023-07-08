@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.avicodes.halchalin.databinding.ActivitySplashBinding
-import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.MainActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks

@@ -15,7 +15,7 @@ import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.City
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentDetailsBinding
-import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,13 +31,8 @@ class DetailsFragment : Fragment() {
 
     lateinit var viewModel: DetailsFragmentViewModel
 
-    val args: DetailsFragmentArgs by navArgs()
-
     private var citiesList: List<String> = mutableListOf()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +55,6 @@ class DetailsFragment : Fragment() {
                     viewModel.saveUser(
                         name = name,
                         loc = loc,
-                        phone = args.phone,
                     )
                     viewModel.login()
                     navigateToHome()

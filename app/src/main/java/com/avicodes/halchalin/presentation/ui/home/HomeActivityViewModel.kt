@@ -387,7 +387,6 @@ class HomeActivityViewModel(
     fun saveUser(
         userId: String? = curUser.value?.userId,
         name: String? = curUser.value?.name,
-        phone: String? = curUser.value?.mobile,
         location: String? = curUser.value?.location,
         image: String? = curUser.value?.imgUrl,
         about: String? = curUser.value?.about
@@ -395,7 +394,6 @@ class HomeActivityViewModel(
         val user = User(
             userId = userId.toString(),
             name = name.toString(),
-            mobile = phone.toString(),
             location = location.toString(),
             imgUrl = image.toString(),
             about = about.toString()

@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.auth.phone
+package com.avicodes.halchalin.presentation.ui.auth.providers.phone
 
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
+import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -109,8 +110,10 @@ class AuthFragment : Fragment() {
     }
 
     fun navigateToCodeAuth(phone: String) {
-        val action =
-            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("$phone")
-        requireView().findNavController().navigate(action)
+//        val action =
+//            AuthFragmentDirections.actionAuthFragmentToCodeAuthFragment("$phone")
+//        requireView().findNavController().navigate(action)
     }
+
+
 }

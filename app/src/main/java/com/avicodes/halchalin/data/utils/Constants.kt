@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 
 object Constants {
     const val PERMISSION_READ_STORAGE_REQUEST_CODE = 1
-
+    const val REQ_ONE_TAP = 2
     var LOGGEDIN = booleanPreferencesKey("LOGGEDIN")
     var USERID = stringPreferencesKey("USER_ID")
     val NAME = stringPreferencesKey("USER_NAME")

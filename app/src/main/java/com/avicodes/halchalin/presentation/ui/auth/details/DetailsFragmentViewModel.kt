@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.domain.repository.CityRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -19,13 +18,10 @@ class DetailsFragmentViewModel(
     fun saveUser(
         name: String,
         loc: String,
-        phone: String,
     ) {
         val user = User(
             name = name,
-            mobile = "$phone",
             location = loc,
-            userId = phone
         )
         userRespository.saveUser(user)
     }

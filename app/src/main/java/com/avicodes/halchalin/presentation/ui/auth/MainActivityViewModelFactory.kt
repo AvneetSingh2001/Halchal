@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.auth.phone
+package com.avicodes.halchalin.presentation.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

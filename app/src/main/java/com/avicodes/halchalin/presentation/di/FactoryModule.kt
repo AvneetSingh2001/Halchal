@@ -1,6 +1,6 @@
 package com.avicodes.halchalin.presentation.di
 
-import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivityViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModelFactory
 import com.avicodes.halchalin.presentation.ui.SplashViewModelFactory
 import com.avicodes.halchalin.domain.repository.*
 import com.avicodes.halchalin.presentation.ui.auth.details.DetailsFragmentViewModelFactory

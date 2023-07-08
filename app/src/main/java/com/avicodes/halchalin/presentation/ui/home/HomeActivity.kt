@@ -11,18 +11,15 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.avicodes.halchalin.presentation.ui.auth.phone.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.MainActivity
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
 import com.avicodes.halchalin.presentation.openDialog
 import com.avicodes.halchalin.presentation.ui.NoInternetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
