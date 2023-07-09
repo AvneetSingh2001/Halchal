@@ -9,10 +9,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentAuthBinding
-import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModel
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,7 +22,7 @@ class AuthFragment : Fragment() {
     private var _binding: FragmentAuthBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by activityViewModels<MainActivityViewModel>()
+   private val viewModel by activityViewModels<GoogleAuthActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +47,8 @@ class AuthFragment : Fragment() {
                 if (validNumber(number) and validCode(countryCode)) {
                     activity?.let { activity ->
                         Log.e("Avi", countryCode)
-                        viewModel.authenticatePhone("+$countryCode$number", activity)
-                        observeResults(number)
+//                        viewModel.authenticatePhone("+$countryCode$number", activity)
+//                        observeResults(number)
                     }
 
                 }
@@ -59,39 +58,39 @@ class AuthFragment : Fragment() {
     }
 
 
-    fun observeResults(number: String) {
-        binding.apply {
-            lifecycleScope.launch {
-
-                viewModel.phoneState.collectLatest { uiState ->
-
-                    when (uiState) {
-                        is Result.Success -> {
-                            viewModel.phoneState.value = Result.NotInitialized
-                            navigateToCodeAuth("$number")
-                            progCons.visibility = View.INVISIBLE
-                            mainCons.visibility = View.VISIBLE
-                        }
-
-                        is Result.Loading -> {
-                            progCons.visibility = View.VISIBLE
-                            mainCons.visibility = View.INVISIBLE
-                        }
-
-                        is Result.Error -> {
-                            progCons.visibility = View.INVISIBLE
-                            mainCons.visibility = View.VISIBLE
-                            Log.e("AVi", uiState.exception.toString())
-                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                        }
-
-                        is Result.NotInitialized -> {}
-                    }
-                }
-
-            }
-        }
-    }
+//    fun observeResults(number: String) {
+//        binding.apply {
+//            lifecycleScope.launch {
+//
+//                viewModel.phoneState.collectLatest { uiState ->
+//
+//                    when (uiState) {
+//                        is Result.Success -> {
+//                            viewModel.phoneState.value = Result.NotInitialized
+//                            navigateToCodeAuth("$number")
+//                            progCons.visibility = View.INVISIBLE
+//                            mainCons.visibility = View.VISIBLE
+//                        }
+//
+//                        is Result.Loading -> {
+//                            progCons.visibility = View.VISIBLE
+//                            mainCons.visibility = View.INVISIBLE
+//                        }
+//
+//                        is Result.Error -> {
+//                            progCons.visibility = View.INVISIBLE
+//                            mainCons.visibility = View.VISIBLE
+//                            Log.e("AVi", uiState.exception.toString())
+//                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+//                        }
+//
+//                        is Result.NotInitialized -> {}
+//                    }
+//                }
+//
+//            }
+//        }
+//    }
 
     fun validCode(number: String): Boolean {
         if (number.isNullOrBlank() || number.isEmpty()) {

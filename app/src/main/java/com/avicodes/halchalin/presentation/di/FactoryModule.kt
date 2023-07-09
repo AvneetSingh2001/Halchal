@@ -1,9 +1,9 @@
 package com.avicodes.halchalin.presentation.di
 
-import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModelFactory
 import com.avicodes.halchalin.presentation.ui.SplashViewModelFactory
 import com.avicodes.halchalin.domain.repository.*
-import com.avicodes.halchalin.presentation.ui.auth.details.DetailsFragmentViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.details.DetailsActivityViewModelFactory
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthViewModelFactory
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -17,19 +17,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class FactoryModule {
 
-
-    @Singleton
-    @Provides
-    fun provideDetailsFragmentViewModelFactory(
-        userRespository: UserRespository,
-        cityRepository: CityRepository
-    ): DetailsFragmentViewModelFactory {
-        return DetailsFragmentViewModelFactory(
-            userRespository = userRespository,
-            cityRepository = cityRepository
-            )
-
-    }
 
     @Singleton
     @Provides
@@ -55,13 +42,23 @@ class FactoryModule {
 
     @Singleton
     @Provides
-    fun provideMainActivityViewModelFactory(
-        phoneAuthRepository: PhoneAuthRepository,
+    fun provideDetailsActivityViewModelFactory(
+        cityRepository: CityRepository,
         userRespository: UserRespository
-    ) : MainActivityViewModelFactory {
-        return MainActivityViewModelFactory(
-            phoneAuthRepository = phoneAuthRepository,
-            userRespository = userRespository
+    ) : DetailsActivityViewModelFactory {
+        return DetailsActivityViewModelFactory(
+            userRespository = userRespository,
+            cityRepository = cityRepository
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoogleAuthActivityViewModelFactory(
+        userRespository: UserRespository
+    ) : GoogleAuthViewModelFactory {
+        return GoogleAuthViewModelFactory(
+            userRespository = userRespository,
         )
     }
 

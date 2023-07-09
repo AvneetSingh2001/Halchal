@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.avicodes.halchalin.databinding.ActivitySplashBinding
 import com.avicodes.halchalin.presentation.ui.auth.MainActivity
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -41,12 +42,11 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.isLoggedIn().collectLatest {
-                Log.e("login", it.toString())
                 if (it) {
-                    delay(2000)
+                    delay(1000)
                     moveToHomeActivity()
                 } else {
-                    delay(2000)
+                    delay(1000)
                     moveToSignUpActivity()
                 }
             }
@@ -55,14 +55,14 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun moveToSignUpActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, GoogleAuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
         finish()
     }
 
 
-    fun moveToHomeActivity() {
+    private fun moveToHomeActivity() {
         getDynamicLink()
     }
 

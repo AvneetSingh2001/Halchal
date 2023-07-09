@@ -19,6 +19,7 @@ import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
 import com.avicodes.halchalin.presentation.openDialog
 import com.avicodes.halchalin.presentation.ui.NoInternetDialogFragment
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -154,7 +155,7 @@ class HomeActivity : AppCompatActivity() {
 
     fun logout() {
         viewModel.logout()
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, GoogleAuthActivity::class.java)
         startActivity(intent)
         finish()
     }

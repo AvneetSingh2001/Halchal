@@ -22,48 +22,38 @@
         android:theme="@style/Theme.Halchalin"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.auth.details.DetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.auth.providers.google.GoogleAuthActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.SplashActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".presentation.ui.home.HomeActivity"
             android:exported="false"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.ui.auth.MainActivity"
-            android:exported="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="halchalin.com"
-                    android:scheme="https" />
-            </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Theme.Halchalin.cropper" />

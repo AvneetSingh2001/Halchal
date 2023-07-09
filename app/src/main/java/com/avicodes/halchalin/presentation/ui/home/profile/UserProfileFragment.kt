@@ -52,6 +52,7 @@ class UserProfileFragment : Fragment(), FeaturedArticleAdapter.FeaturedOnClickLi
             Glide.with(ivUser.context)
                 .load(user.imgUrl).circleCrop()
                 .error(R.drawable.baseline_person_24)
+                .placeholder(R.drawable.baseline_person_24)
                 .into(ivUser)
 
             tvName.text = user.name

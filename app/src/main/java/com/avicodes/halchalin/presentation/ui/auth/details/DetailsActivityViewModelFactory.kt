@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.avicodes.halchalin.domain.repository.CityRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
 
-class DetailsFragmentViewModelFactory(
+class DetailsActivityViewModelFactory(
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository
 ): ViewModelProvider.Factory{
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailsFragmentViewModel(
+        return DetailsActivityViewModel(
             userRespository = userRespository,
             cityRepository = cityRepository
             ) as T

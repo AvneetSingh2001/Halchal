@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.databinding.ItemArticleBinding
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ class ArticlesAdapter(
             binding.apply {
                 Glide.with(ivFeaturedArticle)
                     .load(article.articleImage)
+                    .placeholder(R.drawable.baseline_person_24)
                     .into(ivFeaturedArticle)
 
                 tvArticleTitle.text = article.articleTitle

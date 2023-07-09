@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
@@ -66,6 +67,7 @@ class ArticleDetailFragment : Fragment() {
             Glide.with(ivUser.context)
                 .load(article.user.imgUrl)
                 .circleCrop()
+                .placeholder(R.drawable.baseline_person_24)
                 .into(ivUser)
 
             tvUserName.text = article.user.name

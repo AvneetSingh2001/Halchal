@@ -1,47 +1,48 @@
 package com.avicodes.halchalin.presentation.ui.auth.details
 
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.City
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.databinding.FragmentDetailsBinding
-import com.avicodes.halchalin.presentation.ui.auth.MainActivity
+import com.avicodes.halchalin.databinding.ActivityDetailsBinding
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivity
+import com.avicodes.halchalin.presentation.ui.home.HomeActivity
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class DetailsFragment : Fragment() {
-    private var _binding: FragmentDetailsBinding? = null
+class DetailsActivity : AppCompatActivity() {
+
+    private var _binding: ActivityDetailsBinding? = null
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var factory: DetailsActivityViewModelFactory
 
     @Inject
-    lateinit var factory: DetailsFragmentViewModelFactory
+    lateinit var auth: FirebaseAuth
 
-    lateinit var viewModel: DetailsFragmentViewModel
+    lateinit var viewModel: DetailsActivityViewModel
 
     private var citiesList: List<String> = mutableListOf()
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         // Inflate the layout for this fragment
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        _binding = ActivityDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         viewModel =
-            ViewModelProvider(requireActivity(), factory)[DetailsFragmentViewModel::class.java]
+            ViewModelProvider(this, factory)[DetailsActivityViewModel::class.java]
 
         getCities()
 
@@ -65,34 +66,48 @@ class DetailsFragment : Fragment() {
                     }
                 }
             }
+
+            btnGoogleChange.setOnClickListener {
+                auth.signOut()
+                navigateToGoogleSignInScreen()
+            }
         }
-        return binding.root
     }
 
     private fun navigateToHome() {
-        (activity as MainActivity).moveToHomeActivity()
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToGoogleSignInScreen() {
+        val intent = Intent(this, GoogleAuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 
     fun getCities() {
-        viewModel.getCities().observe(viewLifecycleOwner, Observer {
+        viewModel.getCities().observe( this, Observer {
             when (it) {
                 is Result.Success -> {
                     citiesList = it.data?.map(City::name)!!
                     Log.e("Cities Fetch", it.data.toString())
-                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, citiesList)
+                    val adapter = ArrayAdapter(this, R.layout.item_city, citiesList)
                     (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
                 }
 
                 is Result.Error -> {
                     Log.e("Cities Fetch", it.exception?.message.toString())
                     val items = listOf("Error Fetching Data")
-                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    val adapter = ArrayAdapter( this, R.layout.item_city, items)
                     (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
                 }
                 is Result.Loading -> {
                     val items = listOf("Loading...")
-                    val adapter = ArrayAdapter(requireContext(), R.layout.item_city, items)
+                    val adapter = ArrayAdapter(this, R.layout.item_city, items)
                     (binding.etLoc.editText as? AutoCompleteTextView)?.setAdapter(adapter)
                 }
                 else -> {}

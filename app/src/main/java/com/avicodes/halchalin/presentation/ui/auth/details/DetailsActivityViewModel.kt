@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class DetailsFragmentViewModel(
+class DetailsActivityViewModel(
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository
 ): ViewModel() {

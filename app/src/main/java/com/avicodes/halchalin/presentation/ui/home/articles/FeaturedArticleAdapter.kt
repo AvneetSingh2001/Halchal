@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.databinding.ItemFeaturedArticleBinding
 import com.bumptech.glide.Glide
@@ -31,6 +32,7 @@ class FeaturedArticleAdapter(
                 Glide.with(ivUser.context)
                     .load(article.user.imgUrl)
                     .circleCrop()
+                    .placeholder(R.drawable.baseline_person_24)
                     .into(ivUser)
 
                 root.setOnClickListener {

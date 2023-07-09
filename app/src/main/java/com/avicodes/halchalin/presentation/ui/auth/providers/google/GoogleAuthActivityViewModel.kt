@@ -1,4 +1,4 @@
-package com.avicodes.halchalin.presentation.ui.auth
+package com.avicodes.halchalin.presentation.ui.auth.providers.google
 
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,6 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.avicodes.halchalin.data.models.User
 import com.avicodes.halchalin.data.utils.Result
-import com.avicodes.halchalin.domain.repository.PhoneAuthRepository
 import com.avicodes.halchalin.domain.repository.UserRespository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,27 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(
-    private val phoneAuthRepository: PhoneAuthRepository,
+class GoogleAuthActivityViewModel(
     private val userRespository: UserRespository,
 ) : ViewModel() {
 
-    val phoneState: MutableStateFlow<Result<String>> = phoneAuthRepository.phoneState
-
-    val codeState: MutableStateFlow<Result<String>> = phoneAuthRepository.codeState
-
     val curUser: MutableLiveData<User> = MutableLiveData()
-
-    fun authenticatePhone(phone: String, activity: Activity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            phoneAuthRepository.authenticate(phone, activity = activity)
-        }
-    }
-    fun verifyOtp(code: String, activity: Activity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            phoneAuthRepository.onVerifyOtp(code, activity)
-        }
-    }
 
     fun getUser(uid: String) = liveData<Result<User>> {
         userRespository.getUserRemotely(uid).collectLatest { response ->

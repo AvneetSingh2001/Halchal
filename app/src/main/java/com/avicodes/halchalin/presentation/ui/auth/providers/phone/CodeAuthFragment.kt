@@ -10,13 +10,12 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.FragmentCodeAuthBinding
 import com.avicodes.halchalin.presentation.ui.auth.MainActivity
-import com.avicodes.halchalin.presentation.ui.auth.MainActivityViewModel
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivity
+import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,7 +28,7 @@ class CodeAuthFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-    private val viewModel by activityViewModels<MainActivityViewModel>()
+    private val viewModel by activityViewModels<GoogleAuthActivityViewModel>()
 
 
     var otpTry: Int = 3
@@ -53,7 +52,7 @@ class CodeAuthFragment : Fragment() {
                 val code = etOtp.editText?.text.toString()
                 if (validNumber(code)) {
                     activity?.let { activity ->
-                        viewModel.verifyOtp(code, activity)
+                       // viewModel.verifyOtp(code, activity)
                         observeState()
                     }
                 }
@@ -61,7 +60,6 @@ class CodeAuthFragment : Fragment() {
 
 
             btnReqestAgain.setOnClickListener {
-                //Log.e("Requested Again", args.phone)
                 navigateBack()
             }
 
@@ -83,39 +81,39 @@ class CodeAuthFragment : Fragment() {
 
         binding.apply {
             lifecycleScope.launch {
-                viewModel.codeState.collectLatest { uiState ->
-                    when (uiState) {
-                        is Result.Success -> {
-                            viewModel.codeState.value = Result.NotInitialized
-                            progCons.visibility = View.INVISIBLE
-                            mainCons.visibility = View.VISIBLE
-                            navigateToNextScreen()
-                        }
-
-                        is Result.Loading -> {
-                            progCons.visibility = View.VISIBLE
-                            mainCons.visibility = View.INVISIBLE
-                        }
-
-                        is Result.Error -> {
-                            progCons.visibility = View.INVISIBLE
-                            mainCons.visibility = View.VISIBLE
-                            val text = (uiState as Result.Error).exception?.message
-                            if (text == context?.getString(R.string.invalid_code)) {
-                                binding.etOtp.error = "Wrong OTP"
-                            }
-                            otpTry--
-                            if(otpTry == 0) {
-                                navigateBack()
-                            }
-                        }
-
-                        is Result.NotInitialized -> {
-                            progCons.visibility = View.INVISIBLE
-                            mainCons.visibility = View.VISIBLE
-                        }
-                    }
-                }
+//                viewModel.codeState.collectLatest { uiState ->
+//                    when (uiState) {
+//                        is Result.Success -> {
+//                            viewModel.codeState.value = Result.NotInitialized
+//                            progCons.visibility = View.INVISIBLE
+//                            mainCons.visibility = View.VISIBLE
+//                            navigateToNextScreen()
+//                        }
+//
+//                        is Result.Loading -> {
+//                            progCons.visibility = View.VISIBLE
+//                            mainCons.visibility = View.INVISIBLE
+//                        }
+//
+//                        is Result.Error -> {
+//                            progCons.visibility = View.INVISIBLE
+//                            mainCons.visibility = View.VISIBLE
+//                            val text = (uiState as Result.Error).exception?.message
+//                            if (text == context?.getString(R.string.invalid_code)) {
+//                                binding.etOtp.error = "Wrong OTP"
+//                            }
+//                            otpTry--
+//                            if(otpTry == 0) {
+//                                navigateBack()
+//                            }
+//                        }
+//
+//                        is Result.NotInitialized -> {
+//                            progCons.visibility = View.INVISIBLE
+//                            mainCons.visibility = View.VISIBLE
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -182,8 +180,6 @@ class CodeAuthFragment : Fragment() {
 //        requireView().findNavController().navigate(action)
     }
 
-    fun navigateToHomeScreen() {
-        (activity as MainActivity).moveToHomeActivity()
-    }
+
 
 }

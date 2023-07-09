@@ -216,7 +216,7 @@ class WriteArticleFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             this,
             "Please provide access to gallery",
             Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
     }
 

@@ -127,21 +127,6 @@ class EditFragment(
         )
     }
 
-    private val selectPictureLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) {
-            cropImage.launch(
-                CropImageContractOptions(
-                    uri = it,
-                    CropImageOptions(
-                        allowRotation = true,
-                        allowFlipping = true,
-                        cropMenuCropButtonTitle = "CROP"
-                    )
-                )
-            )
-        }
-
-
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             // Use the returned uri.
@@ -234,11 +219,12 @@ class EditFragment(
         )
 
     private fun requestStoragePermission() {
+        Log.e("Request", "StoragePErm")
         EasyPermissions.requestPermissions(
             this,
             "Please provide access to gallery",
             Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.READ_EXTERNAL_STORAGE
         )
     }
 
