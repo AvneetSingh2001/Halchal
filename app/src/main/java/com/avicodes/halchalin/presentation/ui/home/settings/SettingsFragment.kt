@@ -42,7 +42,7 @@ class SettingsFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
 
-//        val kkhUrl = "https://www.kichhakihalchal.com/contact"
+
         binding.run {
             btnSignOut.setOnClickListener {
                 (activity as HomeActivity).logout()
@@ -52,18 +52,6 @@ class SettingsFragment : Fragment() {
                 navigateToEditScreen()
             }
 
-
-//            btnReport.setOnClickListener {
-////                val openURL = Intent(Intent.ACTION_VIEW)
-////                openURL.data = Uri.parse(kkhUrl)
-////                startActivity(openURL)
-//            }
-//
-//            btnJoinUs.setOnClickListener {
-//                val openURL = Intent(Intent.ACTION_VIEW)
-//                openURL.data = Uri.parse(kkhUrl)
-//                startActivity(openURL)
-//            }
 
             viewModel.curUser.observe(requireActivity(), Observer { user ->
                 user?.let {
@@ -86,8 +74,6 @@ class SettingsFragment : Fragment() {
                 val action = SettingsFragmentDirections.actionSettingsFragmentToCommunityFragment()
                 requireView().findNavController().navigate(action)
             }
-
-
         }
     }
 

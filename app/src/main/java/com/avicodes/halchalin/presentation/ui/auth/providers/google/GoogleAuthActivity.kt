@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Constants.PRIVACY_POLICY_URI
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.databinding.ActivityGoogleAuthBinding
 import com.avicodes.halchalin.presentation.ui.auth.details.DetailsActivity
@@ -67,6 +68,12 @@ class GoogleAuthActivity : AppCompatActivity() {
             btnGoogleSignIn.setOnClickListener {
                 signInRequest()
                 showLoader()
+            }
+
+            btnPrivacyPolicy.setOnClickListener {
+                val openURL = Intent(Intent.ACTION_VIEW)
+                openURL.data = Uri.parse(PRIVACY_POLICY_URI)
+                startActivity(openURL)
             }
         }
 

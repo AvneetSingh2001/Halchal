@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Constants.ABOUT_US_URI
+import com.avicodes.halchalin.data.utils.Constants.REQUEST_FEATURE_URI
 import com.avicodes.halchalin.databinding.FragmentCommunityBinding
 import com.bumptech.glide.Glide
 
@@ -16,8 +18,6 @@ class CommunityFragment : Fragment() {
     private var _binding: FragmentCommunityBinding? = null
     private val binding get() = _binding!!
 
-
-    var REQUEST_FEATURE_URL = "https://forms.gle/7ak1YmQZWDyGMt1W7"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,27 +39,25 @@ class CommunityFragment : Fragment() {
 
             btnRequestFeature.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URL)
+                urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
                 startActivity(urlIntent)
             }
 
             btnAboutUs.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URL)
+                urlIntent.data = Uri.parse(ABOUT_US_URI)
                 startActivity(urlIntent)
             }
 
             btnJoinUs.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URL)
+                urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
                 startActivity(urlIntent)
             }
 
-
-
             btnReportBug.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URL)
+                urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
                 startActivity(urlIntent)
             }
 

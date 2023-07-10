@@ -60,7 +60,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="60dp"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Hey, \nWelcome!"
+                android:text="Hey \nWelcome!"
                 android:layout_marginRight="20dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:textColor="@color/black"
@@ -78,13 +78,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 >
 
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:id="@+id/btnGoogleSignIn"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:focusable="true"
                     android:background="@drawable/outline"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginBottom="20dp"
                     >
 
                     <ImageView
@@ -124,7 +127,30 @@
                     android:paddingLeft="36dp"
                     android:paddingRight="36dp"
                     android:textSize="12sp"
-                    android:paddingBottom="10dp"/>
+                    android:paddingBottom="10dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/mainGrey"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:text="Privacy Policy"
+                    android:id="@+id/btnPrivacyPolicy"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingLeft="36dp"
+                    android:textColor="@color/mainBlue"
+                    android:paddingRight="36dp"
+                    android:textSize="12sp"
+                    />
 
 
             </LinearLayout>

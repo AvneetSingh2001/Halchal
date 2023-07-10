@@ -14,4 +14,8 @@ object Constants {
     val IMAGE = stringPreferencesKey("IMAGE")
     val ABOUT = stringPreferencesKey("ABOUT")
 
+    const val KKH_URI = "https://www.kichhakihalchal.com/contact"
+    const val PRIVACY_POLICY_URI = "https://www.kichhakihalchal.com/privacy-policy"
+    const val REQUEST_FEATURE_URI = "https://forms.gle/7ak1YmQZWDyGMt1W7"
+    const val ABOUT_US_URI = "https://www.kichhakihalchal.com/contact"
 }
