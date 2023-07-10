@@ -14,11 +14,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "815975591098-la39td2oomq6r3bq0osr6riibqovr3m1.apps.googleusercontent.com",
+          "client_id": "815975591098-2ouoqq4hvt8mndsdluso7guli9c3ec3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.avicodes.halchalin",
+            "certificate_hash": "184e24571ad2d8b1de58e9797214138edad541da"
+          }
+        },
+        {
+          "client_id": "815975591098-cpign17h2ku9t761apnh2ntd9kcetui3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.avicodes.halchalin",
             "certificate_hash": "2a04d9bf14828a6d82ab37bdd9c2bf26427c03b9"
+          }
+        },
+        {
+          "client_id": "815975591098-s4aj45gmggk96k4rv9f5hga9pfe8kfhk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.avicodes.halchalin",
+            "certificate_hash": "c43d9d04ecc943af7f5c688a82359bb6f21ae503"
           }
         },
         {

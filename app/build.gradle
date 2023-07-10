@@ -13,8 +13,8 @@ android {
     namespace 'com.avicodes.halchalin'
     compileSdk 33
 
-    def code = 1
-    def name = "1.0"
+    def code = 7
+    def name = "1.0.1"
     defaultConfig {
         applicationId "com.avicodes.halchalin"
         minSdk 22
@@ -52,17 +52,14 @@ android {
 dependencies {
 
     def lifecycle_version = "2.5.1"
-    def arch_version = "2.1.0"
     def nav_version = "2.5.3"
     def room_version = "2.4.3"
-    def media3_version = "1.0.0"
     def paging_version = "3.0.0"
 
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
-
 
     //ROOM
     implementation "androidx.room:room-runtime:$room_version"
@@ -119,7 +116,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx'
 
@@ -145,21 +141,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //circular imageView
-    implementation 'com.mikhaellopez:circularimageview:4.3.1'
-
     //pagination
     implementation "androidx.paging:paging-runtime:$paging_version"
-
-    //bottom bar
-    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
     //lottie
     def lottieVersion = "6.0.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
-
-    //country code
-    implementation "com.hbb20:ccp:2.6.0"
 
     //Permission manager
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'

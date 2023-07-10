@@ -39,19 +39,19 @@ class AuthFragment : Fragment() {
 
         binding.apply {
 
-            etCountryCode.resetToDefaultCountry()
+//            etCountryCode.resetToDefaultCountry()
 
             btnContinue.setOnClickListener {
                 val number = etPhoneNumber.editText?.text.toString()
-                val countryCode = etCountryCode.selectedCountryCode
-                if (validNumber(number) and validCode(countryCode)) {
-                    activity?.let { activity ->
-                        Log.e("Avi", countryCode)
-//                        viewModel.authenticatePhone("+$countryCode$number", activity)
-//                        observeResults(number)
-                    }
-
-                }
+//                val countryCode = etCountryCode.selectedCountryCode
+//                if (validNumber(number) and validCode(countryCode)) {
+//                    activity?.let { activity ->
+//                        Log.e("Avi", countryCode)
+////                        viewModel.authenticatePhone("+$countryCode$number", activity)
+////                        observeResults(number)
+//                    }
+//
+//                }
             }
 
         }

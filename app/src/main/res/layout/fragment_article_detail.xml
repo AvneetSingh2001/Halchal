@@ -29,7 +29,7 @@
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/ivTopAds"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="180dp"
                     app:sliderAnimationDuration="2000"
                     app:sliderAutoCycleDirection="back_and_forth"
                     app:sliderAutoCycleEnabled="true"
