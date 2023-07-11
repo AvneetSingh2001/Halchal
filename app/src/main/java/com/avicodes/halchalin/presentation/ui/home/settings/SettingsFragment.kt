@@ -1,23 +1,23 @@
 package com.avicodes.halchalin.presentation.ui.home.settings
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Constants.APP_PACKAGE_NAME
 import com.avicodes.halchalin.databinding.FragmentSettingsBinding
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -74,6 +74,51 @@ class SettingsFragment : Fragment() {
                 val action = SettingsFragmentDirections.actionSettingsFragmentToCommunityFragment()
                 requireView().findNavController().navigate(action)
             }
+
+            btnRateUs.setOnClickListener {
+                rateApp()
+            }
+        }
+    }
+
+    private fun rateApp() {
+        context?.let { context ->
+            activity?.let { activity ->
+                val manager = ReviewManagerFactory.create(context)
+                val request = manager.requestReviewFlow()
+                request.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // We got the ReviewInfo object
+                        val reviewInfo = task.result
+                        val flow = manager.launchReviewFlow(activity, reviewInfo)
+                        flow.addOnCompleteListener { _ -> }
+                    } else {
+                        rateAppFromPlayStore()
+                    }
+                }.addOnFailureListener {
+                    rateAppFromPlayStore()
+                }
+            }
+        }
+    }
+
+    private fun rateAppFromPlayStore() {
+        val uri: Uri = Uri.parse("market://details?id=$APP_PACKAGE_NAME")
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        goToMarket.addFlags(
+            Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+        )
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=$APP_PACKAGE_NAME")
+                )
+            )
         }
     }
 

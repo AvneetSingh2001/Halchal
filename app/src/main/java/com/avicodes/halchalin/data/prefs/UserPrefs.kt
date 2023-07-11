@@ -14,7 +14,6 @@ import com.avicodes.halchalin.data.utils.Constants.IMAGE
 import com.avicodes.halchalin.data.utils.Constants.LOCATION
 import com.avicodes.halchalin.data.utils.Constants.LOGGEDIN
 import com.avicodes.halchalin.data.utils.Constants.NAME
-import com.avicodes.halchalin.data.utils.Constants.PHONE
 import com.avicodes.halchalin.data.utils.Constants.USERID
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

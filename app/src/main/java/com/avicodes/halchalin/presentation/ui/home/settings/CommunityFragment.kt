@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Constants.ABOUT_US_URI
+import com.avicodes.halchalin.data.utils.Constants.BUG_URI
+import com.avicodes.halchalin.data.utils.Constants.JOIN_US_URI
 import com.avicodes.halchalin.data.utils.Constants.REQUEST_FEATURE_URI
 import com.avicodes.halchalin.databinding.FragmentCommunityBinding
 import com.bumptech.glide.Glide
@@ -51,13 +53,13 @@ class CommunityFragment : Fragment() {
 
             btnJoinUs.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
+                urlIntent.data = Uri.parse(JOIN_US_URI)
                 startActivity(urlIntent)
             }
 
             btnReportBug.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
-                urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
+                urlIntent.data = Uri.parse(BUG_URI)
                 startActivity(urlIntent)
             }
 

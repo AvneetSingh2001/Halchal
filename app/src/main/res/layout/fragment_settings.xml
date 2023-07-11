@@ -228,7 +228,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/document"
+                        android:background="@drawable/ic_paper"
                         android:backgroundTint="@color/mainRed"
                         android:id="@+id/ic2"/>
 
@@ -280,7 +280,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/community"
+                        android:background="@drawable/ic_group"
                         android:backgroundTint="@color/mainRed"
                         android:id="@+id/ic3"/>
 
