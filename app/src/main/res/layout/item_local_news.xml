@@ -29,7 +29,7 @@
                 android:foreground="@drawable/red_gradient"
                 android:id="@+id/ivThumbnail"
                 android:scaleType="centerCrop"
-                android:src="@drawable/flower"
+                android:src="@drawable/halchal_logo_2"
                 android:layout_width="match_parent"
                 android:layout_height="220dp" />
 

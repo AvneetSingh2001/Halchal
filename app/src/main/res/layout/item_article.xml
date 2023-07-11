@@ -34,7 +34,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:foreground="@drawable/red_gradient"
             android:scaleType="centerCrop"
-            android:src="@drawable/flower" />
+            android:src="@drawable/halchal_logo_2" />
 
 
         <TextView
