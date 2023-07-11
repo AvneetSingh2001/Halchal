@@ -35,10 +35,6 @@ class CommunityFragment : Fragment() {
 
         binding.apply {
 
-            Glide.with(ivFooter.context)
-                .load(R.drawable.tagline)
-                .into(ivFooter)
-
             btnRequestFeature.setOnClickListener {
                 val urlIntent = Intent(Intent.ACTION_VIEW)
                 urlIntent.data = Uri.parse(REQUEST_FEATURE_URI)
