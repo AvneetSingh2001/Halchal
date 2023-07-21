@@ -1,5 +1,5 @@
 # Halchal
-Android App to get your City's Latest Local News 🗞️ , write and share your articles ✍🏻
+📱Android App to get your City's Latest Local News 🗞️ , write and share your articles ✍🏻
 
 [DOWNLOAD HALCHAL FROM PLAY STORE](https://play.google.com/store/apps/details?id=com.avicodes.halchalin) 
 
