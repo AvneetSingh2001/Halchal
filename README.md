@@ -1,7 +1,16 @@
 # Halchal
 📱Android App to get your City's Latest Local News 🗞️ , write and share your articles ✍🏻
 
-[DOWNLOAD HALCHAL FROM PLAY STORE](https://play.google.com/store/apps/details?id=com.avicodes.halchalin) 
+<p align="center">
+<img src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/fr_get.svg" width="50%">
+</p>
+<p>
+    <h1 align="center">
+        <a href="https://play.google.com/store/apps/details?id=com.avicodes.halchalin">
+            Get Halchal on Play Store
+        </a>
+    </h1>
+</p>
 
 
 | ScreenShot 1                                                                                          | ScreenShot 2                                                                                          | ScreenShot 3                                                                                          | ScreenShot 4                                                                                          |
