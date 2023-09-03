@@ -3,6 +3,7 @@ package com.avicodes.halchalin.presentation.ui.home.settings
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -118,6 +119,7 @@ class EditFragment(
             CropImageContractOptions(
                 uri = null,
                 CropImageOptions(
+                    imageSourceIncludeCamera = false,
                     allowRotation = true,
                     allowFlipping = true,
                     cropMenuCropButtonTitle = "CROP",
@@ -213,19 +215,35 @@ class EditFragment(
 
 
     private fun hasStoragePermission() =
-        EasyPermissions.hasPermissions(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
+
 
     private fun requestStoragePermission() {
-        Log.e("Request", "StoragePErm")
-        EasyPermissions.requestPermissions(
-            this,
-            "Please provide access to gallery",
-            Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.requestPermissions(
+                this,
+                "Please provide access to gallery",
+                Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                "Please provide access to gallery",
+                Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(

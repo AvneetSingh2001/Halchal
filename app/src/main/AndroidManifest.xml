@@ -8,7 +8,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".presentation.HalchalApp"
@@ -21,6 +23,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Halchalin"
         tools:targetApi="31">
+
+        <service
+            android:name=".presentation.PushNotificationService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+
+        </service>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5283250244975535~1023773875" />
+
         <activity
             android:name=".presentation.ui.auth.details.DetailsActivity"
             android:exported="false" />

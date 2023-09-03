@@ -22,11 +22,19 @@ class RemoteNewsPagingSource(
         val pageIndex = params.key ?: "null"
         return try {
             if (category == "national") {
-                val response = service.getTopHeadlines(
-                    country = country,
-                    lang = lang,
-                    page = pageIndex,
-                )
+                val response = if (params.key == null) {
+                    service.getTopHeadlines(
+                        country = country,
+                        lang = lang,
+                    )
+                } else {
+                    service.getTopHeadlinesByPage(
+                        country = country,
+                        lang = lang,
+                        page = pageIndex,
+                    )
+                }
+                Log.e("Avneet 1", response.toString())
 
                 if (response.isSuccessful && response.body() != null) {
                     val pageResponse = response.body()
@@ -37,6 +45,7 @@ class RemoteNewsPagingSource(
                         prevKey = null,
                         nextKey = nextKey
                     )
+
                 } else {
                     LoadResult.Page(
                         data = ArrayList(),
@@ -46,14 +55,22 @@ class RemoteNewsPagingSource(
                 }
 
             } else {
-                val response = service.getTopicHeadlines(
-                    topic = topic,
-                    country = country,
-                    lang = lang,
-                    page = pageIndex,
-                )
+                val response = if (params.key == null) {
+                    service.getTopicHeadlines(
+                        topic = topic,
+                        country = country,
+                        lang = lang,
+                    )
+                } else {
+                    service.getTopicHeadlinesByPage(
+                        topic = topic,
+                        country = country,
+                        lang = lang,
+                        page = pageIndex,
+                    )
+                }
 
-                Log.e("Avneet Data Source", response.body()?.results.toString())
+                Log.e("Avneet 3", response.toString())
                 if (response.isSuccessful && response.body() != null) {
                     val pageResponse = response.body()
                     val news = pageResponse?.results ?: ArrayList()

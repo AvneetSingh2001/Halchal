@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -175,7 +176,8 @@ class WriteArticleFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                     allowFlipping = true,
                     cropMenuCropButtonTitle = "CROP",
                     imageSourceIncludeGallery = true,
-                )
+                    imageSourceIncludeCamera = false,
+                    )
             )
         )
         //selectPictureLauncher.launch(intent.type)
@@ -206,18 +208,34 @@ class WriteArticleFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
 
     private fun hasStoragePermission() =
-        EasyPermissions.hasPermissions(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
 
     private fun requestStoragePermission() {
-        EasyPermissions.requestPermissions(
-            this,
-            "Please provide access to gallery",
-            Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            EasyPermissions.requestPermissions(
+                this,
+                "Please provide access to gallery",
+                Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            EasyPermissions.requestPermissions(
+                this,
+                "Please provide access to gallery",
+                Constants.PERMISSION_READ_STORAGE_REQUEST_CODE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(

@@ -40,6 +40,10 @@
         <action
             android:id="@+id/action_newsFragment_to_categoryNewsFragment"
             app:destination="@id/categoryNewsFragment" />
+        <argument
+            android:name="newsCategory"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/adsFragment"
@@ -136,6 +140,12 @@
         <action
             android:id="@+id/action_localNewsDescFragment_to_newsVpFragment"
             app:destination="@id/newsVpFragment" />
+        <action
+            android:id="@+id/action_localNewsDescFragment_to_newsFragment"
+            app:destination="@id/newsFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/localNewsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/newsVpFragment"

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="code_sent">OTP Sent</string>
+    <string name="verified">Verified</string>
+    <string name="verification_failed">Verification Failed</string>
+    <string name="phone_auth_success">Login Success</string>
+    <string name="invalid_code">Invalid Code</string>
+    <string name="code_will_be_send">Code will be sent</string>
+    <string name="day_ago_text"> days ago</string>
+    <string name="just_now_text">just now</string>
+    <string name="minute_ago_text">a minute ago</string>
+    <string name="minutes_ago_text"> minutes ago</string>
+    <string name="hour_ago_text">an hour ago</string>
+    <string name="hours_ago_text"> hour ago</string>
+    <string name="yesterday_text">yesterday</string>
+</resources>

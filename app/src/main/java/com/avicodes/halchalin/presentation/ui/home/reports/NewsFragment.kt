@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.avicodes.halchalin.databinding.FragmentNewsBinding
@@ -35,6 +36,7 @@ class NewsFragment(
     private lateinit var adapter: NewsAdapter
     private val viewModel by activityViewModels<HomeActivityViewModel>()
 
+    val args: NewsFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,9 +51,9 @@ class NewsFragment(
 
         adapter = NewsAdapter(childFragmentManager, lifecycle)
 
+        var newsCategory = args.newsCategory
+
         binding.run {
-
-
             tlNews.addTab(
                 tlNews.newTab().setText("National News")
             )
@@ -60,11 +62,11 @@ class NewsFragment(
                 tlNews.newTab().setText("International News")
             )
 
+
             tlNews.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let { tab ->
                         vpNews.currentItem = tab.position
-
                     }
                 }
 
@@ -87,6 +89,8 @@ class NewsFragment(
             addTabsVp()
             vpNews.adapter = adapter
 
+            vpNews.currentItem = newsCategory
+            tlNews.selectTab(tlNews.getTabAt(newsCategory))
         }
     }
 

@@ -196,13 +196,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="12dp"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="10dp"
+                        app:layout_constraintRight_toRightOf="parent"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/circle_button"
                         android:padding="10dp"
                         android:src="@drawable/share"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/btnComment"
                         app:layout_constraintTop_toBottomOf="@id/cvThumbnail"
                         app:layout_constraintVertical_bias="0" />
 
@@ -210,16 +210,16 @@
                         android:id="@+id/btnComment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="10dp"
                         android:background="@drawable/circle_button"
                         android:padding="10dp"
                         android:src="@drawable/comment"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@id/btnShare"
+                        android:layout_marginRight="20dp"
                         app:layout_constraintVertical_bias="0" />
+
 
 <!--                    <ImageButton-->
 <!--                        android:id="@+id/btnMedia"-->
@@ -244,10 +244,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="40dp"
                 android:id="@+id/cvDesc"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="12dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cvSocial">
@@ -257,25 +256,14 @@
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintRight_toRightOf="parent"
                     android:fontFamily="@font/roboto_bold"
                     android:text="March 28, 2023"
                     android:textColor="#555454"
+                    app:layout_constraintTop_toBottomOf="@id/tvLoc"
                     android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/circle"
-                    app:layout_constraintTop_toTopOf="@id/circle"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     />
 
-                <View
-                    android:id="@+id/circle"
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:layout_marginLeft="10dp"
-                    app:layout_constraintBottom_toTopOf="@id/tvDesc"
-                    android:background="@drawable/circle"
-                    app:layout_constraintLeft_toRightOf="@id/tvTime"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
                 <TextView
                     android:id="@+id/tvLoc"
                     android:layout_width="wrap_content"
@@ -285,66 +273,215 @@
                     android:text="Kichha, Uttarakhand"
                     android:textColor="#555454"
                     android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@id/circle"
-                    app:layout_constraintTop_toTopOf="@id/circle"
-                    app:layout_constraintLeft_toRightOf="@id/circle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     />
 
-                <TextView
-                    android:id="@+id/tvDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="Lorem ipsum dolor sit amet consectetur. Sagittis eget sed mollis non cursus in urna. Vitae massa eget posuere in platea placerat placerat. Posuere sodales phasellus a vitae faucibus. Adipiscing nec magna montes aliquet in. Sit tellus blandit id elementum...."
-                    android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvTime"
-                    app:layout_constraintVertical_bias="0" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/user_grey"
+                    android:id="@+id/iv_author"
+                    android:scaleType="centerCrop"
+                    />
 
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cvImagesBottom"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="5dp"
-                    android:visibility="gone"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginBottom="40dp"
-                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDesc"
-                    >
+                    app:layout_constraintLeft_toRightOf="@id/iv_author"
+                    app:layout_constraintRight_toLeftOf="@id/tvTime">
 
-                    <com.smarteist.autoimageslider.SliderView
-                        android:id="@+id/ivNewsBottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:nestedScrollingEnabled="true"
-                        app:sliderAnimationDuration="2000"
-                        app:sliderAutoCycleDirection="back_and_forth"
-                        app:sliderAutoCycleEnabled="true"
-                        app:sliderIndicatorAnimationDuration="100"
-                        app:sliderIndicatorGravity="center_horizontal|bottom"
-                        app:sliderIndicatorMargin="15dp"
-                        app:sliderIndicatorOrientation="horizontal"
-                        app:sliderIndicatorPadding="3dp"
-                        app:sliderIndicatorRadius="2dp"
-                        app:sliderIndicatorSelectedColor="@color/mainRed"
-                        app:sliderIndicatorUnselectedColor="#FFF"
-                        app:sliderScrollTimeInSec="0" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Reported By"
+                        android:textColor="@color/mainRed"
+                        android:textSize="10sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Ranjit Singh Maankiya"
+                        android:textColor="#000000"
+                        android:textSize="13sp"
+                        android:id="@+id/tvReporter"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
 
-                </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <TextView
+                android:id="@+id/tvDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Lorem ipsum dolor sit amet consectetur. Sagittis eget sed mollis non cursus in urna. Vitae massa eget posuere in platea placerat placerat. Posuere sodales phasellus a vitae faucibus. Adipiscing nec magna montes aliquet in. Sit tellus blandit id elementum...."
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/cvDesc"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintVertical_bias="0" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvImagesBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="5dp"
+                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginBottom="40dp"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDesc"
+                >
+
+                <com.smarteist.autoimageslider.SliderView
+                    android:id="@+id/ivNewsBottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:nestedScrollingEnabled="true"
+                    app:sliderAnimationDuration="2000"
+                    app:sliderAutoCycleDirection="back_and_forth"
+                    app:sliderAutoCycleEnabled="true"
+                    app:sliderIndicatorAnimationDuration="100"
+                    app:sliderIndicatorGravity="center_horizontal|bottom"
+                    app:sliderIndicatorMargin="15dp"
+                    app:sliderIndicatorOrientation="horizontal"
+                    app:sliderIndicatorPadding="3dp"
+                    app:sliderIndicatorRadius="2dp"
+                    app:sliderIndicatorSelectedColor="@color/mainRed"
+                    app:sliderIndicatorUnselectedColor="#FFF"
+                    app:sliderScrollTimeInSec="0" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                ads:layout_constraintTop_toBottomOf="@id/cvImagesBottom"
+                ads:layout_constraintLeft_toLeftOf="parent"
+                ads:layout_constraintRight_toRightOf="parent"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:layout_marginHorizontal="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="20dp"
+                ads:adSize="MEDIUM_RECTANGLE"
+                ads:adUnitId="ca-app-pub-5283250244975535/8432603998">
+            </com.google.android.gms.ads.AdView>
+
+
+            <TextView
+                android:id="@+id/tvExploreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="Explore News"
+                android:layout_marginTop="30dp"
+                android:textColor="#555454"
+                app:layout_constraintTop_toBottomOf="@id/adView"
+                android:textSize="13sp"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:orientation="horizontal"
+                android:id="@+id/llCateogry"
+                android:paddingBottom="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tvExploreText"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <include
+                    android:id="@+id/categoryLocal"
+                    layout="@layout/item_categories"/>
+
+                <include
+                    android:id="@+id/categoryNational"
+                    layout="@layout/item_categories"/>
+
+                <include
+                    android:id="@+id/categoryWorld"
+                    layout="@layout/item_categories"/>
+
+            </LinearLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                app:layout_constraintTop_toBottomOf="@id/llCateogry"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/btnWhatsapp"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rect_outline"
+                >
+
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/whatsapp"
+                    android:id="@+id/ivWhatsapp"
+                    android:layout_marginHorizontal="12dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Talk with us"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="12dp"
+                    app:layout_constraintStart_toEndOf="@id/ivWhatsapp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

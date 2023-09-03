@@ -17,4 +17,5 @@ data class News(
     var coverUrl: String? = null,
     var resUrls: List<String>? = ArrayList(),
     var createdAt: Long = 0,
+    val reporterId: String? = null,
 ): Parcelable

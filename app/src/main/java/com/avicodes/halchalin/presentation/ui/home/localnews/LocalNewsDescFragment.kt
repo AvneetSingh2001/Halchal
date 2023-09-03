@@ -4,15 +4,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.News
 import com.avicodes.halchalin.data.utils.Result
 import com.avicodes.halchalin.data.utils.TimeCalc
@@ -20,10 +23,15 @@ import com.avicodes.halchalin.databinding.FragmentLocalNewsDescBinding
 import com.avicodes.halchalin.presentation.ui.home.ads.AdsAdapter
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
+import com.avicodes.halchalin.presentation.ui.home.reports.categories.CategoriesAdapter
+import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.*
+import com.google.android.gms.ads.AdRequest
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class LocalNewsDescFragment : Fragment() {
@@ -41,7 +49,6 @@ class LocalNewsDescFragment : Fragment() {
     private lateinit var viewModel: HomeActivityViewModel
     private lateinit var adAdapter: AdsAdapter
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +64,16 @@ class LocalNewsDescFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         val news = args.news
 
+
         binding.apply {
+
+            news.reporterId?.let {
+                getReporter(news.reporterId)
+            }
+
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+
             val data = news
 
             tvHeadline.text = data.newsHeadline
@@ -87,12 +103,65 @@ class LocalNewsDescFragment : Fragment() {
                 viewModel.createDeepLink(data)
             }
 
-
-
             observeLinkCreated()
 
+            setUpCategories()
         }
 
+    }
+
+    private fun getReporter(reporterId: String) {
+        binding.apply {
+            lifecycleScope.launch {
+                val reporter = async {  viewModel.getUserById(reporterId) }
+
+                reporter.await()?.let { reporter ->
+                    Glide.with(ivAuthor.context)
+                        .load(reporter.imgUrl)
+                        .circleCrop()
+                        .into(ivAuthor)
+
+                    tvReporter.text = reporter.name
+                }
+
+            }
+        }
+    }
+    private fun setUpCategories() {
+        binding.apply {
+            categoryLocal.tvName.text = "Local"
+            categoryNational.tvName.text = "India"
+            categoryWorld.tvName.text = "World"
+
+            Glide.with(categoryNational.ivCategory)
+                .load("https://firebasestorage.googleapis.com/v0/b/halchal-bb06e.appspot.com/o/categories%2Findia.jpeg?alt=media&token=88f892b7-3a96-432c-a159-7b54fa5e4636")
+                .circleCrop()
+                .into(categoryNational.ivCategory)
+
+            Glide.with(categoryWorld.ivCategory)
+                .load("https://firebasestorage.googleapis.com/v0/b/halchal-bb06e.appspot.com/o/categories%2Fworld.jpeg?alt=media&token=90ef2058-906e-44cf-9aa3-9a5f4c9efea2")
+                .circleCrop()
+                .into(categoryWorld.ivCategory)
+
+            Glide.with(categoryLocal.ivCategory)
+                .load("https://firebasestorage.googleapis.com/v0/b/halchal-bb06e.appspot.com/o/categories%2Ftourism.jpeg?alt=media&token=173da2fd-fa39-487e-8abd-7177606ee3b4")
+                .circleCrop()
+                .into(categoryLocal.ivCategory)
+
+            categoryLocal.root.setOnClickListener {
+                view?.findNavController()?.popBackStack()
+            }
+
+            categoryNational.root.setOnClickListener {
+                val action = LocalNewsDescFragmentDirections.actionLocalNewsDescFragmentToNewsFragment(0)
+                view?.findNavController()?.navigate(action)
+            }
+
+            categoryWorld.root.setOnClickListener {
+                val action = LocalNewsDescFragmentDirections.actionLocalNewsDescFragmentToNewsFragment(1)
+                view?.findNavController()?.navigate(action)
+            }
+        }
     }
 
 

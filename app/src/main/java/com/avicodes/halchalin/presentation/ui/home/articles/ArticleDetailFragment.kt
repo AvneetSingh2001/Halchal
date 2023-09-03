@@ -21,6 +21,7 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.avicodes.halchalin.presentation.ui.home.localnews.NewsResAdapter
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdRequest
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
@@ -50,6 +51,9 @@ class ArticleDetailFragment : Fragment() {
         val article = args.article
 
         binding.apply {
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+
             Glide.with(ivArticle.context)
                 .load(article.articleImage)
                 .into(ivArticle)
@@ -88,7 +92,6 @@ class ArticleDetailFragment : Fragment() {
                 navigateToUserProfile(article.user)
             }
 
-            Log.e("Commentbtn", article.commentEnabled.toString())
 
             if(article.commentEnabled) {
                 btnComment.visibility = View.VISIBLE

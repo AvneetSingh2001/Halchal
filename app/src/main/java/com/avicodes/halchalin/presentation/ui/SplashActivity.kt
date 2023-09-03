@@ -12,6 +12,7 @@ import com.avicodes.halchalin.databinding.ActivitySplashBinding
 import com.avicodes.halchalin.presentation.ui.auth.MainActivity
 import com.avicodes.halchalin.presentation.ui.auth.providers.google.GoogleAuthActivity
 import com.avicodes.halchalin.presentation.ui.home.HomeActivity
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -39,6 +40,8 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[SplashViewModel::class.java]
+
+        MobileAds.initialize(this) {}
 
         lifecycleScope.launch {
             viewModel.isLoggedIn().collectLatest {

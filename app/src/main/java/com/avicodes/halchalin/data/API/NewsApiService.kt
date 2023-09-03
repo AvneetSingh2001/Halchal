@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface NewsApiService {
     @GET("news")
-    suspend fun getTopHeadlines(
+    suspend fun getTopHeadlinesByPage(
         @Query("country")
         country: String,
         @Query("language")
@@ -17,8 +17,34 @@ interface NewsApiService {
         apiKey: String = BuildConfig.API_KEY,
         @Query("page")
         page: String?,
-        @Query("domain")
-        domain: String = "ndtv_in,abplive,hindinews18"
+        @Query("image")
+        image: Int = 1
+    ): Response<NewsResponse>
+
+    @GET("news")
+    suspend fun getTopHeadlines(
+        @Query("country")
+        country: String,
+        @Query("language")
+        lang: String,
+        @Query("apikey")
+        apiKey: String = BuildConfig.API_KEY,
+        @Query("image")
+        image: Int = 1
+    ): Response<NewsResponse>
+
+    @GET("news")
+    suspend fun getTopicHeadlinesByPage(
+        @Query("category")
+        topic: String,
+        @Query("country")
+        country: String,
+        @Query("language")
+        lang: String,
+        @Query("apikey")
+        apiKey: String = BuildConfig.API_KEY,
+        @Query("page")
+        page: String?,
     ): Response<NewsResponse>
 
     @GET("news")
@@ -31,9 +57,7 @@ interface NewsApiService {
         lang: String,
         @Query("apikey")
         apiKey: String = BuildConfig.API_KEY,
-        @Query("page")
-        page: String?,
-        @Query("domain")
-        domain: String = "ndtv_in,abplive,hindinews18"
+        @Query("image")
+        image: Int = 1
     ): Response<NewsResponse>
 }
