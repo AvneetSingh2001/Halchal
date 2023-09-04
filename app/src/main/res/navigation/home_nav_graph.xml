@@ -83,6 +83,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_prefFragment"
             app:destination="@id/prefFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_uploadNewsFragment"
+            app:destination="@id/uploadNewsFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -215,4 +218,8 @@
         android:name="com.avicodes.halchalin.presentation.ui.home.settings.PrefFragment"
         android:label="fragment_pref"
         tools:layout="@layout/fragment_pref" />
+    <fragment
+        android:id="@+id/uploadNewsFragment"
+        android:name="com.avicodes.halchalin.presentation.ui.home.admin.UploadNewsFragment"
+        android:label="UploadNewsFragment" />
 </navigation>

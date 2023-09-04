@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.utils.Constants.APP_PACKAGE_NAME
@@ -19,6 +20,7 @@ import com.avicodes.halchalin.presentation.ui.home.HomeActivityViewModel
 import com.bumptech.glide.Glide
 import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -67,6 +69,8 @@ class SettingsFragment : Fragment() {
                     btnMyArticles.setOnClickListener {
                         navigateToArticlesScreen(user.userId)
                     }
+
+                    checkIsAdmin()
                 }
             })
 
@@ -78,7 +82,26 @@ class SettingsFragment : Fragment() {
             btnRateUs.setOnClickListener {
                 rateApp()
             }
+
         }
+    }
+
+    private fun checkIsAdmin() {
+        lifecycleScope.launch {
+            val isAdmin = viewModel.checkIsAdmin()
+            if(isAdmin) {
+                binding.btnUploadNews.visibility = View.VISIBLE
+
+                binding.btnUploadNews.setOnClickListener {
+                    navigateToUploadNewsScreen()
+                }
+            }
+        }
+    }
+
+    private fun navigateToUploadNewsScreen() {
+        val action = SettingsFragmentDirections.actionSettingsFragmentToUploadNewsFragment()
+        view?.findNavController()?.navigate(action)
     }
 
     private fun rateApp() {

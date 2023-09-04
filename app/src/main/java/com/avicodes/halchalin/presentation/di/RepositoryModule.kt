@@ -1,6 +1,7 @@
 package com.avicodes.halchalin.presentation.di
 
 import com.avicodes.halchalin.data.repository.*
+import com.avicodes.halchalin.data.repository.admin.AdminRepositoryImpl
 import com.avicodes.halchalin.data.repository.ads.AdsDataSource
 import com.avicodes.halchalin.data.repository.ads.AdsRepositoryImpl
 import com.avicodes.halchalin.data.repository.article.ArticleDataSource
@@ -16,6 +17,9 @@ import com.avicodes.halchalin.data.repository.settings.city.CityRespositoryImpl
 import com.avicodes.halchalin.data.repository.settings.user.UserDataSource
 import com.avicodes.halchalin.data.repository.settings.user.UserRepositoryImpl
 import com.avicodes.halchalin.domain.repository.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +32,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePhoneAuthRepository(phoneAuthDataSource: PhoneAuthDataSource) : PhoneAuthRepository {
+    fun providePhoneAuthRepository(phoneAuthDataSource: PhoneAuthDataSource): PhoneAuthRepository {
         return PhoneAuthRepositoryImpl(phoneAuthDataSource)
     }
 
@@ -61,7 +65,7 @@ class RepositoryModule {
     @Singleton
     fun provideArticleRepository(articleDataSource: ArticleDataSource): ArticleRepository {
         return ArticleRepositoryImpl(
-             articleDataSource = articleDataSource
+            articleDataSource = articleDataSource
         )
     }
 
@@ -75,5 +79,19 @@ class RepositoryModule {
     @Singleton
     fun provideCityRepository(cityDataSource: CityDataSource): CityRepository {
         return CityRespositoryImpl(cityDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAdminRepository(
+        firestore: FirebaseFirestore,
+        auth: FirebaseAuth,
+        storage: FirebaseStorage,
+    ): AdminRepository {
+        return AdminRepositoryImpl(
+            fireStore = firestore,
+            auth = auth,
+            storage = storage
+        )
     }
 }

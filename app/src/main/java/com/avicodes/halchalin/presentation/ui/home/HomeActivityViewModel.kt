@@ -26,7 +26,8 @@ class HomeActivityViewModel(
     private val adsRepository: AdsRepository,
     private val userRespository: UserRespository,
     private val cityRepository: CityRepository,
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
+    private val adminRepository: AdminRepository
 ) : ViewModel() {
 
 
@@ -36,8 +37,9 @@ class HomeActivityViewModel(
     val worldHeadlines: MutableLiveData<Result<PagingData<NewsRemote>>> =
         MutableLiveData(Result.NotInitialized)
 
-    private val _localHeadlines: MutableLiveData<Result<List<News>>> = MutableLiveData(Result.NotInitialized)
-    val localHeadlines : LiveData<Result<List<News>>> = _localHeadlines
+    private val _localHeadlines: MutableLiveData<Result<List<News>>> =
+        MutableLiveData(Result.NotInitialized)
+    val localHeadlines: LiveData<Result<List<News>>> = _localHeadlines
 
     val featuredAds: MutableLiveData<Result<List<Featured>>> =
         MutableLiveData(Result.NotInitialized)
@@ -306,7 +308,7 @@ class HomeActivityViewModel(
         ).cachedIn(viewModelScope)
     }
 
-    fun getLocalNews(loc: String)  = viewModelScope.launch {
+    fun getLocalNews(loc: String) = viewModelScope.launch {
         localNewsRepository.getNews(loc).stateIn(viewModelScope).collectLatest {
             _localHeadlines.postValue(it)
         }
@@ -473,7 +475,29 @@ class HomeActivityViewModel(
         return localNewsRepository.deleteComment(commentId)
     }
 
-    fun deleteArticle(articleId: String) : Flow<Result<String>> {
+    fun deleteArticle(articleId: String): Flow<Result<String>> {
         return articleRepository.deleteArticle(articleId = articleId)
+    }
+
+    suspend fun checkIsAdmin(): Boolean {
+        return adminRepository.checkIsAdmin()
+    }
+
+    fun uploadNews(
+        newsHeadline: String,
+        newsDesc: String,
+        newsLoc: String,
+        videoUri: Uri?,
+        uploadedImages: List<Uri>,
+        coverUri: Uri?
+    ): Flow<Result<String>> {
+        return adminRepository.uploadNews(
+            newsHeadline = newsHeadline,
+            newsDesc = newsDesc,
+            newsLoc = newsLoc,
+            videoUri = videoUri,
+            uploadedImages = uploadedImages,
+            coverUri = coverUri
+        )
     }
 }

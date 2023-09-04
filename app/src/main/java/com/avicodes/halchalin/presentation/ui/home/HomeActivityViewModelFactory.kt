@@ -12,7 +12,8 @@ class HomeActivityViewModelFactory(
     val adsRepository: AdsRepository,
     val userRespository: UserRespository,
     val cityRepository: CityRepository,
-    val articleRepository: ArticleRepository
+    val articleRepository: ArticleRepository,
+    val adminRepository: AdminRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -23,7 +24,8 @@ class HomeActivityViewModelFactory(
             adsRepository,
             userRespository,
             cityRepository,
-            articleRepository
+            articleRepository,
+            adminRepository
         ) as T
     }
 }

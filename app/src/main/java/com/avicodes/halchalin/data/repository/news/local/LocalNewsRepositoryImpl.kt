@@ -44,6 +44,4 @@ class LocalNewsRepositoryImpl(
     override fun deleteComment(commentId: String): Flow<Result<String>> {
         return remoteLocalNewsDataSource.deleteComment(commentId)
     }
-
-
 }

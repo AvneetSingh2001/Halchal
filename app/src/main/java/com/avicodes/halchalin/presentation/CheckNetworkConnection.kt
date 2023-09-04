@@ -15,7 +15,7 @@ class CheckNetworkConnection (private val connectivityManager: ConnectivityManag
 
     constructor(application: Application) : this(application.getSystemService(Context.CONNECTIVITY_SERVICE) as  ConnectivityManager)
 
-    private val networkCallback = @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private val networkCallback =
 
     object : ConnectivityManager.NetworkCallback(){
         override fun onAvailable(network: Network) {
@@ -33,14 +33,12 @@ class CheckNetworkConnection (private val connectivityManager: ConnectivityManag
     }
 
     @SuppressLint("MissingPermission")
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActive() {
         super.onActive()
         val builder = NetworkRequest.Builder()
         connectivityManager.registerNetworkCallback(builder.build(),networkCallback)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onInactive() {
         super.onInactive()
         connectivityManager.unregisterNetworkCallback(networkCallback)

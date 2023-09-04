@@ -27,7 +27,8 @@ class FactoryModule {
         localNewsRepository: LocalNewsRepository,
         userRespository: UserRespository,
         cityRepository: CityRepository,
-        articleRepository: ArticleRepository
+        articleRepository: ArticleRepository,
+        adminRepository: AdminRepository
     ): HomeActivityViewModelFactory {
         return HomeActivityViewModelFactory(
             auth = auth,
@@ -36,7 +37,8 @@ class FactoryModule {
             adsRepository = adsRepository,
             userRespository = userRespository,
             cityRepository = cityRepository,
-            articleRepository = articleRepository
+            articleRepository = articleRepository,
+            adminRepository = adminRepository
         )
     }
 
