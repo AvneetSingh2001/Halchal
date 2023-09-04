@@ -9,6 +9,7 @@ import com.avicodes.halchalin.R
 import com.avicodes.halchalin.data.models.ArticleProcessed
 import com.avicodes.halchalin.databinding.ItemArticleBinding
 import com.bumptech.glide.Glide
+import com.google.firebase.analytics.FirebaseAnalytics
 
 class ArticlesAdapter(
     private val onItemClickListener: (ArticleProcessed) -> Unit
@@ -24,7 +25,6 @@ class ArticlesAdapter(
                     .into(ivFeaturedArticle)
 
                 tvArticleTitle.text = article.articleTitle
-
                 tvUser.text = article.user.name
 
                 root.setOnClickListener {

@@ -20,6 +20,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.avicodes.halchalin.presentation.ui.auth.MainActivity
 import com.avicodes.halchalin.R
+import com.avicodes.halchalin.data.utils.Analytics
 import com.avicodes.halchalin.data.utils.Constants
 import com.avicodes.halchalin.databinding.ActivityHomeBinding
 import com.avicodes.halchalin.presentation.CheckNetworkConnection
@@ -108,25 +109,32 @@ class HomeActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> showBottomNav()
+                R.id.homeFragment -> {
+                    showBottomNav()
+                }
                 R.id.localNewsFragment -> {
                     showBottomNav()
+                    Analytics.logEvent(Constants.ANALYTICS_BOTTOM_NAV_LOCAL)
                 }
 
                 R.id.newsFragment -> {
                     showBottomNav()
                     tabCount++
                     showAd()
-
+                    Analytics.logEvent(Constants.ANALYTICS_BOTTOM_NAV_EXPLORE)
                 }
 
                 R.id.adsFragment -> {
                     showBottomNav()
                     tabCount++
                     showAd()
+                    Analytics.logEvent(Constants.ANALYTICS_BOTTOM_NAV_HALL)
                 }
 
-                R.id.settingsFragment -> showBottomNav()
+                R.id.settingsFragment -> {
+                    showBottomNav()
+                    Analytics.logEvent(Constants.ANALYTICS_BOTTOM_NAV_PROFILE)
+                }
                 else -> hideBottomNav()
             }
         }
