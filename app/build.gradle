@@ -13,8 +13,8 @@ android {
     namespace 'com.avicodes.halchalin'
     compileSdk 34
 
-    def code = 8
-    def name = "1.0.1"
+    def code = 10
+    def name = "1.2.0"
     defaultConfig {
         applicationId "com.avicodes.halchalin"
         minSdk 22
